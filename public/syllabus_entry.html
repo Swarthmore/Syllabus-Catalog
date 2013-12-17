@@ -111,85 +111,243 @@
 
       <!-- Begin page content -->
       <div class="container">
+      
+      <!--
         <div class="page-header">
           <h1>Syllabus Entry Form</h1>
         </div>
+    -->
 
-		<form role="form">
-			<div class="form-group">
-				<label for="department">Department</label>
-				<select class="form-control" id="department">
-					<option value="">Select Department/Program</option>
-					<option value="Ancient History">Ancient History</option>
-					<option value="Anthropology">Anthropology</option>
-					<option value="Arabic">Arabic</option>
-					<option value="Art">Art</option>
-					<option value="Art History">Art History</option>
-					<option value="Asian Studies">Asian Studies</option>
-					<option value="Astronomy">Astronomy</option>
-					<option value="Biochemistry">Biochemistry</option>
-					<option value="Biology">Biology</option>
-					<option value="Black Studies">Black Studies</option>
-					<option value="Chemistry">Chemistry</option>
-					<option value="Chinese">Chinese</option>
-					<option value="Classics">Classics</option>
-					<option value="Cognitive Science">Cognitive Science</option>
-					<option value="Comparative Literature">Comparative Literature</option>
-					<option value="Computer Science">Computer Science</option>
-					<option value="Dance">Dance</option>
-					<option value="Economics">Economics</option>
-					<option value="Educational Studies">Educational Studies</option>
-					<option value="Engineering">Engineering</option>
-					<option value="English Literature">English Literature</option>
-					<option value="Environmental Studies">Environmental Studies</option>
-					<option value="Film & Media Studies">Film & Media Studies</option>
-					<option value="French & Francophone Studies">French & Francophone Studies</option>
-					<option value="Gender & Sexuality Studies">Gender & Sexuality Studies</option>
-					<option value="German Studies">German Studies</option>
-					<option value="Greek">Greek</option>
-					<option value="History">History</option>
-					<option value="Interpretation Theory">Interpretation Theory</option>
-					<option value="Islamic Studies">Islamic Studies</option>
-					<option value="Japanese">Japanese</option>
-					<option value="Latin">Latin</option>
-					<option value="Latin American Studies">Latin American Studies</option>
-					<option value="Linguistics">Linguistics</option>
-					<option value="Math and Stats">Math and Stats</option>
-					<option value="Medieval Studies">Medieval Studies</option>
-					<option value="Modern Languages & Literatures">Modern Languages & Literatures</option>
-					<option value="Music">Music</option>
-					<option value="Peace & Conflict Studies">Peace & Conflict Studies</option>
-					<option value="Philosophy">Philosophy</option>
-					<option value="Physics">Physics</option>
-					<option value="Political Science">Political Science</option>
-					<option value="Psychology">Psychology</option>
-					<option value="Public Policy">Public Policy</option>
-					<option value="Religion">Religion</option>
-					<option value="Russian">Russian</option>
-					<option value="Sociology">Sociology</option>
-					<option value="Spanish">Spanish</option>
-					<option value="Statistics">Statistics</option>
-					<option value="Theater">Theater</option>
-				</select>
-			</div>
+		<form role="form" >
+		
+			<!-- Form Name -->
+			<legend>Syllabus Entry</legend>
+		
+			<div class="row department" >
 
-			<div class="form-group">
-				<label for="coursenumber">Course Number</label>
-				<input type="text" class="form-control" id="coursenumber" placeholder="Enter course number">
+				<!-- Department -->
+				<div class="form-group col-lg-4">
+					<label for="department">Department</label>
+					<select class="form-control" id="department">
+						<option value="">Select Department/Program</option>
+						<option value="Ancient History">Ancient History</option>
+						<option value="Anthropology">Anthropology</option>
+						<option value="Arabic">Arabic</option>
+						<option value="Art">Art</option>
+						<option value="Art History">Art History</option>
+						<option value="Asian Studies">Asian Studies</option>
+						<option value="Astronomy">Astronomy</option>
+						<option value="Biochemistry">Biochemistry</option>
+						<option value="Biology">Biology</option>
+						<option value="Black Studies">Black Studies</option>
+						<option value="Chemistry">Chemistry</option>
+						<option value="Chinese">Chinese</option>
+						<option value="Classics">Classics</option>
+						<option value="Cognitive Science">Cognitive Science</option>
+						<option value="Comparative Literature">Comparative Literature</option>
+						<option value="Computer Science">Computer Science</option>
+						<option value="Dance">Dance</option>
+						<option value="Economics">Economics</option>
+						<option value="Educational Studies">Educational Studies</option>
+						<option value="Engineering">Engineering</option>
+						<option value="English Literature">English Literature</option>
+						<option value="Environmental Studies">Environmental Studies</option>
+						<option value="Film & Media Studies">Film & Media Studies</option>
+						<option value="French & Francophone Studies">French & Francophone Studies</option>
+						<option value="Gender & Sexuality Studies">Gender & Sexuality Studies</option>
+						<option value="German Studies">German Studies</option>
+						<option value="Greek">Greek</option>
+						<option value="History">History</option>
+						<option value="Interpretation Theory">Interpretation Theory</option>
+						<option value="Islamic Studies">Islamic Studies</option>
+						<option value="Japanese">Japanese</option>
+						<option value="Latin">Latin</option>
+						<option value="Latin American Studies">Latin American Studies</option>
+						<option value="Linguistics">Linguistics</option>
+						<option value="Math and Stats">Math and Stats</option>
+						<option value="Medieval Studies">Medieval Studies</option>
+						<option value="Modern Languages & Literatures">Modern Languages & Literatures</option>
+						<option value="Music">Music</option>
+						<option value="Peace & Conflict Studies">Peace & Conflict Studies</option>
+						<option value="Philosophy">Philosophy</option>
+						<option value="Physics">Physics</option>
+						<option value="Political Science">Political Science</option>
+						<option value="Psychology">Psychology</option>
+						<option value="Public Policy">Public Policy</option>
+						<option value="Religion">Religion</option>
+						<option value="Russian">Russian</option>
+						<option value="Sociology">Sociology</option>
+						<option value="Spanish">Spanish</option>
+						<option value="Statistics">Statistics</option>
+						<option value="Theater">Theater</option>
+					</select>
+				</div>
+	
+				<!-- Course Number -->
+				<div class="form-group col-lg-2">
+					<label for="coursenumber">Course Number</label>
+					<input type="text" class="form-control" id="coursenumber" placeholder="Enter course number">
+				</div>	
+				
+				
+				<button id="remove_dept" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+
+			
+			</div> <!-- End of row -->
+			
+			<div class="row" >
+				<div class="form-group col-lg-4">
+					<button id="add_a_dept" type="button" class="btn btn-default">Add a department</button>
+				</div>'
 			</div>
+			
+			<script>
+				$("#add_a_dept").click(function() {
+					var last_department_input = $('.department:last');
+					last_department_input.clone().insertAfter( last_department_input);
+				});
+			</script>		
+			
 			
 						
 			<div class="form-group">
 				<label for="coursename">Course Name</label>
 				<input type="text" class="form-control" id="coursename" placeholder="Enter course name">
 			</div>
+
+			
+			<div class="form-group instructors ">
+				<label for="instructor">Instructor</label>
+				<input type="text" class="form-control" id="instructor" placeholder="Enter instructor name">
+			</div>			
+			
+			<div class="row">
+				<div class="form-group col-lg-4">
+					<button id="add_instructor" type="button" class="btn btn-default">Add an instructor</button>
+				</div>
+			</div>
+			
+						
+			<script>
+				$("#add_instructor").click(function() {
+					var last_instructor = $('.instructors:last');
+					last_instructor.clone().insertAfter( last_instructor);					
+					});
+			</script>	
+
+
+			<div class="row">
+				<div class="form-group col-lg-2">
+					<label for="semester">Semester</label>
+					<select class="form-control" id="department">
+						<option value="Spring 2014">Spring 2014</option>
+						<option value="Fall 2013">Fall 2013</option>
+						<option value="Spring 2013">Spring 2013</option>
+						<option value="Fall 2012">Fall 2012</option>
+						<option value="Spring 2012">Spring 2012</option>
+						<option value="Fall 2011">Fall 2011</option>
+						<option value="Spring 2011">Spring 2011</option>
+						<option value="Fall 2010">Fall 2010</option>
+						<option value="Spring 2010">Spring 2010</option>
+						<option value="Fall 2009">Fall 2009</option>
+						<option value="Spring 2009">Spring 2009</option>
+						<option value="Fall 2008">Fall 2008</option>
+						<option value="Spring 2008">Spring 2008</option>
+						<option value="Fall 2007">Fall 2007</option>
+						<option value="Spring 2007">Spring 2007</option>
+						<option value="Fall 2006">Fall 2006</option>
+						<option value="Spring 2006">Spring 2006</option>
+					</select>
+				</div>
+				<div class="form-group col-lg-2">
+					<label for="credits">Credits</label>
+					<select class="form-control" id="credits">
+						<option value="2">2</option>
+						<option value="1.5">1.5</option>
+						<option value="1">1</option>
+						<option value="0.5">0.5</option>
+						<option value="0">0</option>
+					</select>
+				</div>
+			</div>
+
+
+
+			<div class="form-group">
+				<label for="prerequisites">Official Prerequisites</label>
+				<textarea class="form-control" rows="3" id="prerequisites"></textarea>
+			</div>
+
+			
+			<div class="form-group">
+				<label for="course_description">Course Description</label>
+				<textarea class="form-control" rows="3" id="course_description"></textarea>
+			</div>
+
+					
+			<div class="form-group">
+				<label for="assignments">Assignments</label>
+				<textarea class="form-control" rows="3" id="assignments"></textarea>
+			</div>			
+
+			<div class="form-group">
+				<label for="policies">Policies</label>
+				<textarea class="form-control" rows="3" id="policies"></textarea>
+			</div>
+			
+			<div class="form-group">
+				<label for="policies">Policies</label>
+				<textarea class="form-control" rows="3" id="policies"></textarea>
+			</div>	
+					
+			<div class="form-group">
+				<label for="class_format">Class Format</label>
+				<textarea class="form-control" rows="3" id="class_format"></textarea>
+			</div>				
+
+			<div class="form-group">
+				<label for="visitors">Visitors</label>
+				<textarea class="form-control" rows="3" id="visitors"></textarea>
+			</div>	
+
+			<div class="form-group">
+				<label for="required_events">Required Events</label>
+				<textarea class="form-control" rows="3" id="required_events"></textarea>
+			</div>	
+
+			
+
+			<div class="panel panel-default">
+  				<div class="panel-heading">
+    				<h3 class="panel-title">Week 1</h3>
+  				</div>
+  				<div class="panel-body">
+					<div class="form-group col-lg-4">
+					<label for="reading">Reading OCLC Number</label>
+					<input type="text" class="form-control" id="reading" placeholder="Enter reading OCLC number">
+				
+					<button id="remove_dept" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+
+					</div>
+  				</div>
+			</div>
+			
 			
 			<div id="reading_list" class="form-group">
-				<label for="reading">Readings</label>
-				<input type="text" class="form-control" id="reading" placeholder="Enter reading OCLC number">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">Remove</button>
-				</span>
+			
+			<div class="row" >
+				
+				
+				
+				
+				
+				<div class="form-group col-lg-4">
+					<label for="reading">Week Number</label>
+					<input type="text" class="form-control" id="week" placeholder="Week Number">
+				</div>
+			
+				
+			</div>
 				<BR>
 				<button id="add_a_reading" type="button" class="btn btn-default">Add a reading</button>
 			</div>		
