@@ -60,7 +60,41 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
+	<script src="./js/lib/underscore-min.js"></script>
 
+
+	<script>
+	
+
+	// Set up template rendering function.  This will load templates the first time they are
+	// used and then cache them.  
+
+	function render(tmpl_name, tmpl_data) {
+		if ( !render.tmpl_cache ) { 
+			render.tmpl_cache = {};
+		}
+
+		if ( ! render.tmpl_cache[tmpl_name] ) {
+			var tmpl_dir = './template';
+			var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
+
+			var tmpl_string;
+			$.ajax({
+				url: tmpl_url,
+				method: 'GET',
+				async: false,
+				success: function(data) {
+					tmpl_string = data;
+				}
+			});
+
+			render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
+		}
+
+		return render.tmpl_cache[tmpl_name](tmpl_data);
+	}
+
+	</script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -316,49 +350,24 @@
 			</div>	
 
 			
+			<div id="weeks"></div>
 
-			<div class="panel panel-default">
-  				<div class="panel-heading">
-    				<h3 class="panel-title">Week 1</h3>
-  				</div>
-  				<div class="panel-body">
-					<div class="form-group col-lg-4">
-					<label for="reading">Reading OCLC Number</label>
-					<input type="text" class="form-control" id="reading" placeholder="Enter reading OCLC number">
-				
-					<button id="remove_dept" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-
-					</div>
-  				</div>
-			</div>
-			
-			
-			<div id="reading_list" class="form-group">
-			
-			<div class="row" >
-				
-				
-				
-				
-				
-				<div class="form-group col-lg-4">
-					<label for="reading">Week Number</label>
-					<input type="text" class="form-control" id="week" placeholder="Week Number">
-				</div>
-			
-				
-			</div>
-				<BR>
-				<button id="add_a_reading" type="button" class="btn btn-default">Add a reading</button>
-			</div>		
 			
 			<script>
-				$("#add_a_reading").click(function() {
-					var last_reading_input = $('#reading_list input:last');
+				var m = render("week_template", {week_number: 1});
+				$(m).appendTo("#weeks").slideDown();
+			
+			
+				$("#add_reading").click(function() {
+					var last_reading = $('#reading_list .reading:last');
+					var last_reading_input = last_reading.find("input");
 					
 					// Only add a new box if the previous one is empty
 					if (last_reading_input.val() != "") {
-						$("<BR><input type=\"text\" class=\"form-control\" placeholder=\"Enter reading OCLC number\">").insertAfter(last_reading_input); 
+						// Copy the reading entry, clear the values, and add a new reading to the bottom of the list
+						new_reading = last_reading.clone();
+						new_reading.find('input').val("");
+						new_reading.insertAfter( last_reading);	
 					} else {
 						return;
 					}
