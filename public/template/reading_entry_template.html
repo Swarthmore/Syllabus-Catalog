@@ -1,8 +1,20 @@
 <div class="row reading_entry">
+
+<!--
 	<div class="form-group col-lg-4">
-		<label for="reading">Reading OCLC Number</label>
+		<label for="reading">Search for a reading</label>
 		<input type="text" class="form-control" id="week_<%= reading %>_reading_<%= reading %>" placeholder="Enter OCLC number for reading <%= reading %> in week <%= week %>">
 	</div>
+	-->
+	
+	<div class="col-lg-6">
+		<div class="input-group">
+		  <input type="text" class="form-control" placeholder="Enter OCLC number for reading <%= reading %> in week <%= week %>">
+		  <span class="input-group-btn search_reading" >
+			<button class="btn btn-default " type="button" >Search</button>
+		  </span>
+		</div><!-- /input-group -->
+	  </div><!-- /.col-lg-6 -->
 
 	<div class="btn-group pull-left">
 		<button type="button" class="btn btn-danger btn-xs delete_reading"><span class="glyphicon glyphicon-remove"></span></button>
@@ -10,11 +22,25 @@
 </div>
 
 
-<!-- Code for removing reading -->
+<!-- Code for removing reading and searching for readings-->
 <script>
 	$(".delete_reading").click(function() {
 
 		// Find the div with class reading_entry that contains this button and remove it
-		$(this).closest(".reading_entry").remove();
+		$(this).closest(".reading_entry").slideUp(
+			function() {
+				$(this).remove();
+			}
+		);
 	});
+	
+	
+	$(".search_reading").click(function() {
+		var search_q = $(this).prev().val();
+		
+		socket.emit("search_oclc", {q:search_q});	
+		
+	});
+		
+	
 </script>

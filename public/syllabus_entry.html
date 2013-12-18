@@ -61,6 +61,8 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
 	<script src="./js/lib/underscore-min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/lib/date.format.js"></script>
 
 
 	<script>
@@ -93,6 +95,87 @@
 
 		return render.tmpl_cache[tmpl_name](tmpl_data);
 	}
+
+
+	
+
+	
+	
+	function start_ws() {
+	
+		socket = io.connect('http://23.23.177.220', {
+			'reconnect': true,
+  			'reconnection delay': 500,
+  			'max reconnection attempts': Infinity
+		});
+		var socketTimer;
+		var ws_heartbeat_interval = 60000;		// Websocket heartbeat (to keep connection open)
+				
+
+
+		// SOCKET MESSAGE DEFINITIONS 
+
+		socket.on('reading_search_results', function(data) {
+			console.debug(data);
+		});
+	
+	
+		// When socket is opened, display message in console
+		socket.on('connect', function() { 
+			
+			formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
+			console.log("Started connection to server: " + formatted_time);
+				
+			// Turn off automatic attempts to start socket
+			clearInterval(socketTimer);
+		
+			// Replace with heartbeat 
+			socketTimer = setInterval(function() {socket.send('heartbeat');}, ws_heartbeat_interval);
+					
+		}); // End of socket open routine 	
+
+
+
+
+		// If socket is closed, display notification message
+		socket.on('disconnect', function() {  
+		
+			var formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
+			console.log("Connection with server interrupted: " + formatted_time);
+			
+			// Turn off automatic attempts to send heartbeat
+			clearInterval(socketTimer);		
+		
+			// Keep trying to restart connection
+			socketTimer = setInterval(function(){start_ws()}, 5000);
+		});  // End of socket close	
+	
+	
+	
+	
+		// If there is a socket error, display a notification message
+		socket.on("error", function() {  
+			var formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
+			console.log("Websocket error: " + formatted_time);
+		
+		}); // End of socket on error	
+	
+	
+	
+	
+	}
+	
+	
+	
+		
+	$(document).ready(function() {
+		start_ws();		// Start web sockets	
+	});
+	
+
+
+
+
 
 	</script>
 
@@ -157,90 +240,27 @@
 			<!-- Form Name -->
 			<legend>Syllabus Entry</legend>
 		
-			<div class="row department" >
-
-				<!-- Department -->
-				<div class="form-group col-lg-4">
-					<label for="department">Department</label>
-					<select class="form-control" id="department">
-						<option value="">Select Department/Program</option>
-						<option value="Ancient History">Ancient History</option>
-						<option value="Anthropology">Anthropology</option>
-						<option value="Arabic">Arabic</option>
-						<option value="Art">Art</option>
-						<option value="Art History">Art History</option>
-						<option value="Asian Studies">Asian Studies</option>
-						<option value="Astronomy">Astronomy</option>
-						<option value="Biochemistry">Biochemistry</option>
-						<option value="Biology">Biology</option>
-						<option value="Black Studies">Black Studies</option>
-						<option value="Chemistry">Chemistry</option>
-						<option value="Chinese">Chinese</option>
-						<option value="Classics">Classics</option>
-						<option value="Cognitive Science">Cognitive Science</option>
-						<option value="Comparative Literature">Comparative Literature</option>
-						<option value="Computer Science">Computer Science</option>
-						<option value="Dance">Dance</option>
-						<option value="Economics">Economics</option>
-						<option value="Educational Studies">Educational Studies</option>
-						<option value="Engineering">Engineering</option>
-						<option value="English Literature">English Literature</option>
-						<option value="Environmental Studies">Environmental Studies</option>
-						<option value="Film & Media Studies">Film & Media Studies</option>
-						<option value="French & Francophone Studies">French & Francophone Studies</option>
-						<option value="Gender & Sexuality Studies">Gender & Sexuality Studies</option>
-						<option value="German Studies">German Studies</option>
-						<option value="Greek">Greek</option>
-						<option value="History">History</option>
-						<option value="Interpretation Theory">Interpretation Theory</option>
-						<option value="Islamic Studies">Islamic Studies</option>
-						<option value="Japanese">Japanese</option>
-						<option value="Latin">Latin</option>
-						<option value="Latin American Studies">Latin American Studies</option>
-						<option value="Linguistics">Linguistics</option>
-						<option value="Math and Stats">Math and Stats</option>
-						<option value="Medieval Studies">Medieval Studies</option>
-						<option value="Modern Languages & Literatures">Modern Languages & Literatures</option>
-						<option value="Music">Music</option>
-						<option value="Peace & Conflict Studies">Peace & Conflict Studies</option>
-						<option value="Philosophy">Philosophy</option>
-						<option value="Physics">Physics</option>
-						<option value="Political Science">Political Science</option>
-						<option value="Psychology">Psychology</option>
-						<option value="Public Policy">Public Policy</option>
-						<option value="Religion">Religion</option>
-						<option value="Russian">Russian</option>
-						<option value="Sociology">Sociology</option>
-						<option value="Spanish">Spanish</option>
-						<option value="Statistics">Statistics</option>
-						<option value="Theater">Theater</option>
-					</select>
-				</div>
-	
-				<!-- Course Number -->
-				<div class="form-group col-lg-2">
-					<label for="coursenumber">Course Number</label>
-					<input type="text" class="form-control" id="coursenumber" placeholder="Enter course number">
-				</div>	
-				
-				
-				<button id="remove_dept" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-
-			
-			</div> <!-- End of row -->
+			<div class="row" id="departments">
+				<!-- Place to put department and course number selections -->
+			</div>
 			
 			<div class="row" >
 				<div class="form-group col-lg-4">
-					<button id="add_a_dept" type="button" class="btn btn-default">Add a department</button>
+					<button id="add_dept" type="button" class="btn btn-default">Add a department</button>
 				</div>'
 			</div>
-			
+	
 			<script>
-				$("#add_a_dept").click(function() {
-					var last_department_input = $('.department:last');
-					last_department_input.clone().insertAfter( last_department_input);
+				var m = render("department_template", {department_number:1});
+				$(m).appendTo("#departments").slideDown();
+	
+				$("#add_dept").click(function() {
+					number_of_departments = $("#departments .department_listing").length + 1
+				
+					var m = render("department_template", {department_number:number_of_departments});
+					$(m).appendTo("#departments").slideDown();
 				});
-			</script>		
+			</script>	
 			
 			
 						
@@ -250,24 +270,29 @@
 			</div>
 
 			
-			<div class="form-group instructors ">
-				<label for="instructor">Instructor</label>
-				<input type="text" class="form-control" id="instructor" placeholder="Enter instructor name">
-			</div>			
-			
-			<div class="row">
-				<div class="form-group col-lg-4">
-					<button id="add_instructor" type="button" class="btn btn-default">Add an instructor</button>
-				</div>
+			<div class="row" id="instructors">
+				<!-- Place to put instructors -->
 			</div>
 			
-						
+			<div class="row" >
+				<div class="form-group col-lg-4">
+					<button id="add_instructor" type="button" class="btn btn-default">Add an instructor</button>
+				</div>'
+			</div>
+	
 			<script>
+				var m = render("instructor_template", {instructor_number:1});
+				$(m).appendTo("#instructors").slideDown();
+	
 				$("#add_instructor").click(function() {
-					var last_instructor = $('.instructors:last');
-					last_instructor.clone().insertAfter( last_instructor);					
-					});
+					number_of_instructors = $("#instructors .instructor_entry").length + 1
+				
+					var m = render("instructor_template", {instructor_number:number_of_instructors});
+					$(m).appendTo("#instructors").slideDown();
+				});
 			</script>	
+
+			
 
 
 			<div class="row">
@@ -350,6 +375,10 @@
 			</div>	
 
 			
+			
+			
+			
+			
 			<div id="weeks"></div>
 			
 			<div class="row">
@@ -359,35 +388,18 @@
 			</div>			
 			
 			<script>
-				var m = render("week_template", {week_number: 1});
+			
+				var m = render("week_template", {week_number:1});
 				$(m).appendTo("#weeks").slideDown();
-	
+			
 				$("#add_week").click(function() {
 					number_of_weeks = $("#weeks .week_box").length
 				
 					var m = render("week_template", {week_number: number_of_weeks+1});
 					$(m).appendTo("#weeks").slideDown();
-				});
-			
-			
-
-				
-				
+				});		
 			</script>
 			
-			<div class="form-group">
-			<label for="exampleInputPassword1">Password</label>
-			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-			</div>
-			<div class="form-group">
-			<label for="exampleInputFile">File input</label>
-			<input type="file" id="exampleInputFile">
-			<p class="help-block">Example block-level help text here.</p>
-			</div>
-			<div class="checkbox">
-			<label>
-			  <input type="checkbox"> Check me out
-			</label>
 			
 			</div>
 				<button type="submit" class="btn btn-default">Submit</button>

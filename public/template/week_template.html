@@ -2,7 +2,7 @@
 	<div class="panel-heading">
 		<span class="panel-title">Week <%= week_number %></span>
 		<div class="btn-group pull-right">
-			<button type="button" class="btn btn-danger btn-sm">Delete Week</button>
+			<button type="button" class="btn btn-danger btn-sm delete_week">Delete Week</button>
 		</div>
 		<div class="clearfix"></div>
 			
@@ -11,6 +11,14 @@
 	
 	<div class="panel-body">
 	
+		<div class="col-lg-4" >
+			<label for="instructor">Topic</label>
+			<input type="text" class="form-control" id="topic_<%= week_number %>" placeholder="Enter topic">
+		</div>	
+
+		<div class="clearfix"></div>
+
+	
 		<div class="reading_list">
 		
 			<!-- Individual reading entries go here-->
@@ -18,11 +26,11 @@
 		</div>	 <!-- End of reading_list -->
 		
 		<!-- Button for adding a new reading -->
-		<div class="row">
+
 			<div class="form-group col-lg-4">
 				<button type="button" class="btn btn-default add_reading">Add a reading</button>
 			</div>
-		</div>
+
 
 	</div> <!-- End of panel-body -->
 	
@@ -32,6 +40,10 @@
 <!-- code to add and remove readings -->
 <script>
 
+		// Remove old click handlier
+		$( ".add_reading").unbind( "click" );
+		
+		// Handle "Add reading" button clicks
 		$(".add_reading").click(function() {
 			
 			var week_number = $(this).closest(".week_box").index(".week_box") + 1;
@@ -44,12 +56,14 @@
 		});
 		
 		
-		$(".delete_reading").click(function() {
+		$(".delete_week").click(function() {
 		
 			// Find the div with class reading_entry that contains this button and remove it
-			$(this).closest(".reading_entry").css("background-color","red");
-			alert("hi");
-		
+			$(this).closest(".week_box").slideUp(
+				function() {
+					$(this).remove();
+				}
+			);
 		});
 
 </script>

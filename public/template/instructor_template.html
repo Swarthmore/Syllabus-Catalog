@@ -1,0 +1,28 @@
+<div class="form-group instructor_entry">
+
+	<div class=" col-lg-4" >
+		<label for="instructor">Instructor <%= instructor_number %></label>
+		<input type="text" class="form-control" id="instructor_<%= instructor_number %>" placeholder="Enter instructor name">
+	</div>	
+
+	<% if (instructor_number> 1) {
+			print ('<button type="button" class="btn btn-danger btn-xs delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>');
+		}
+	%>
+	
+</div>
+<div class="clearfix"></div>	
+
+
+<!-- Code for removing instructor -->
+<script>
+	$(".delete_instructor").click(function() {
+
+		// Find the div with class instructor_entry that contains this button and remove it
+		$(this).closest(".instructor_entry").slideUp(
+			function() {
+				$(this).remove();
+			}
+		);
+	});
+</script>

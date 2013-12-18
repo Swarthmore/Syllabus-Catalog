@@ -124,10 +124,21 @@ io.sockets.on('connection', function(socket) {
 
 	utility.update_status("Got a socket connection");
 			
-	socket.on('reload_search_terms', function (data) {
-		utility.update_status("Re-loading configs");
-		load_config();
+	socket.on('search_oclc', function (data) {
+		utility.update_status("Search OCLC for: " + data.q);
+		
+		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&wskey= DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
+			console.log("Got response: " + res.statusCode);
+		}).on('error', function(e) {
+			console.log("Got error: " + e.message);
+		});
+		
 	});
+	
+	
+	
+	
+	
 });
 
 
