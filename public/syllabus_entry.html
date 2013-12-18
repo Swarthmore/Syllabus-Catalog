@@ -351,27 +351,28 @@
 
 			
 			<div id="weeks"></div>
-
+			
+			<div class="row">
+				<div class="form-group col-lg-4">
+					<button id="add_week" type="button" class="btn btn-default">Add a week</button>
+				</div>
+			</div>			
 			
 			<script>
 				var m = render("week_template", {week_number: 1});
 				$(m).appendTo("#weeks").slideDown();
-			
-			
-				$("#add_reading").click(function() {
-					var last_reading = $('#reading_list .reading:last');
-					var last_reading_input = last_reading.find("input");
-					
-					// Only add a new box if the previous one is empty
-					if (last_reading_input.val() != "") {
-						// Copy the reading entry, clear the values, and add a new reading to the bottom of the list
-						new_reading = last_reading.clone();
-						new_reading.find('input').val("");
-						new_reading.insertAfter( last_reading);	
-					} else {
-						return;
-					}
+	
+				$("#add_week").click(function() {
+					number_of_weeks = $("#weeks .week_box").length
+				
+					var m = render("week_template", {week_number: number_of_weeks+1});
+					$(m).appendTo("#weeks").slideDown();
 				});
+			
+			
+
+				
+				
 			</script>
 			
 			<div class="form-group">

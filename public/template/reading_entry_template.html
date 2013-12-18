@@ -1,0 +1,20 @@
+<div class="row reading_entry">
+	<div class="form-group col-lg-4">
+		<label for="reading">Reading OCLC Number</label>
+		<input type="text" class="form-control" id="week_<%= reading %>_reading_<%= reading %>" placeholder="Enter OCLC number for reading <%= reading %> in week <%= week %>">
+	</div>
+
+	<div class="btn-group pull-left">
+		<button type="button" class="btn btn-danger btn-xs delete_reading"><span class="glyphicon glyphicon-remove"></span></button>
+	</div>
+</div>
+
+
+<!-- Code for removing reading -->
+<script>
+	$(".delete_reading").click(function() {
+
+		// Find the div with class reading_entry that contains this button and remove it
+		$(this).closest(".reading_entry").remove();
+	});
+</script>

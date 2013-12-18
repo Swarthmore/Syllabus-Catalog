@@ -1,26 +1,55 @@
-<div class="panel panel-default">
+<div class="panel panel-default week_box" id="week_<%= week_number %>">
 	<div class="panel-heading">
-		<h3 class="panel-title">Week <%= week_number %></h3>
-	</div>
+		<span class="panel-title">Week <%= week_number %></span>
+		<div class="btn-group pull-right">
+			<button type="button" class="btn btn-danger btn-sm">Delete Week</button>
+		</div>
+		<div class="clearfix"></div>
+			
+	</div> <!-- End of panel-heading -->
+	
+	
 	<div class="panel-body">
 	
-	<div id="reading_list">
-		<div class="row reading">
-			<div class="form-group col-lg-4">
-				<label for="reading">Reading OCLC Number</label>
-				<input type="text" class="form-control" id="reading" placeholder="Enter reading OCLC number">
-			</div>
-			<div class="form-group col-lg-4">
-				<button id="remove_reading" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-			</div>
-		</div>
-	</div>	
+		<div class="reading_list">
 		
+			<!-- Individual reading entries go here-->
+			
+		</div>	 <!-- End of reading_list -->
+		
+		<!-- Button for adding a new reading -->
 		<div class="row">
 			<div class="form-group col-lg-4">
-				<button id="add_reading" type="button" class="btn btn-default">Add a reading</button>
+				<button type="button" class="btn btn-default add_reading">Add a reading</button>
 			</div>
 		</div>
 
-	</div>
-</div>
+	</div> <!-- End of panel-body -->
+	
+</div> <!-- End of panel -->
+
+
+<!-- code to add and remove readings -->
+<script>
+
+		$(".add_reading").click(function() {
+			
+			var week_number = $(this).closest(".week_box").index(".week_box") + 1;
+			var reading_number = $(this).closest(".week_box").find(".reading_entry").length + 1
+			var reading_list = $(this).closest(".week_box").find(".reading_list")
+			
+			var m = render("reading_entry_template", {week: week_number, reading: reading_number});
+			$(m).appendTo(reading_list).slideDown();
+			
+		});
+		
+		
+		$(".delete_reading").click(function() {
+		
+			// Find the div with class reading_entry that contains this button and remove it
+			$(this).closest(".reading_entry").css("background-color","red");
+			alert("hi");
+		
+		});
+
+</script>
