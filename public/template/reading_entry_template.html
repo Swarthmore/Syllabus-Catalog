@@ -38,6 +38,8 @@
 	$(".search_reading").click(function() {
 		var search_q = $(this).prev().val();
 		
+		console.log("Requesting a search for: " + search_q);
+		
 		socket.emit("search_oclc", {q:search_q});	
 		
 	});

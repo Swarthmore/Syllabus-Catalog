@@ -68,7 +68,7 @@ function start_server(config_file, callback) {
 function connect_to_db(config, callback) {
 
 	utility.update_status("Connecting to database");
-	MongoClient.connect('mongodb://127.0.0.1:27017/syllabus-catalog', function(err, db) {
+	MongoClient.connect('mongodb://' + config.DB.db_host + ':27017/syllabus-catalog', function(err, db) {
 		if(err) {utility.update_status("Can't connect to database: " + err);}
 
 		config.db = db;
@@ -123,20 +123,36 @@ function handler (request, response) {
 io.sockets.on('connection', function(socket) {
 
 	utility.update_status("Got a socket connection");
+		
+		
+		
 			
 	socket.on('search_oclc', function (data) {
 		utility.update_status("Search OCLC for: " + data.q);
 		
-		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&wskey= DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
-			console.log("Got response: " + res.statusCode);
-		}).on('error', function(e) {
-			console.log("Got error: " + e.message);
-		});
+		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&wskey=DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
+
+			var pageData = "";
+		
+			res.on('error', function(e) {
+				console.log("Got error: " + e.message);
+			});
+		
+		
+			res.on('data', function (chunk) {
+			  pageData += chunk;
+			});
+
+			res.on('end', function(){
+				console.log("Got response: " + res.statusCode);
+			   console.log(pageData)
+			});
+		
 		
 	});
+	});
 	
-	
-	
+
 	
 	
 });
