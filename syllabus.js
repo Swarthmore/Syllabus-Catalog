@@ -129,7 +129,10 @@ io.sockets.on('connection', function(socket) {
 	socket.on('search_oclc', function (data) {
 		utility.update_status("Search OCLC for: " + data.q);
 		
-		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&format=atom&cformat=mla&count=10&wskey=DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
+		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + 
+			"&format=atom&cformat=mla&count=" + 
+			config.OCLC.search_results_count + 
+			"&wskey=" + config.OCLC.wskey, function(res) {
 
 			var pageData = "";
 		
