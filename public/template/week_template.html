@@ -11,25 +11,47 @@
 	
 	<div class="panel-body">
 	
-		<div class="col-lg-4" >
-			<label for="instructor">Topic</label>
-			<input type="text" class="form-control" id="topic_<%= week_number %>" placeholder="Enter topic">
+		<div class="form-group" >
+			<label class="col-sm-1 control-label" for="topic_<%= week_number %>">Topic</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="topic_<%= week_number %>" placeholder="Enter topic">
+			</div>
+		</div>	
+
+		<div class="form-group" >
+			<label class="col-sm-1 control-label" for="details_<%= week_number %>">Details</label>
+			<div class="col-sm-10">
+				<textarea class="form-control" rows="3" id="details_<%= week_number %>" placeholder="Topic details"></textarea>
+			</div>
 		</div>	
 
 		<div class="clearfix"></div>
 
-	
-		<div class="reading_list">
-		
-			<!-- Individual reading entries go here-->
-			
-		</div>	 <!-- End of reading_list -->
+		<div class="table-responsive col-lg-12 reading_list">
+			<label class="control-label" for="week_<%= week_number %>_readinglist">Reading list</label>
+			<table class="table table-striped " id="week_<%= week_number %>_readinglist">
+				<thead>
+					<tr>
+						<th>OCLC&nbsp;#</th>
+						<th>Citation</th>
+						<th>Pages</th>
+						<th>Remove</th>
+					</tr>
+				</thead>
+				<!-- Individual reading entries go here-->
+			</table>	 <!-- End of reading_list -->
+		</div>
 		
 		<!-- Button for adding a new reading -->
-
-			<div class="form-group col-lg-4">
-				<button type="button" class="btn btn-default add_reading">Add a reading</button>
-			</div>
+		<div class="col-lg-6">
+			<label for="instructor">Search for a reading in WorldCat</label>
+			<div class="input-group">
+			  <input type="text" class="form-control">
+			  <span class="input-group-btn search_reading" >
+				<button class="btn btn-default " type="button" data-loading-text="Searching...">Search</button>
+			  </span>
+			</div><!-- /input-group -->
+		  </div><!-- /.col-lg-6 -->
 
 
 	</div> <!-- End of panel-body -->
@@ -39,31 +61,28 @@
 
 <!-- code to add and remove readings -->
 <script>
+	
+	$(".delete_week").click(function() {
+	
+		// Find the div with class reading_entry that contains this button and remove it
+		$(this).closest(".week_box").slideUp(
+			function() {
+				$(this).remove();
+			}
+		);
+	});
 
-		// Remove old click handlier
-		$( ".add_reading").unbind( "click" );
+
+	// Search for a new reading.
+	$(".search_reading").click(function() {
+	
+		// Set the search button to disabled
+		$(this).find("button").button("loading");
 		
-		// Handle "Add reading" button clicks
-		$(".add_reading").click(function() {
-			
-			var week_number = $(this).closest(".week_box").index(".week_box") + 1;
-			var reading_number = $(this).closest(".week_box").find(".reading_entry").length + 1
-			var reading_list = $(this).closest(".week_box").find(".reading_list")
-			
-			var m = render("reading_entry_template", {week: week_number, reading: reading_number});
-			$(m).appendTo(reading_list).slideDown();
-			
-		});
-		
-		
-		$(".delete_week").click(function() {
-		
-			// Find the div with class reading_entry that contains this button and remove it
-			$(this).closest(".week_box").slideUp(
-				function() {
-					$(this).remove();
-				}
-			);
-		});
+		var week_number = $(this).closest(".week_box").index(".week_box") + 1;
+		var search_q = $(this).prev().val();	
+		socket.emit("search_oclc", {q:search_q, week:week_number});		
+	});
+
 
 </script>

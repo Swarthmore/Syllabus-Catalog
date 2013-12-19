@@ -55,6 +55,13 @@
 		code {
 		  font-size: 80%;
 		}
+		
+		
+		/* Start reading list table as hidden  */
+		.reading_list {
+			display:none;
+		}
+		
 	 </style>
 	 
 
@@ -103,7 +110,7 @@
 	
 	function start_ws() {
 	
-		socket = io.connect('', {
+		socket = io.connect('http://23.23.177.220', {
 			'reconnect': true,
   			'reconnection delay': 500,
   			'max reconnection attempts': Infinity
@@ -115,8 +122,11 @@
 
 		// SOCKET MESSAGE DEFINITIONS 
 
-		socket.on('reading_search_results', function(data) {
+		socket.on('worldcat_search_results', function(data) {
 			console.debug(data);
+			var m = render("reading_search_results_template", data);
+			$("#reading_search_results_modal").html(m);
+			$('#reading_search_results_modal').modal({show:true});
 		});
 	
 	
@@ -170,6 +180,7 @@
 		
 	$(document).ready(function() {
 		start_ws();		// Start web sockets	
+	
 	});
 	
 
@@ -235,7 +246,7 @@
         </div>
     -->
 
-		<form role="form" >
+		<form role="form" class="form-horizontal">
 		
 			<!-- Form Name -->
 			<legend>Syllabus Entry</legend>
@@ -405,6 +416,9 @@
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
 
+			<!-- Search WorldCat modal placeholder -->
+			<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false">
+			</div>
 
 
       </div>

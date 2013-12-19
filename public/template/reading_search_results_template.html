@@ -1,0 +1,70 @@
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><%= feed.title %>&nbsp;</h4>
+      </div>
+      <div class="modal-body">
+        <p><%= feed.subtitle %></p>
+        
+        <% if (typeof feed.entry  === 'undefined') { %>
+        	<h5>No search results found</h5>
+        <% } %>
+        
+        
+        <div class="table-responsive">
+			<table class="table table-striped">
+				<% _.each(feed.entry, function(entry, index, list) { %>
+					<tr>
+						<td>
+							<button type="button" class="btn btn-primary select_reading_button" data-dismiss="modal" id="button_<%= entry["oclcterms:recordIdentifier"][0] %>" >Select</button> 
+						</td><td>
+							<a href="<%= entry.link[0].$.href %>" target="blank">
+								<span id="citation_<%= entry["oclcterms:recordIdentifier"][0] %>" >
+									<%= entry.content[0]._ %>
+								</span>
+							</a>
+						</td>
+					</tr>
+				<% }); %>
+			</table>
+		</div>
+        
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+
+
+
+<!-- Code for select button -->
+<script>
+
+// Now that results are loaded, reset the state of the search button
+ $(".week_box:nth-of-type(<%= week_number %>) .search_reading button").button("reset");
+
+
+$(".select_reading_button").click(function() {
+	// Get the index of the button -- this is everything after the underscore
+	var oclc = $(this).attr("id").replace("button_","");
+	var citation = $("#citation_" + oclc).html();
+	var week_number = <%= week_number %>;
+	
+	var reading_number = $(".week_box:nth-of-type(<%= week_number %>)").find(".reading_entry").length + 1
+	var reading_list = $(".week_box:nth-of-type(<%= week_number %>)").find(".reading_list > table")
+	
+	
+	// Make sure reading list div is visible
+	$(".week_box:nth-of-type(<%= week_number %>)").find(".reading_list").show();
+		
+	var m = render("reading_entry_template", {week_number: <%= week_number %>, reading_number: reading_number, citation: citation, oclc: oclc});
+	$(m).appendTo(reading_list).slideDown();
+
+});
+
+
+</script>

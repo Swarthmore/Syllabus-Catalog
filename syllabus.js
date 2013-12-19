@@ -10,7 +10,9 @@ var http = require('http'),
   	mongo = require('mongodb'),
   	async = require('async'),
   	moment = require('moment'),
-  	utility = require("./utility");
+  	util = require('util'),
+  	utility = require("./utility"),
+  	parseString = require('xml2js').parseString;
 
 
 var twit;
@@ -68,7 +70,7 @@ function start_server(config_file, callback) {
 function connect_to_db(config, callback) {
 
 	utility.update_status("Connecting to database");
-	MongoClient.connect('mongodb://' + config.DB.db_host + ':27017/syllabus-catalog', function(err, db) {
+	MongoClient.connect('mongodb://127.0.0.1:27017/syllabus-catalog', function(err, db) {
 		if(err) {utility.update_status("Can't connect to database: " + err);}
 
 		config.db = db;
@@ -123,29 +125,43 @@ function handler (request, response) {
 io.sockets.on('connection', function(socket) {
 
 	utility.update_status("Got a socket connection");
-		
-		
-		
 			
 	socket.on('search_oclc', function (data) {
 		utility.update_status("Search OCLC for: " + data.q);
 		
-		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&wskey=DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
+		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + "&format=atom&cformat=mla&count=10&wskey=DhjV4Y2nMHk7OiBvElnW4Vv1AK1gFu7ELtYfLCHGivaaaJzKx0wI3WrJqpfvghvrOMjODOBdYOdMJqo6", function(res) {
 
 			var pageData = "";
 		
+		
 			res.on('error', function(e) {
-				console.log("Got error: " + e.message);
+				console.log("Error doing WorldCat search: " + e.message);
 			});
-		
-		
+	
+	
 			res.on('data', function (chunk) {
-			  pageData += chunk;
+				pageData += chunk;
 			});
 
+
 			res.on('end', function(){
-				console.log("Got response: " + res.statusCode);
-			   console.log(pageData)
+				utility.update_status("Got response from WorldCat search: " + res.statusCode);
+				
+				// Parse XML data from WorldCat search
+				parseString(pageData, function (err, result) {
+				
+					if (err) {
+						utility.update_status("Error parsing XML from Worldcat search: " + err);
+						return;
+					}
+					
+					// Add week number to result
+					result.week_number = data.week;
+										
+    				utility.update_status(util.inspect(result, false, null));
+    				socket.emit("worldcat_search_results", result);
+				});
+				
 			});
 		
 		
@@ -156,5 +172,4 @@ io.sockets.on('connection', function(socket) {
 	
 	
 });
-
 
