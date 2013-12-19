@@ -6,194 +6,27 @@
     
     <!-- Bootstrap -->
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
 
 	<!-- Optional theme
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
 	 -->
-	 <style>
 	 
-			 html,
-		body {
-		  height: 100%;
-		  /* The html and body elements cannot have any padding or margin. */
-		}
-
-		/* Wrapper for page content to push down footer */
-		#wrap {
-		  min-height: 100%;
-		  height: auto;
-		  /* Negative indent footer by its height */
-		  margin: 0 auto -60px;
-		  /* Pad bottom by footer height */
-		  padding: 0 0 60px;
-		}
-
-		/* Set the fixed height of the footer here */
-		#footer {
-		  height: 60px;
-		  background-color: #f5f5f5;
-		}
-
-
-		/* Custom page CSS
-		-------------------------------------------------- */
-		/* Not required for template or sticky footer method. */
-
-		#wrap > .container {
-		  padding: 60px 15px 0;
-		}
-		.container .text-muted {
-		  margin: 20px 0;
-		}
-
-		#footer > .container {
-		  padding-left: 15px;
-		  padding-right: 15px;
-		}
-
-		code {
-		  font-size: 80%;
-		}
-		
-		
-		/* Start reading list table as hidden  */
-		.reading_list {
-			display:none;
-		}
-		
-		.col-centered{
-			float: none;
-			margin: 0 auto;
-		}
-		
-	 </style>
+	 <!-- Program specific CSS -->
+	<link rel="stylesheet" href="/css/syllabus_entry.css">
 	 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) and other JS libs-->
     <script src="https://code.jquery.com/jquery.js"></script>
 	<script src="./js/lib/underscore-min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/lib/date.format.js"></script>
 
-
-	<script>
-	
-
-	// Set up template rendering function.  This will load templates the first time they are
-	// used and then cache them.  
-
-	function render(tmpl_name, tmpl_data) {
-		if ( !render.tmpl_cache ) { 
-			render.tmpl_cache = {};
-		}
-
-		if ( ! render.tmpl_cache[tmpl_name] ) {
-			var tmpl_dir = './template';
-			var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
-
-			var tmpl_string;
-			$.ajax({
-				url: tmpl_url,
-				method: 'GET',
-				async: false,
-				success: function(data) {
-					tmpl_string = data;
-				}
-			});
-
-			render.tmpl_cache[tmpl_name] = _.template(tmpl_string);
-		}
-
-		return render.tmpl_cache[tmpl_name](tmpl_data);
-	}
+	<!-- Program-specific JS -->
+	<script src="/js/syllabus_entry.js"></script>
+	<script src="/js/syllabus_save.js"></script>
 
 
-	
-
-	
-	
-	function start_ws() {
-	
-		socket = io.connect('http://23.23.177.220', {
-			'reconnect': true,
-  			'reconnection delay': 500,
-  			'max reconnection attempts': Infinity
-		});
-		var socketTimer;
-		var ws_heartbeat_interval = 60000;		// Websocket heartbeat (to keep connection open)
-				
-
-
-		// SOCKET MESSAGE DEFINITIONS 
-
-		socket.on('worldcat_search_results', function(data) {
-			console.debug(data);
-			var m = render("reading_search_results_template", data);
-			$("#reading_search_results_modal").html(m);
-			$('#reading_search_results_modal').modal({show:true});
-		});
-	
-	
-		// When socket is opened, display message in console
-		socket.on('connect', function() { 
-			
-			formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
-			console.log("Started connection to server: " + formatted_time);
-				
-			// Turn off automatic attempts to start socket
-			clearInterval(socketTimer);
-		
-			// Replace with heartbeat 
-			socketTimer = setInterval(function() {socket.send('heartbeat');}, ws_heartbeat_interval);
-					
-		}); // End of socket open routine 	
-
-
-
-
-		// If socket is closed, display notification message
-		socket.on('disconnect', function() {  
-		
-			var formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
-			console.log("Connection with server interrupted: " + formatted_time);
-			
-			// Turn off automatic attempts to send heartbeat
-			clearInterval(socketTimer);		
-		
-			// Keep trying to restart connection
-			socketTimer = setInterval(function(){start_ws()}, 5000);
-		});  // End of socket close	
-	
-	
-	
-	
-		// If there is a socket error, display a notification message
-		socket.on("error", function() {  
-			var formatted_time = dateFormat(new Date(), 'mm/dd/yyyy hh:MM TT');
-			console.log("Websocket error: " + formatted_time);
-		
-		}); // End of socket on error	
-	
-	
-	
-	
-	}
-	
-	
-	
-		
-	$(document).ready(function() {
-		start_ws();		// Start web sockets	
-	
-	});
-	
-
-
-
-
-
-	</script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -202,8 +35,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
   
+  <body>
   
     <!-- Wrap all page content here -->
     <div id="wrap">
@@ -265,20 +98,6 @@
 					<button id="add_dept" type="button" class="btn btn-default">Add a department</button>
 				</div>
 			</div>
-	
-			<script>
-				var m = render("department_template", {department_number:1});
-				$(m).appendTo("#departments").slideDown();
-	
-				$("#add_dept").click(function() {
-					number_of_departments = $("#departments .department_listing").length + 1
-				
-					var m = render("department_template", {department_number:number_of_departments});
-					$(m).appendTo("#departments").slideDown();
-				});
-			</script>	
-			
-			
 						
 			<div class="form-group">
 				<label for="coursename">Course Name</label>
@@ -296,25 +115,12 @@
 				</div>
 			</div>
 	
-			<script>
-				var m = render("instructor_template", {instructor_number:1});
-				$(m).appendTo("#instructors").slideDown();
-	
-				$("#add_instructor").click(function() {
-					number_of_instructors = $("#instructors .instructor_entry").length + 1
-				
-					var m = render("instructor_template", {instructor_number:number_of_instructors});
-					$(m).appendTo("#instructors").slideDown();
-				});
-			</script>	
-
-			
-
 
 			<div class="row">
 				<div class="form-group col-lg-2">
 					<label for="semester">Semester</label>
-					<select class="form-control" id="department">
+					<select class="form-control" id="semester_selection">
+						<option value="" selected disabled>Select semester</option>
 						<option value="Spring 2014">Spring 2014</option>
 						<option value="Fall 2013">Fall 2013</option>
 						<option value="Spring 2013">Spring 2013</option>
@@ -337,7 +143,8 @@
 				<div class="form-group col-lg-1"></div>
 				<div class="form-group col-lg-2">
 					<label for="credits">Credits</label>
-					<select class="form-control" id="credits">
+					<select class="form-control" id="credit_selection">
+						<option value="" selected disabled>Select credits</option>
 						<option value="2">2</option>
 						<option value="1.5">1.5</option>
 						<option value="1">1</option>
@@ -370,12 +177,7 @@
 				<label for="policies">Policies</label>
 				<textarea class="form-control" rows="3" id="policies"></textarea>
 			</div>
-			
-			<div class="form-group">
-				<label for="policies">Policies</label>
-				<textarea class="form-control" rows="3" id="policies"></textarea>
-			</div>	
-					
+							
 			<div class="form-group">
 				<label for="class_format">Class Format</label>
 				<textarea class="form-control" rows="3" id="class_format"></textarea>
@@ -391,11 +193,7 @@
 				<textarea class="form-control" rows="3" id="required_events"></textarea>
 			</div>	
 
-			
-			
-			
-			
-			
+				
 			<div id="weeks"></div>
 			
 			<div class="row">
@@ -403,38 +201,24 @@
 					<button id="add_week" type="button" class="btn btn-default">Add a week</button>
 				</div>
 			</div>			
-			
-			<script>
-			
-				var m = render("week_template", {week_number:1});
-				$(m).appendTo("#weeks").slideDown();
-			
-				$("#add_week").click(function() {
-					number_of_weeks = $("#weeks .week_box").length
-				
-					var m = render("week_template", {week_number: number_of_weeks+1});
-					$(m).appendTo("#weeks").slideDown();
-				});		
-			</script>
 	
-	
-			
-			</div>
-	
-			
 			<div class="row">
 				<div class="col-lg-1 col-centered">
-					<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+					<button type="button" class="btn btn-primary btn-lg" onClick="save_syllabus()">Save Syllabus</button>
 					<BR><BR>
 				</div>
 			</div>		
-
 				
-			</form>
+		<div class="form-group col-lg-4">
+			<input type="text" class="form-control" id="syllabus_id" readonly>
+		</div>
+				
+			
+		</form>
 
-			<!-- Search WorldCat modal placeholder -->
-			<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false">
-			</div>
+		<!-- Search WorldCat modal placeholder -->
+		<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false">
+		</div>
 
 
       </div>
@@ -442,12 +226,10 @@
 
     <div id="footer">
       <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
+       
       </div>
     </div>
 
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>

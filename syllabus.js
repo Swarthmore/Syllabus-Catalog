@@ -93,7 +93,7 @@ function handler (request, response) {
 	
 	} else if (request.method == "POST") {
 	
-		// Is this an Instagram post?  If so, collect the data
+		// Is this a a request to save the syllabus?  If so, collect the data
 		if (request.url.indexOf("/save_syllabus") == 0) {
 		
 			// Save POST data as it arrives
@@ -101,17 +101,45 @@ function handler (request, response) {
 				data += chunk;
 			});
 			
-			// When Instagram request is done, acknowledge it
+			// When save syllabus request is done, acknowledge it
 			request.on("end", function() { 
 				utility.update_status(data);
 				
 				data = JSON.parse(data);		// Convert to JSON
 				
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("Save syllabus request received");
-				response.end(); 
-			});	
-			// End of handling Instagram posts
+				// If _id is present, convert it to object
+				if (typeof data._id !== 'undefined') {
+					data._id = new mongo.ObjectID(data._id)
+				}
+				
+				var _id = config.db.collection('syllabi').save(data, function(err, doc) {
+					
+					message = {};
+					
+					if (err) {
+						message.status = "Error saving syllabus to database: " + err;
+					} else {
+					
+						if (doc == 1) {
+							message.status = "Successfully updated syllabus in database";
+						} else {
+							message.status = "Successfully saved syllabus to database (" + doc._id + ")";
+							message.syllabus_id = doc._id
+						}
+
+					}
+					console.log(data);
+				
+					response.writeHead(200, {"Content-Type": "application/json"});
+					response.write(JSON.stringify(message));
+					response.end(); 
+			
+					utility.update_status(message.status);
+			
+				});	// End save syllabus to db
+			
+			
+			}); // End of handling save syllabus posts
 			
 		} else {
 		

@@ -3,7 +3,7 @@
 
 	<div class="col-lg-4" >
 		<label for="department">Department <%= department_number %></label>
-		<select class="form-control" id="department_<%= department_number %>">
+		<select class="form-control department_selection">
 			<option value="">Select Department/Program</option>
 			<option value="Ancient History">Ancient History</option>
 			<option value="Anthropology">Anthropology</option>
@@ -61,7 +61,7 @@
 	<!-- Course Number -->
 	<div class="form-group col-lg-2">
 		<label for="coursenumber">Course Number</label>
-		<input type="text" class="form-control" id="coursenumber_<%= department_number %>" placeholder="Enter course number">
+		<input type="text" class="form-control course_number_entry" placeholder="Enter course number">
 	</div>	
 	
 	<% if (department_number> 1) {
