@@ -111,6 +111,7 @@ $(document).ready(function() {
 	setup_dept_template();
 	setup_instructor_template();
 	setup_week_template();
+	setup_nav_links();
 	 
 	start_ws();		// Start web sockets	
 	
@@ -121,16 +122,14 @@ $(document).ready(function() {
 
 function setup_dept_template() {
 
-	var m = render("department_template", {department_number:1});
+	// Add the department listing structure
+	var m = render("department_template");
 	$(m).appendTo("#departments").slideDown();
-
-	$("#add_dept").click(function() {
-		number_of_departments = $("#departments .department_listing").length + 1
-
-		var m = render("department_template", {department_number:number_of_departments});
-		$(m).appendTo("#departments").slideDown();
-	});
-
+	
+	// Add an initial department
+	var department_list = $("#department_listing > table")
+	var m = render("department_entry_template");
+	$(m).appendTo(department_list).slideDown();
 }
 
 
@@ -138,7 +137,7 @@ function setup_instructor_template() {
 	var m = render("instructor_template", {instructor_number:1});
 	$(m).appendTo("#instructors").slideDown();
 
-	$("#add_instructor").click(function() {
+	$(".add_instructor").click(function() {
 		number_of_instructors = $("#instructors .instructor_entry").length + 1
 	
 		var m = render("instructor_template", {instructor_number:number_of_instructors});
@@ -151,13 +150,22 @@ function setup_instructor_template() {
 function setup_week_template() {
 			
 	var m = render("week_template", {week_number:1});
-	$(m).appendTo("#weeks").slideDown();
+	$(m).appendTo("#weeks").slideDown();	
 
-	$("#add_week").click(function() {
-		number_of_weeks = $("#weeks .week_box").length
-	
-		var m = render("week_template", {week_number: number_of_weeks+1});
-		$(m).appendTo("#weeks").slideDown();
-	});		
+}
+
+
+function setup_nav_links() {
+
+	$("#search_button").click(function() {
+		$("#search_container").removeClass('hidden');
+		$("#entry_container").addClass('hidden');
+	});
+
+	$("#entry_button").click(function() {
+		$("#search_container").addClass('hidden');
+		$("#entry_container").removeClass('hidden');
+	});
+
 
 }

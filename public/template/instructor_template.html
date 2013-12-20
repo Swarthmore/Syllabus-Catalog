@@ -1,14 +1,31 @@
-<div class="form-group instructor_entry">
+<div class="form-group instructor_entry form-horizontal">
 
-	<div class=" col-lg-4" >
-		<label for="instructor">Instructor <%= instructor_number %></label>
-		<input type="text" class="form-control instructor_name" placeholder="Enter instructor name">
-	</div>	
+	
+	
+	<div class="col-lg-6">
+	<label for="instructor">Instructor <%= instructor_number %></label>
+    <div class="input-group">
+      <input type="text" class="instructor_name form-control" placeholder="Enter instructor name">
+      <span class="input-group-btn">
+    	<% if (instructor_number> 1) { %>
+			<button type="button" class="btn btn-danger delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>
+		<% } else { %>
+			<button type="button" class="btn btn-primary add_instructor"><span class="glyphicon glyphicon-plus"></span></button>
+		<% }  %>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+	
+	
+	
+	
+	<div class="input-append">
+		
 
-	<% if (instructor_number> 1) {
-			print ('<button type="button" class="btn btn-danger btn-xs delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>');
-		}
-	%>
+	</div>
+
+
+
 	
 </div>
 <div class="clearfix"></div>	

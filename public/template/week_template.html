@@ -1,7 +1,8 @@
-<div class="panel panel-default week_box" id="week_<%= week_number %>">
+<div class="panel panel-default week_box">
 	<div class="panel-heading">
-		<span class="panel-title">Week <%= week_number %></span>
+		<span class="panel-title week_title"></span>
 		<div class="btn-group pull-right">
+			<button type="button" class="btn btn-primary btn-sm add_week">Add a week</button>
 			<button type="button" class="btn btn-danger btn-sm delete_week">Delete Week</button>
 		</div>
 		<div class="clearfix"></div>
@@ -61,6 +62,16 @@
 
 <!-- code to add and remove readings -->
 <script>
+
+	$(".add_week").unbind("click");	// Remove existing events
+	$(".add_week").click(function() {
+		var this_week = $(this).closest(".week_box");
+		number_of_weeks = $("#weeks .week_box").length
+		var m = render("week_template", {week_number: number_of_weeks+1});
+		$(m).insertAfter(this_week).slideDown();
+		renumber_weeks();
+	});	
+
 	
 	$(".delete_week").click(function() {
 	
@@ -70,6 +81,7 @@
 				$(this).remove();
 			}
 		);
+		renumber_weeks();
 	});
 
 
@@ -84,5 +96,17 @@
 		socket.emit("search_oclc", {q:search_q, week:week_number});		
 	});
 
+
+
+	function renumber_weeks() {
+		// Find all weeks and put the correct number in the week heading
+		$(".week_box").each(function(index, element) {
+			$(element).find(".week_title").html("Week " + (index + 1));
+		});
+	
+	}
+
+	// Run renumber
+	renumber_weeks();
 
 </script>

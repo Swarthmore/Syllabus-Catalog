@@ -1,83 +1,14 @@
 <!-- Department -->
-<div class="form-group  department_listing">
-
-	<div class="col-lg-4" >
-		<label for="department">Department <%= department_number %></label>
-		<select class="form-control department_selection">
-			<option value="">Select Department/Program</option>
-			<option value="Ancient History">Ancient History</option>
-			<option value="Anthropology">Anthropology</option>
-			<option value="Arabic">Arabic</option>
-			<option value="Art">Art</option>
-			<option value="Art History">Art History</option>
-			<option value="Asian Studies">Asian Studies</option>
-			<option value="Astronomy">Astronomy</option>
-			<option value="Biochemistry">Biochemistry</option>
-			<option value="Biology">Biology</option>
-			<option value="Black Studies">Black Studies</option>
-			<option value="Chemistry">Chemistry</option>
-			<option value="Chinese">Chinese</option>
-			<option value="Classics">Classics</option>
-			<option value="Cognitive Science">Cognitive Science</option>
-			<option value="Comparative Literature">Comparative Literature</option>
-			<option value="Computer Science">Computer Science</option>
-			<option value="Dance">Dance</option>
-			<option value="Economics">Economics</option>
-			<option value="Educational Studies">Educational Studies</option>
-			<option value="Engineering">Engineering</option>
-			<option value="English Literature">English Literature</option>
-			<option value="Environmental Studies">Environmental Studies</option>
-			<option value="Film & Media Studies">Film & Media Studies</option>
-			<option value="French & Francophone Studies">French & Francophone Studies</option>
-			<option value="Gender & Sexuality Studies">Gender & Sexuality Studies</option>
-			<option value="German Studies">German Studies</option>
-			<option value="Greek">Greek</option>
-			<option value="History">History</option>
-			<option value="Interpretation Theory">Interpretation Theory</option>
-			<option value="Islamic Studies">Islamic Studies</option>
-			<option value="Japanese">Japanese</option>
-			<option value="Latin">Latin</option>
-			<option value="Latin American Studies">Latin American Studies</option>
-			<option value="Linguistics">Linguistics</option>
-			<option value="Math and Stats">Math and Stats</option>
-			<option value="Medieval Studies">Medieval Studies</option>
-			<option value="Modern Languages & Literatures">Modern Languages & Literatures</option>
-			<option value="Music">Music</option>
-			<option value="Peace & Conflict Studies">Peace & Conflict Studies</option>
-			<option value="Philosophy">Philosophy</option>
-			<option value="Physics">Physics</option>
-			<option value="Political Science">Political Science</option>
-			<option value="Psychology">Psychology</option>
-			<option value="Public Policy">Public Policy</option>
-			<option value="Religion">Religion</option>
-			<option value="Russian">Russian</option>
-			<option value="Sociology">Sociology</option>
-			<option value="Spanish">Spanish</option>
-			<option value="Statistics">Statistics</option>
-			<option value="Theater">Theater</option>
-		</select>
-	</div>
-
-	<!-- Course Number -->
-	<div class="form-group col-lg-2">
-		<label for="coursenumber">Course Number</label>
-		<input type="text" class="form-control course_number_entry" placeholder="Enter course number">
-	</div>	
-	
-	<% if (department_number> 1) {
-			print ('<button type="button" class="btn btn-danger btn-xs delete_dept"><span class="glyphicon glyphicon-remove"></span></button>');
-		}
-	%>
+<div class="table-responsive col-lg-8" id="department_listing">
+	<table class="table department_table">
+		<thead>
+			<tr>
+				<th>Department</th>
+				<th>Course Number</th>
+				<th class="text-center"></th>
+			</tr>
+		</thead>
+		<!-- Individual department entries go here-->
+	</table>	 <!-- End of department_list -->
 </div>
-<div class="clearfix"></div>
-
-
-<!-- Code for removing department -->
-<script>
-	$(".delete_dept").click(function() {
-
-		// Find the div with class reading_entry that contains this button and remove it
-		$(this).closest(".department_listing").remove();
-	});
-</script>
 
