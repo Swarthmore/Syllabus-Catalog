@@ -95,16 +95,15 @@ function load_syllabus(syllabus_id) {
 		type: 'GET',
 		data: {syllabus_id: syllabus_id}
 	})
-	.done(function(data) {
+	.done(function(response) {
 
-		console.log(data);
+		console.log(response);
 		
-		if (typeof data.data == 'undefined') {
-			$("#search_container").html("No syllabi found");
+		if (typeof response.status == 'undefined' || !response.status) {
+			alert("Could not find syllabus");
+			return;
 		} else {
-			var m = render("search_results_template", data);
-			console.log(m);
-			$("#search_container").html(m);
+			show_syllabus_detail(response);
 		}
 		
 	})

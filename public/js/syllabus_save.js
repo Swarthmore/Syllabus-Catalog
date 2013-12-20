@@ -98,7 +98,7 @@ function get_departments() {
 	var department = []
 	
 	// Get a list of all the department entries
-	$(".department_listing").each( function(index) {
+	$(".department_entry").each( function(index) {
 		
 		var dept_name = $(this).find(".department_selection").val();
 		var course_number = $(this).find(".course_number_entry").val();

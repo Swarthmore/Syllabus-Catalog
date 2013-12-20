@@ -108,9 +108,7 @@ function start_ws() {
 	
 $(document).ready(function() {
 	
-	setup_dept_template();
-	setup_instructor_template();
-	setup_week_template();
+	show_syllabus_detail();
 	setup_nav_links();
 	 
 	start_ws();		// Start web sockets	
@@ -120,36 +118,41 @@ $(document).ready(function() {
 
 
 
-function setup_dept_template() {
+function setup_syllabus_detail_template(syllabus) {
+
+	var m = render("syllabus_detail_template", syllabus);
+	$("#syllabus_detail_container").html(m);
+	
+	setup_dept_template(syllabus);
+	setup_instructor_template(syllabus);
+	setup_week_template(syllabus);
+
+}
+
+
+function setup_dept_template(syllabus) {
 
 	// Add the department listing structure
-	var m = render("department_template");
+	var m = render("department_template", syllabus);
 	$(m).appendTo("#departments").slideDown();
 	
 	// Add an initial department
 	var department_list = $("#department_listing > table")
-	var m = render("department_entry_template");
+	var m = render("department_entry_template", syllabus);
 	$(m).appendTo(department_list).slideDown();
 }
 
 
-function setup_instructor_template() {
-	var m = render("instructor_template", {instructor_number:1});
+function setup_instructor_template(syllabus) {
+	var m = render("instructor_template", syllabus);
 	$(m).appendTo("#instructors").slideDown();
-
-	$(".add_instructor").click(function() {
-		number_of_instructors = $("#instructors .instructor_entry").length + 1
-	
-		var m = render("instructor_template", {instructor_number:number_of_instructors});
-		$(m).appendTo("#instructors").slideDown();
-	});
 }
 
 
 
-function setup_week_template() {
+function setup_week_template(syllabus) {
 			
-	var m = render("week_template", {week_number:1});
+	var m = render("week_template", syllabus);
 	$(m).appendTo("#weeks").slideDown();	
 
 }
@@ -165,21 +168,39 @@ function setup_nav_links() {
 	
 		// Show correct content
 		$("#search_container").removeClass('hidden');
-		$("#entry_container").addClass('hidden');
+		$("#syllabus_detail_container").addClass('hidden');
 		
 		// Search for syllabi
 		search_syllabi();
 	});
 
 	$("#entry_button").click(function() {
-	
+		show_syllabus_detail();
+	});
+
+}
+
+
+
+
+function show_syllabus_detail(syllabus) {
+
+		// If not called with data, make a blank syllabus entry
+		if (typeof syllabus != 'object') {
+			syllabus = {data:{}};
+		}
+
+		console.log("Show syllabus_detail:");
+		console.log(syllabus);
+
+		// Fill out template
+		setup_syllabus_detail_template(syllabus);
+
 		// Highlight search as active
 		$("ul.navbar-nav li").removeClass("active");	
 		$(this).closest("li").addClass('active');
 	
 		$("#search_container").addClass('hidden');
-		$("#entry_container").removeClass('hidden');
-	});
-
+		$("#syllabus_detail_container").removeClass('hidden');
 
 }

@@ -95,6 +95,11 @@ function handler (request, response) {
 			// Send back syllabi listing
 			send_syllabi(request, response);
 		
+		} else if (request.url.indexOf("/get_syllabus") == 0) {
+		
+			// Send back syllabi listing
+			get_syllabus(request, response);
+		
 		} else {
 		
 			// Serve up file
@@ -218,14 +223,25 @@ function send_syllabi(request, response) {
  
 	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1}).limit(1000)
       .toArray(function(err, docs) {
-	
+		
 			message = {};
 					
 			if (err) {
 				message.status = "Error reading syllabi from database: " + err;
 			} else {
 				message.status = "Successfully found " + docs.length + " syllabi in database";
-				message.data = docs;
+				
+				// Sort results
+				
+				
+				
+				message.data = _und.sortBy(docs, function(doc) { 
+					if ( (typeof doc.department != 'undefined') && (typeof doc.department[0].name != 'undefined')) {
+						return doc.department[0].code;
+					} else {
+						return '';
+					}
+				});
 			}
 			
 			console.log(docs);
@@ -238,7 +254,84 @@ function send_syllabi(request, response) {
         
     });
 	
-
-
 }
+
+
+
+
+
+// Send a specific syllabus in JSON format to web page
+function get_syllabus(request, response) {
+ 
+ 	var url_parts = url.parse(request.url, true);
+	var query = url_parts.query;
+ 
+ 	var message = {};
+ 
+ 	if ( typeof query.syllabus_id === 'undefined') {
+ 	
+ 		// HTTP request did not specify syllabus ID
+ 		message.status_message = "Need to provide syllabus ID number";
+ 		message.status = false;
+ 		send_json_message(response, message);
+ 		return;
+ 		
+ 	} else {
+
+		// Search for syllabus id
+		var syllabus_id;
+		
+		try {
+			var syllabus_id = new mongo.ObjectID(query.syllabus_id);
+		} 
+		catch (e) {
+			message.status_message = "Invalid syllabus ID provided: " + query.syllabus_id;
+			message.status = false;
+			send_json_message(response, message);
+ 			return;
+ 		}
+		
+		
+		var collection = config.db.collection('syllabi').findOne({_id:syllabus_id}, function(err, doc) {
+					
+			if (err) {
+			
+				message.status_message = "Error reading syllabi from database: " + err;
+				message.status = false;
+			
+			} else if (doc == null ) {
+			
+				message.status_message = "Did not find a match for syllabus ID: " + syllabus_id;
+				message.status = false;
+			
+			} else {
+			
+				message.status_message = "Successfully found syllabus id " + syllabus_id + " in database";
+				message.data = doc;
+				message.status = true;
+			}
+			
+			send_json_message(response, message);
+
+		});
+        
+    }
+}
+
+
+
+
+// Given a message in JSON format and a response, send the message to the web page
+function send_json_message(response, message) {
+
+	// Log the message
+	console.log(message);
+
+	response.writeHead(200, {"Content-Type": "application/json"});
+	response.write(JSON.stringify(message));
+	response.end(); 
+	
+	utility.update_status(message.status_message);
+}
+
 

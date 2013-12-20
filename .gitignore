@@ -1,3 +1,4 @@
 *.conf
 .DS_Storie
 node_modules/*
+*.csv

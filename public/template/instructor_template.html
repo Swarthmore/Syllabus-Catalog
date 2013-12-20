@@ -1,34 +1,58 @@
-<div class="form-group instructor_entry form-horizontal">
+<% // Check to see if there is a department defined.  If not, define one
+	
+var instructor_number;
+var manually_added = false;
 
+if ( (typeof data == 'undefined') || (typeof data.instructor == 'undefined') ||  (data.instructor.length < 1)) {
 	
+	data = {instructor:[""]}; 
+	manually_added = true;
+	instructor_number = $(".instructor_entry").length + 1;	// Look for existing instructor entries
+} else {
+	console.log(data);
+}
+
+
+_.each(data.instructor, function(instructor, index, list) { 
+
+	console.log(manually_added);
+	if (!manually_added) {
+		instructor_number = index+1;
+	}
+
+	%>
+
+	<div class="form-group instructor_entry form-horizontal">
+		<div class="col-lg-6">
+		<label for="instructor">Instructor <%= instructor_number %></label>
+		<div class="input-group">
+		  <input type="text" class="instructor_name form-control" placeholder="Enter instructor name" value="<%= instructor %>">
+		  <span class="input-group-btn">
+			<% if ( (index> 0) || ($(".instructor_entry") ).length > 0){ %>
+				<button type="button" class="btn btn-danger delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>
+			<% } else { %>
+				<button type="button" class="btn btn-primary add_instructor"><span class="glyphicon glyphicon-plus"></span></button>
+			<% }  %>
+		  </span>
+		</div><!-- /input-group -->
+	</div><!-- /.col-lg-6 -->
 	
-	<div class="col-lg-6">
-	<label for="instructor">Instructor <%= instructor_number %></label>
-    <div class="input-group">
-      <input type="text" class="instructor_name form-control" placeholder="Enter instructor name">
-      <span class="input-group-btn">
-    	<% if (instructor_number> 1) { %>
-			<button type="button" class="btn btn-danger delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>
-		<% } else { %>
-			<button type="button" class="btn btn-primary add_instructor"><span class="glyphicon glyphicon-plus"></span></button>
-		<% }  %>
-      </span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-	
-	
-	
-	
+
 	<div class="input-append">
 		
 
 	</div>
 
-
-
-	
 </div>
 <div class="clearfix"></div>	
+
+<% }); 
+
+	if (manually_added) {
+		delete data;
+	}
+%>
+
 
 
 <!-- Code for removing instructor -->
@@ -42,4 +66,13 @@
 			}
 		);
 	});
+	
+	$(".add_instructor").unbind("click");	// Remove existing click bindings
+	$(".add_instructor").click(function() {
+		number_of_instructors = $("#instructors .instructor_entry").length + 1
+	
+		var m = render("instructor_template");
+		$(m).appendTo("#instructors").slideDown();
+	});
+		
 </script>
