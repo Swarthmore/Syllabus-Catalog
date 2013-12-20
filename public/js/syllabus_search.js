@@ -62,30 +62,58 @@ function parse_syllabus_data() {
 // Send syllabus to database
 function search_syllabi() {
 
-	var syllabus = prepare_syllabus_data();
-
 	$.ajax({
-		url: '/save_syllabus', 
-		type: 'POST', 
-		contentType: 'application/json', 
-		data: JSON.stringify(syllabus)
+		url: '/search_syllabi', 
+		type: 'GET'
 	})
 	.done(function(data) {
-		alert(data.status);
+
 		console.log(data);
 		
-		// Set the syllabus_id (if provided)	
-		if (typeof data.syllabus_id !== 'undefined') {
-			$("#syllabus_id").val(data.syllabus_id);
+		if (typeof data.data == 'undefined') {
+			$("#search_container").html("No syllabi found");
+		} else {
+			var m = render("search_results_template", data);
+			$("#search_container").html(m);
 		}
+		
 	})
 	.fail(function() {
-		alert("Could NOT save syllabus to database!");
+		alert("Could NOT retrive syllabi from database!");
 	});	
 
 }
 
 
+
+
+
+function load_syllabus(syllabus_id) {
+
+	$.ajax({
+		url: '/get_syllabus', 
+		type: 'GET',
+		data: {syllabus_id: syllabus_id}
+	})
+	.done(function(data) {
+
+		console.log(data);
+		
+		if (typeof data.data == 'undefined') {
+			$("#search_container").html("No syllabi found");
+		} else {
+			var m = render("search_results_template", data);
+			console.log(m);
+			$("#search_container").html(m);
+		}
+		
+	})
+	.fail(function() {
+		alert("Could NOT retrive syllabus \"" + syllabus_id + "\" from database!");
+	});	
+
+
+}
 
 
 

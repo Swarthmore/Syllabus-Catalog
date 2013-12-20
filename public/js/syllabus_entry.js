@@ -158,11 +158,25 @@ function setup_week_template() {
 function setup_nav_links() {
 
 	$("#search_button").click(function() {
+	
+		// Highlight search as active
+		$("ul.navbar-nav li").removeClass("active");
+		$(this).closest("li").addClass('active');
+	
+		// Show correct content
 		$("#search_container").removeClass('hidden');
 		$("#entry_container").addClass('hidden');
+		
+		// Search for syllabi
+		search_syllabi();
 	});
 
 	$("#entry_button").click(function() {
+	
+		// Highlight search as active
+		$("ul.navbar-nav li").removeClass("active");	
+		$(this).closest("li").addClass('active');
+	
 		$("#search_container").addClass('hidden');
 		$("#entry_container").removeClass('hidden');
 	});

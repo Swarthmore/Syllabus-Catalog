@@ -1,0 +1,67 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>View/Edit</th>
+			<th>Course Number</th>
+			<th>Course Name</th>
+			<th>Instructor</th>
+			<th>Semester</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+	
+		<% _.each(data, function(syllabus, index, list) {
+		
+			%>
+			
+			<tr>
+				<td>
+					<button type="button" class="btn btn-default btn-sm view_syllabus"><span class="glyphicon glyphicon-pencil"></span></button>
+				</td>
+				<td>
+				
+				<%
+		
+				_.each(syllabus.department, function(department, index, list) {
+					if (index > 0) { print("<BR>"); } // Space before each entry after the first
+					print(department.name + " " + department.number);
+				});
+			
+				%> 
+				</td>
+			
+			
+				<td>
+					<% if (typeof syllabus.course_name != 'undefined') {
+						print(syllabus.course_name);
+					}
+					%>
+				</td>
+			
+			
+				<td>	
+					<% _.each(syllabus.instructor, function(instructor, index, list) {
+						if (index > 0) { print("<BR>"); } // Space before each entry after the first
+						print(instructor);
+					});
+			
+					%> 
+				</td>
+			
+			
+				<td>
+					<% if (typeof syllabus.semester != 'undefined') {
+						print(syllabus.semester);
+					}
+					%>
+				</td>
+			
+			</tr>		
+		
+		<% }); %>
+		
+	</tbody>
+</table>
+
+

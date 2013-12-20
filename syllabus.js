@@ -89,7 +89,17 @@ function handler (request, response) {
 	
 	if (request.method == "GET") {
 
-		fileServer.serve(request, response);
+		// Check for special requests.  Otherwise, serve up requested file
+		if (request.url.indexOf("/search_syllabi") == 0) {
+		
+			// Send back syllabi listing
+			send_syllabi(request, response);
+		
+		} else {
+		
+			// Serve up file
+			fileServer.serve(request, response);
+		}
 	
 	} else if (request.method == "POST") {
 	
@@ -139,7 +149,7 @@ function handler (request, response) {
 				});	// End save syllabus to db
 			
 			
-			}); // End of handling save syllabus posts
+			}); // End of handling save syllabus posts	
 			
 		} else {
 		
@@ -199,8 +209,36 @@ io.sockets.on('connection', function(socket) {
 	});
 	});
 	
-
-	
-	
 });
+
+
+
+// Send syllabi in JSON format to web page
+function send_syllabi(request, response) {
+ 
+	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1}).limit(1000)
+      .toArray(function(err, docs) {
+	
+			message = {};
+					
+			if (err) {
+				message.status = "Error reading syllabi from database: " + err;
+			} else {
+				message.status = "Successfully found " + docs.length + " syllabi in database";
+				message.data = docs;
+			}
+			
+			console.log(docs);
+		
+			response.writeHead(200, {"Content-Type": "application/json"});
+			response.write(JSON.stringify(message));
+			response.end(); 
+			
+			utility.update_status(message.status);
+        
+    });
+	
+
+
+}
 
