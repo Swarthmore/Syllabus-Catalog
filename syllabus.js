@@ -70,7 +70,7 @@ function start_server(config_file, callback) {
 function connect_to_db(config, callback) {
 
 	utility.update_status("Connecting to database");
-	MongoClient.connect('mongodb://127.0.0.1:27017/syllabus-catalog', function(err, db) {
+	MongoClient.connect("mongodb://" + config.DB.db_host + ":27017/syllabus-catalog", function(err, db) {
 		if(err) {utility.update_status("Can't connect to database: " + err);}
 
 		config.db = db;
