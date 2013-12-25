@@ -110,11 +110,55 @@ $(document).ready(function() {
 	
 	show_syllabus_detail();
 	setup_nav_links();
+
+	setup_form_validation();
 	 
 	start_ws();		// Start web sockets	
 	
 });
 
+
+
+// Configuration form validation
+function setup_form_validation() {
+
+
+ $('#syllabus_detail_form').validate({ // initialize the plugin
+ 
+		errorClass:'error',
+		validClass:'success',
+		errorElement:'span',
+		highlight: function (element, errorClass, validClass) { 
+			$(element).parents("div[class='clearfix']").addClass(errorClass).removeClass(validClass); 
+		}, 
+		unhighlight: function (element, errorClass, validClass) { 
+			$(element).parents(".error").removeClass(errorClass).addClass(validClass); 
+		},
+ 
+ 
+        rules: {
+            semester_selection: {
+                select_option: true
+            }
+        },
+        
+        messages: {
+    		semester_selection: "Please specify the semester"
+    		},
+        
+       submitHandler: function (form) { // for demo
+            save_syllabus();
+            return false; // for demo
+        }
+    });
+
+
+	// Method for making sure an option is selected from a select box
+    $.validator.addMethod('select_option', function (value) {
+        return (value != '-1' && value != null);
+    }, "Select a value");	
+
+}
 
 
 

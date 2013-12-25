@@ -1,4 +1,4 @@
-<form role="form" class="form-horizontal">
+<form role="form" class="form-horizontal" id="syllabus_detail_form">
 
 	<!-- Form Name -->
 	<legend>Syllabus Entry</legend>
@@ -27,9 +27,9 @@
 		<div class="col-lg-3">
 			<div class="form-group">
 				<label for="semester">Semester</label>
-				<select class="form-control" id="semester_selection">
+				<select class="form-control" name="semester_selection" id="semester_selection">
 					
-					<option value="" disabled selected>Select semester</option>
+					<option value="-1" disabled selected>Select semester</option>
 					
 					<% var semesters = ["Spring 2014","Fall 2013","Spring 2013","Fall 2012","Spring 2012","Fall 2011","Spring 2011","Fall 2010","Spring 2010","Fall 2009","Spring 2009","Fall 2008","Spring 2008","Fall 2007","Spring 2006"];
 					
@@ -88,27 +88,27 @@
 
 			
 	<div class="row form-group">
-		<label for="assignments">Assignments</label>
+		<label class="control-label" for="assignments">Assignments</label>
 		<textarea class="form-control" rows="3" id="assignments"><%= data.assignments %></textarea>
 	</div>			
 
 	<div class="row form-group">
-		<label for="policies">Policies</label>
+		<label class="control-label" for="policies">Policies</label>
 		<textarea class="form-control" rows="3" id="policies"><%= data.policies %></textarea>
 	</div>
 					
 	<div class="row form-group">
-		<label for="class_format">Class Format</label>
+		<label class="control-label" for="class_format">Class Format</label>
 		<textarea class="form-control" rows="3" id="class_format"><%= data.class_format %></textarea>
 	</div>				
 
 	<div class="row form-group">
-		<label for="visitors">Visitors</label>
+		<label class="control-label" for="visitors">Visitors</label>
 		<textarea class="form-control" rows="3" id="visitors"><%= data.visitors %></textarea>
 	</div>	
 
 	<div class="row form-group">
-		<label for="required_events">Required Events</label>
+		<label class="control-label" for="required_events">Required Events</label>
 		<textarea class="form-control" rows="3" id="required_events"><%= data.required_events %></textarea>
 	</div>	
 
@@ -121,7 +121,7 @@
 
 	<div class="row">
 		<div class="col-lg-1 col-centered">
-			<button type="button" class="btn btn-primary btn-lg" onClick="save_syllabus()">Save Syllabus</button>
+			<button type="submit" class="btn btn-primary btn-lg">Save Syllabus</button>
 			<BR><BR>
 		</div>
 	</div>		
