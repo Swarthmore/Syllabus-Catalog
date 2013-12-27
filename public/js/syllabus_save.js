@@ -62,26 +62,32 @@ function prepare_syllabus_data() {
 // Send syllabus to database
 function save_syllabus() {
 
-	var syllabus = prepare_syllabus_data();
+	// First check to make sure form is valid.  If it is, submit it
+    valid = $("#syllabus_detail_form").valid();
+    if(valid) {
 
-	$.ajax({
-		url: '/save_syllabus', 
-		type: 'POST', 
-		contentType: 'application/json', 
-		data: JSON.stringify(syllabus)
-	})
-	.done(function(data) {
-		alert(data.status);
-		console.log(data);
+		var syllabus = prepare_syllabus_data();
+
+		$.ajax({
+			url: '/save_syllabus', 
+			type: 'POST', 
+			contentType: 'application/json', 
+			data: JSON.stringify(syllabus)
+		})
+		.done(function(data) {
+			alert(data.status);
+			console.log(data);
 		
-		// Set the syllabus_id (if provided)	
-		if (typeof data.syllabus_id !== 'undefined') {
-			$("#syllabus_id").val(data.syllabus_id);
-		}
-	})
-	.fail(function() {
-		alert("Could NOT save syllabus to database!");
-	});	
+			// Set the syllabus_id (if provided)	
+			if (typeof data.syllabus_id !== 'undefined') {
+				$("#syllabus_id").val(data.syllabus_id);
+			}
+		})
+		.fail(function() {
+			alert("Could NOT save syllabus to database!");
+		});	
+	
+	 }
 
 }
 

@@ -3,19 +3,16 @@
 var instructor_number;
 var manually_added = false;
 
-if ( (typeof data == 'undefined') || (typeof data.instructor == 'undefined') ||  (data.instructor.length < 1)) {
+if ( (typeof data.instructor == 'undefined') ||  (data.instructor.length < 1)) {
 	
-	data = {instructor:[""]}; 
+	data.instructor = [""]; 
 	manually_added = true;
 	instructor_number = $(".instructor_entry").length + 1;	// Look for existing instructor entries
-} else {
-	console.log(data);
-}
+} 
 
 
 _.each(data.instructor, function(instructor, index, list) { 
 
-	console.log(manually_added);
 	if (!manually_added) {
 		instructor_number = index+1;
 	}
@@ -48,9 +45,11 @@ _.each(data.instructor, function(instructor, index, list) {
 
 <% }); 
 
+	/*
 	if (manually_added) {
 		delete data;
 	}
+	*/
 %>
 
 

@@ -39,7 +39,7 @@ function render(tmpl_name, tmpl_data) {
 
 function start_ws() {
 
-	socket = io.connect('http://23.23.177.220', {
+	socket = io.connect('', {
 		'reconnect': true,
 		'reconnection delay': 500,
 		'max reconnection attempts': Infinity
@@ -108,12 +108,11 @@ function start_ws() {
 	
 $(document).ready(function() {
 	
-	show_syllabus_detail();
 	setup_nav_links();
-
-	setup_form_validation();
 	 
 	start_ws();		// Start web sockets	
+	
+	show_project_info(); // Home page
 	
 });
 
@@ -122,34 +121,45 @@ $(document).ready(function() {
 // Configuration form validation
 function setup_form_validation() {
 
-
  $('#syllabus_detail_form').validate({ // initialize the plugin
  
-		errorClass:'error',
-		validClass:'success',
+		errorClass:'has-error',
+		validClass:'has-success',
 		errorElement:'span',
 		highlight: function (element, errorClass, validClass) { 
-			$(element).parents("div[class='clearfix']").addClass(errorClass).removeClass(validClass); 
+			$(element).parent().addClass(errorClass).removeClass(validClass); 
 		}, 
 		unhighlight: function (element, errorClass, validClass) { 
-			$(element).parents(".error").removeClass(errorClass).addClass(validClass); 
+			$(element).parent(".has-error").removeClass(errorClass).addClass(validClass); 
 		},
  
  
         rules: {
             semester_selection: {
                 select_option: true
+            },
+            class_website: {
+            	url:true,
+            	//required: true
             }
+            
         },
         
         messages: {
     		semester_selection: "Please specify the semester"
     		},
+    		
+    	invalidHandler: function(event, validator) {
+			// 'this' refers to the form
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'You missed 1 field. It has been highlighted'
+				: 'You missed ' + errors + ' fields. They have been highlighted';
+				alert(message);
+			}
+		}
         
-       submitHandler: function (form) { // for demo
-            save_syllabus();
-            return false; // for demo
-        }
     });
 
 
@@ -157,21 +167,29 @@ function setup_form_validation() {
     $.validator.addMethod('select_option', function (value) {
         return (value != '-1' && value != null);
     }, "Select a value");	
-
+    
+    $.validator.addMethod("text_entry_required", function(value) {
+    	return (value != "" && value != null);
+    }, "Entry required");
+    
+    // Add validation rules to other classes
+	$.validator.addClassRules("department_selection", { select_option: true });
+	$.validator.addClassRules("course_number_entry", { text_entry_required: true, message: "Course number required"});
 }
 
 
 
 function setup_syllabus_detail_template(syllabus) {
-
+	
 	var m = render("syllabus_detail_template", syllabus);
-	$("#syllabus_detail_container").html(m);
+	$("#page_container").html(m);
 	
 	setup_dept_template(syllabus);
 	setup_instructor_template(syllabus);
 	setup_week_template(syllabus);
-
+	
 }
+
 
 
 function setup_dept_template(syllabus) {
@@ -187,6 +205,7 @@ function setup_dept_template(syllabus) {
 }
 
 
+
 function setup_instructor_template(syllabus) {
 	var m = render("instructor_template", syllabus);
 	$(m).appendTo("#instructors").slideDown();
@@ -194,12 +213,11 @@ function setup_instructor_template(syllabus) {
 
 
 
-function setup_week_template(syllabus) {
-			
+function setup_week_template(syllabus) {			
 	var m = render("week_template", syllabus);
 	$(m).appendTo("#weeks").slideDown();	
-
 }
+
 
 
 function setup_nav_links() {
@@ -209,10 +227,6 @@ function setup_nav_links() {
 		// Highlight search as active
 		$("ul.navbar-nav li").removeClass("active");
 		$(this).closest("li").addClass('active');
-	
-		// Show correct content
-		$("#search_container").removeClass('hidden');
-		$("#syllabus_detail_container").addClass('hidden');
 		
 		// Search for syllabi
 		search_syllabi();
@@ -221,9 +235,12 @@ function setup_nav_links() {
 	$("#entry_button").click(function() {
 		show_syllabus_detail();
 	});
-
+	
+	$("#about_button").click(function() {
+		show_project_info();
+	});	
+	
 }
-
 
 
 
@@ -240,11 +257,25 @@ function show_syllabus_detail(syllabus) {
 		// Fill out template
 		setup_syllabus_detail_template(syllabus);
 
-		// Highlight search as active
-		$("ul.navbar-nav li").removeClass("active");	
-		$(this).closest("li").addClass('active');
-	
-		$("#search_container").addClass('hidden');
-		$("#syllabus_detail_container").removeClass('hidden');
+		// Setup form validation for syllabus entry
+		setup_form_validation();
 
+		// Highlight search as active in top menu
+		$("ul.navbar-nav li").removeClass("active");	
+		$("#entry_button").closest("li").addClass('active');
+
+}
+
+
+
+// Show "about project" page
+function show_project_info() {
+
+	var m = render("about_project_template");
+	console.log(m);
+	$("#page_container").html(m).slideDown();	
+
+	// Highlight about as active in top menu
+	$("ul.navbar-nav li").removeClass("active");	
+	$("#about_button").closest("li").addClass('active');
 }

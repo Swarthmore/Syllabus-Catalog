@@ -1,64 +1,91 @@
-<div class="panel panel-default week_box">
-	<div class="panel-heading">
-		<span class="panel-title week_title"></span>
-		<div class="btn-group pull-right">
-			<button type="button" class="btn btn-primary btn-sm add_week">Add a week</button>
-			<button type="button" class="btn btn-danger btn-sm delete_week">Delete Week</button>
-		</div>
-		<div class="clearfix"></div>
+<% // Check to see if there is a week defined.  If not, define one
+
+	if ( typeof data == 'undefined' ) {
+		data = {};
+	}
+
+	if ( (typeof data.weeks == 'undefined') ||  (data.weeks.length < 1)) {
+		console.log("No weeks");
+		data.weeks = [{topic:null, details:null}]; 
+	}
+
+	_.each(data.weeks, function(week, index, list) { %>
+
+		<div class="panel panel-default week_box">
+			<div class="panel-heading">
+				<span class="panel-title week_title"></span>
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-primary btn-sm add_week">Add a week</button>
+					<button type="button" class="btn btn-danger btn-sm delete_week">Delete Week</button>
+				</div>
+				<div class="clearfix"></div>
 			
-	</div> <!-- End of panel-heading -->
+			</div> <!-- End of panel-heading -->
 	
 	
-	<div class="panel-body">
+			<div class="panel-body">
 	
-		<div class="form-group" >
-			<label class="col-sm-1 control-label">Topic</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control week_topic" placeholder="Enter topic">
-			</div>
-		</div>	
+				<div class="form-group" >
+					<label class="col-sm-1 control-label">Topic</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control week_topic" placeholder="Enter topic" value="<%= week.topic %>">
+					</div>
+				</div>	
 
-		<div class="form-group" >
-			<label class="col-sm-1 control-label">Details</label>
-			<div class="col-sm-10">
-				<textarea class="form-control week_details" rows="3" placeholder="Topic details"></textarea>
-			</div>
-		</div>	
+				<div class="form-group" >
+					<label class="col-sm-1 control-label">Details</label>
+					<div class="col-sm-10">
+						<textarea class="form-control week_details" rows="3" placeholder="Topic details"><%= week.details %></textarea>
+					</div>
+				</div>	
 
-		<div class="clearfix"></div>
+				<div class="clearfix"></div>
 
-		<div class="table-responsive col-lg-12 reading_list">
-			<label class="control-label">Reading list</label>
-			<table class="table table-striped " >
-				<thead>
-					<tr>
-						<th>OCLC&nbsp;#</th>
-						<th>Citation</th>
-						<th>Pages</th>
-						<th>Remove</th>
-					</tr>
-				</thead>
-				<!-- Individual reading entries go here-->
-			</table>	 <!-- End of reading_list -->
-		</div>
+				<div class="table-responsive col-lg-12 reading_list">
+					<label class="control-label">Reading list</label>
+					<table class="table table-striped " >
+						<thead>
+							<tr>
+								<th>OCLC&nbsp;#</th>
+								<th>Citation</th>
+								<th>Pages</th>
+								<th>Remove</th>
+							</tr>
+						</thead>
+						<!-- Individual reading entries go here-->
+					</table>	 <!-- End of reading_list -->
+				</div>
 		
-		<!-- Button for adding a new reading -->
-		<div class="col-lg-6">
-			<label for="instructor">Search for a reading in WorldCat</label>
-			<div class="input-group">
-			  <input type="text" class="form-control">
-			  <span class="input-group-btn search_reading" >
-				<button class="btn btn-default " type="button" data-loading-text="Searching...">Search</button>
-			  </span>
-			</div><!-- /input-group -->
-		  </div><!-- /.col-lg-6 -->
+				<!-- Button for adding a new reading via OCLC search -->
+				<div class="col-lg-6">
+					<label class="control-label">Search for a reading in WorldCat</label>
+					<div class="input-group">
+					  <input type="text" class="form-control">
+					  <span class="input-group-btn search_reading" >
+						<button class="btn btn-default " type="button" data-loading-text="Searching...">Search</button>
+					  </span>
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-6 -->
 
 
-	</div> <!-- End of panel-body -->
+				<!-- Button for adding a new reading manually-->
+				<div class="col-lg-6">
+					<label class="control-label">Manually enter a reading</label>
+					<div class="input-group">
+					  <input type="text" class="form-control manual_reading_title">
+					  <span class="input-group-btn add_manual_reading" >
+						<button class="btn btn-default" type="button">Add</button>
+					  </span>
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-6 -->
+
+
+			</div> <!-- End of panel-body -->
 	
-</div> <!-- End of panel -->
+		</div> <!-- End of panel -->
 
+
+	<% }); %>
 
 <!-- code to add and remove readings -->
 <script>
@@ -66,8 +93,8 @@
 	$(".add_week").unbind("click");	// Remove existing events
 	$(".add_week").click(function() {
 		var this_week = $(this).closest(".week_box");
-		number_of_weeks = $("#weeks .week_box").length
-		var m = render("week_template", {week_number: number_of_weeks+1});
+		number_of_weeks = $("#weeks .week_box").length;
+		var m = render("week_template");
 		$(m).insertAfter(this_week).slideDown();
 		renumber_weeks();
 	});	
@@ -82,6 +109,21 @@
 			}
 		);
 		renumber_weeks();
+	});
+
+
+	// Add a new manual reading
+	$(".add_manual_reading").click(function() {
+
+		var reading_list = $(this).closest(".week_box").find(".reading_list > table");
+		var title = $(this).closest(".week_box").find(".manual_reading_title").val();
+	
+		// Make sure reading list div is visible
+		$(this).closest(".week_box").find(".reading_list").show();
+		
+		var m = render("reading_entry_template", {citation: title, oclc: null});
+		$(m).appendTo(reading_list).slideDown();
+
 	});
 
 

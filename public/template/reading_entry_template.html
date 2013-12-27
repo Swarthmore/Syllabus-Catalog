@@ -4,16 +4,13 @@
 		<%= oclc %>
 	</td>
 	
-	
 	<td class="reading_citation_cell">
 		<%= citation %>
 	</td>
 	
-	
 	<td>
 		<input type="text" class="form-control pages">
 	</td>
-	
 	
 	<td class="remove_reading_cell">
 		<button type="button" class="btn btn-danger btn-xs delete_reading"><span class="glyphicon glyphicon-remove"></span></button>
@@ -25,7 +22,6 @@
 				// Find the div with class reading_entry that contains this button and remove it
 				$(this).closest("tr.reading_entry").slideUp(
 					function() {
-						
 						
 						// If no readings left, hide the reading list table headers
 						if ($(this).siblings().length < 1) {

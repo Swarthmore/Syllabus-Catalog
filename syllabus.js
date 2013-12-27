@@ -89,8 +89,15 @@ function handler (request, response) {
 	
 	if (request.method == "GET") {
 
+
+
 		// Check for special requests.  Otherwise, serve up requested file
-		if (request.url.indexOf("/search_syllabi") == 0) {
+		if (request.url == "/") {
+		
+			request.url = "/syllabus_entry.html";
+			fileServer.serve(request, response);
+		
+		} else if (request.url.indexOf("/search_syllabi") == 0) {
 		
 			// Send back syllabi listing
 			send_syllabi(request, response);

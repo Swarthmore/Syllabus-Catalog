@@ -71,10 +71,10 @@ function search_syllabi() {
 		console.log(data);
 		
 		if (typeof data.data == 'undefined') {
-			$("#search_container").html("No syllabi found");
+			$("#page_container").html("No syllabi found");
 		} else {
 			var m = render("search_results_template", data);
-			$("#search_container").html(m);
+			$("#page_container").html(m);
 		}
 		
 	})

@@ -44,22 +44,25 @@
 <!-- Code for select button -->
 <script>
 
+var week_number = <%= week_number %>;
+var current_week_box = $(".week_box").get(week_number-1);
+
+
 // Now that results are loaded, reset the state of the search button
- $(".week_box:nth-of-type(<%= week_number %>) .search_reading button").button("reset");
+$(current_week_box).find(".search_reading button").button("reset");
 
 
 $(".select_reading_button").click(function() {
 	// Get the index of the button -- this is everything after the underscore
 	var oclc = $(this).attr("id").replace("button_","");
 	var citation = $("#citation_" + oclc).html();
-	var week_number = <%= week_number %>;
+		
 	
-	var reading_number = $(".week_box:nth-of-type(<%= week_number %>)").find(".reading_entry").length + 1
-	var reading_list = $(".week_box:nth-of-type(<%= week_number %>)").find(".reading_list > table")
-	
+	var reading_number = $(current_week_box).find(".reading_entry").length + 1
+	var reading_list = $(current_week_box).find(".reading_list > table")
 	
 	// Make sure reading list div is visible
-	$(".week_box:nth-of-type(<%= week_number %>)").find(".reading_list").show();
+	$(current_week_box).find(".reading_list").show();
 		
 	var m = render("reading_entry_template", {week_number: <%= week_number %>, reading_number: reading_number, citation: citation, oclc: oclc});
 	$(m).appendTo(reading_list).slideDown();

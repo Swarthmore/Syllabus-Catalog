@@ -9,7 +9,7 @@
 	
 				
 	<div class="row form-group col-lg-8">
-		<label for="coursename">Course Name</label>
+		<label class="control-label"  for="coursename">Course Name</label>
 		<input type="text" class="form-control" id="coursename" placeholder="Enter course name" value="<%= data.course_name %>">
 	</div>
 
@@ -26,7 +26,7 @@
 		<!-- Semester selection -->
 		<div class="col-lg-3">
 			<div class="form-group">
-				<label for="semester">Semester</label>
+				<label class="control-label"  for="semester">Semester</label>
 				<select class="form-control" name="semester_selection" id="semester_selection">
 					
 					<option value="-1" disabled selected>Select semester</option>
@@ -51,7 +51,7 @@
 
 		<div class="col-lg-2 col-lg-offset-1">
 			<div  class="form-group">
-				<label for="credits">Credits</label>
+				<label class="control-label"  for="credits">Credits</label>
 				<select class="form-control" id="credit_selection">
 					<option value="" selected disabled>Select credits</option>
 	
@@ -76,39 +76,45 @@
 	<div class="clearfix"></div>
 
 	<div class="row form-group">
-		<label for="prerequisites">Official Prerequisites</label>
+		<label class="control-label" for="prerequisites">Class website</label>
+		<input class="form-control" id="class_website" name="class_website" value="<%= data.class_website %>" />
+	</div>
+
+
+	<div class="row form-group">
+		<label class="control-label" for="prerequisites">Official Prerequisites</label>
 		<textarea class="form-control" rows="3" id="prerequisites"><%= data.prerequisites %></textarea>
 	</div>
 
 	
 	<div class="row form-group ">
-		<label for="course_description">Course Description</label>
+		<label class="control-label" for="course_description">Course Description</label>
 		<textarea class="form-control" rows="3" id="course_description"><%= data.course_description %></textarea>
 	</div>
 
 			
 	<div class="row form-group">
-		<label class="control-label" for="assignments">Assignments</label>
+		<label class="control-label" class="control-label" for="assignments">Assignments</label>
 		<textarea class="form-control" rows="3" id="assignments"><%= data.assignments %></textarea>
 	</div>			
 
 	<div class="row form-group">
-		<label class="control-label" for="policies">Policies</label>
+		<label class="control-label" class="control-label" for="policies">Policies</label>
 		<textarea class="form-control" rows="3" id="policies"><%= data.policies %></textarea>
 	</div>
 					
 	<div class="row form-group">
-		<label class="control-label" for="class_format">Class Format</label>
+		<label class="control-label"  class="control-label" for="class_format">Class Format</label>
 		<textarea class="form-control" rows="3" id="class_format"><%= data.class_format %></textarea>
 	</div>				
 
 	<div class="row form-group">
-		<label class="control-label" for="visitors">Visitors</label>
+		<label class="control-label" class="control-label" for="visitors">Visitors</label>
 		<textarea class="form-control" rows="3" id="visitors"><%= data.visitors %></textarea>
 	</div>	
 
 	<div class="row form-group">
-		<label class="control-label" for="required_events">Required Events</label>
+		<label class="control-label"  class="control-label" for="required_events">Required Events</label>
 		<textarea class="form-control" rows="3" id="required_events"><%= data.required_events %></textarea>
 	</div>	
 
@@ -121,7 +127,7 @@
 
 	<div class="row">
 		<div class="col-lg-1 col-centered">
-			<button type="submit" class="btn btn-primary btn-lg">Save Syllabus</button>
+			<button type="button" class="btn btn-primary btn-lg" onClick="save_syllabus()">Save Syllabus</button>
 			<BR><BR>
 		</div>
 	</div>		
