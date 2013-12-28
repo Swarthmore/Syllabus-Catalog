@@ -93,6 +93,9 @@ csv()
 			
 			
 			
-		}); // End loop through courses
+	}); // End loop through courses
+	
+	process.exit(1);	
 
 }); // End CSV process
+
