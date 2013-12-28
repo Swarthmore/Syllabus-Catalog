@@ -18,6 +18,9 @@ function prepare_syllabus_data() {
 
 	// Credits
 	syllabus.credits = $("#credit_selection").val();	
+
+	// Class website
+	syllabus.class_website = $("#class_website").val();	
 	
 	// Prerequisites
 	syllabus.prerequisites = $("#prerequisites").val();	

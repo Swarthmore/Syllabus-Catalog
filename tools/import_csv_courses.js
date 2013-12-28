@@ -8,7 +8,7 @@ var fs = require('fs'),
 
 var MongoClient = mongo.MongoClient;
 var BSON = mongo.BSONPure;
-var CONFIG_FILE = './syllabus.conf';
+var CONFIG_FILE = '../syllabus.conf';
 
 
 load_config();
@@ -42,7 +42,7 @@ function load_config_file(config_file, callback) {
 function connect_to_db(config, callback) {
 
 	console.log("Connecting to database");
-	MongoClient.connect('mongodb://127.0.0.1:27017/syllabus-catalog', function(err, db) {
+	MongoClient.connect("mongodb://" + config.DB.db_host + ":27017/syllabus-catalog", function(err, db) {
 		if(err) {console.log("Can't connect to database: " + err);}
 
 		config.db = db;
@@ -57,7 +57,7 @@ function connect_to_db(config, callback) {
 
 
 csv()
-.from.path(__dirname+'/data/courses.csv', { delimiter: ',', escape: '"' })
+.from.path(__dirname+'/../data/courses.csv', { delimiter: ',', escape: '"' })
 .to.array( function(data){
 
 	data.forEach(function(course) {
