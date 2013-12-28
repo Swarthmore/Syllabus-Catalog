@@ -65,7 +65,7 @@ csv()
 		var data = {};
 		
 		var dept = course[0].split(" ");
-		data.department = [{code:dept[0], number:dept[1]}];
+		data.department = [{name:dept[0], number:dept[1]}];
 		
 		data.course_name = course[1];
 		
