@@ -84,19 +84,21 @@ function connect_to_db(config, callback) {
 
 function handler (request, response) {
 
-	utility.update_status(request.url);
+	utility.update_status(request.method + ": " +request.url);
 	var data = "";
 	
 	if (request.method == "GET") {
 
-
-
 		// Check for special requests.  Otherwise, serve up requested file
 		if (request.url == "/") {
 		
-			request.url = "/syllabus_entry.html";
+			request.url = "/index.html";
 			fileServer.serve(request, response);
 		
+		} else if (request.url == "/api/syllabi") {
+			 //Get a list of all syllabi
+			send_syllabi(request, response);
+	
 		} else if (request.url.indexOf("/search_syllabi") == 0) {
 		
 			// Send back syllabi listing
@@ -108,7 +110,6 @@ function handler (request, response) {
 			get_syllabus(request, response);
 		
 		} else {
-		
 			// Serve up file
 			fileServer.serve(request, response);
 		}
@@ -116,7 +117,7 @@ function handler (request, response) {
 	} else if (request.method == "POST") {
 	
 		// Is this a a request to save the syllabus?  If so, collect the data
-		if (request.url.indexOf("/save_syllabus") == 0) {
+		if (request.url == "/api/syllabi") {
 		
 			// Save POST data as it arrives
 			request.on("data", function(chunk) {
@@ -150,10 +151,9 @@ function handler (request, response) {
 						}
 
 					}
-					console.log(data);
 				
 					response.writeHead(200, {"Content-Type": "application/json"});
-					response.write(JSON.stringify(message));
+					response.write(JSON.stringify(doc));
 					response.end(); 
 			
 					utility.update_status(message.status);
@@ -239,10 +239,7 @@ function send_syllabi(request, response) {
 				message.status = "Successfully found " + docs.length + " syllabi in database";
 				
 				// Sort results
-				
-				
-				
-				message.data = _und.sortBy(docs, function(doc) { 
+				var sorted_syllabi = _und.sortBy(docs, function(doc) { 
 					if ( (typeof doc.department != 'undefined') && (typeof doc.department[0].name != 'undefined')) {
 						return doc.department[0].code;
 					} else {
@@ -250,11 +247,9 @@ function send_syllabi(request, response) {
 					}
 				});
 			}
-			
-			console.log(docs);
 		
 			response.writeHead(200, {"Content-Type": "application/json"});
-			response.write(JSON.stringify(message));
+			response.write(JSON.stringify(sorted_syllabi));
 			response.end(); 
 			
 			utility.update_status(message.status);
@@ -316,9 +311,10 @@ function get_syllabus(request, response) {
 				message.status_message = "Successfully found syllabus id " + syllabus_id + " in database";
 				message.data = doc;
 				message.status = true;
+				send_json_message(response, doc);
 			}
 			
-			send_json_message(response, message);
+			
 
 		});
         

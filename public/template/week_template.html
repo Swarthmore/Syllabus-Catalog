@@ -1,15 +1,12 @@
 <% // Check to see if there is a week defined.  If not, define one
 
-	if ( typeof data == 'undefined' ) {
-		data = {};
-	}
 
-	if ( (typeof data.weeks == 'undefined') ||  (data.weeks.length < 1)) {
+	if ( (typeof weeks == 'undefined') ||  (weeks.length < 1)) {
 		console.log("No weeks");
-		data.weeks = [{topic:null, details:null}]; 
+		weeks = [{topic:"", details:""}]; 
 	}
 
-	_.each(data.weeks, function(week, index, list) { %>
+	_.each(weeks, function(week, index, list) { %>
 
 		<div class="panel panel-default week_box">
 			<div class="panel-heading">
@@ -28,7 +25,7 @@
 				<div class="form-group" >
 					<label class="col-sm-1 control-label">Topic</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control week_topic" placeholder="Enter topic" value="<%= week.topic %>">
+						<input type="text" class="form-control week_topic" placeholder="Enter topic" value="<% if (week.topic) { print(week.topic); } %>">
 					</div>
 				</div>	
 

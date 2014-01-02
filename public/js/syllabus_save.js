@@ -62,6 +62,8 @@ function prepare_syllabus_data() {
 
 
 
+
+/*
 // Send syllabus to database
 function save_syllabus() {
 
@@ -95,7 +97,7 @@ function save_syllabus() {
 }
 
 
-
+*/
 
 
 
