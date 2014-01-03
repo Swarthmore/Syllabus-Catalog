@@ -8,7 +8,7 @@ app.SyllabusView = Backbone.View.extend ({
 	el: '#page_container',
 
 	events:{
-        'click #save_syllabus':'addSyllabus'
+        'click #save_syllabus':'saveSyllabus'
 	},
 
 	initialize: function( initialSyllabus ) {
@@ -37,16 +37,15 @@ app.SyllabusView = Backbone.View.extend ({
 	} ,
 	
 	
-	addSyllabus: function( e ) {
-		console.log("Saving syllabus");
-		var data = prepare_syllabus_data();
-		this.model.set(data)
-		this.model.save();
-	},
-	
 	initialize: function(m) {
 		this.model = m;
 		this.render();
+	},
+	
+	saveSyllabus: function(e) {
+		var data = prepare_syllabus_data();
+		this.model.set(data);
+		this.model.save();
 	}
 	
 });

@@ -6,12 +6,9 @@ $(function() {
 
 	console.log(app);
 
-	var syllabus = new app.Syllabus({course_name: "TESTING"});
-
 	app.syllabi_listing = new app.Syllabi();
+	//app.syllabi_listing.fetch();
 
-	new app.SyllabiView( );
-
-
+	app.syllabi_listview = new app.SyllabiView({collection:app.syllabi_listing});
 	
 });

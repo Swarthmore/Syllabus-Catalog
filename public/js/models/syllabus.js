@@ -23,8 +23,30 @@ app.Syllabus = Backbone.Model.extend({
 		"required_events" : null,
 		"readings" : [],
 		"topics" : null,
-		"non_associated_readings": []
+		"non_associated_readings": []	
+	},
+	
+	initialize: function() {
+		console.log('New syllabus model created.');
 		
+		this.on('change', function(){
+            alert('Syllabus model has changed.');
+        });
+        
+        this.on("invalid", function(model, error) {
+        	alert(error);
+        });
+	
+	}, // end of initialize
+	
+	
+	validate: function(attribs) { 
+		if (attribs.department.length < 1){
+			return "Remember to set a department."; 
+		}
+		if (attribs.instructor.length < 1){
+			return "Remember to set an instructor."; 
+		}	
 	}
 	
 });

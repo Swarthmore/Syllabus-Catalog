@@ -1,0 +1,54 @@
+<% 	// Handle empty data
+	// if type of a variable is undefined, make it blank
+	department = _.isUndefined(obj.department) ?  [] : department;
+	course_name = _.isUndefined(obj.course_name) ?  "" : course_name;
+	semester = _.isUndefined(obj.semester) ?  "" : semester;
+	instructor = _.isUndefined(obj.instructor) ?  [] : instructor;
+	_id = _.isUndefined(obj._id) ?  "" : _id;
+	
+%>
+<tr>
+
+<td>
+	<button type="button" class="btn btn-default btn-sm view_syllabus"><span class="glyphicon glyphicon-pencil"></span></button>
+	<span class="hidden syllabus_id"><%= _id %></span> 
+</td>
+<td>
+
+<%
+
+_.each(department, function(department, index, list) {
+	if (index > 0) { print("<BR>"); } // Space before each entry after the first
+	print(department.name + " " + department.number);
+});
+
+%> 
+</td>
+
+
+<td>
+	<% if (typeof course_name != 'undefined') {
+		print(course_name);
+	}
+	%>
+</td>
+
+
+<td>	
+	<% _.each(instructor, function(instructor, index, list) {
+		if (index > 0) { print("<BR>"); } // Space before each entry after the first
+		print(instructor);
+	});
+
+	%> 
+</td>
+
+
+<td>
+	<% if (typeof semester != 'undefined') {
+		print(semester);
+	}
+	%>
+</td>
+</tr>
+

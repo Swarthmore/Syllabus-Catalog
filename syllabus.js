@@ -114,10 +114,10 @@ function handler (request, response) {
 			fileServer.serve(request, response);
 		}
 	
-	} else if (request.method == "POST") {
+	} else if (request.method == "PUT") {
 	
 		// Is this a a request to save the syllabus?  If so, collect the data
-		if (request.url == "/api/syllabi") {
+		if (request.url.indexOf("/api/syllabi") == 0) {
 		
 			// Save POST data as it arrives
 			request.on("data", function(chunk) {
@@ -228,7 +228,7 @@ io.sockets.on('connection', function(socket) {
 // Send syllabi in JSON format to web page
 function send_syllabi(request, response) {
  
-	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1}).limit(1000)
+	var collection = config.db.collection('syllabi').find({}).limit(1000)
       .toArray(function(err, docs) {
 		
 			message = {};
