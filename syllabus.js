@@ -24,7 +24,7 @@ var MongoClient = mongo.MongoClient;
 var BSON = mongo.BSONPure;
 
 var CONFIG_FILE = './syllabus.conf';
-
+var get_syllabus_req_regex = /\/api\/syllabi\/([A-Za-z0-9]*)/;
 
 
 io.set('log level', 2); // reduce logging
@@ -86,6 +86,7 @@ function handler (request, response) {
 
 	utility.update_status(request.method + ": " +request.url);
 	var data = "";
+
 	
 	if (request.method == "GET") {
 
@@ -99,12 +100,7 @@ function handler (request, response) {
 			 //Get a list of all syllabi
 			send_syllabi(request, response);
 	
-		} else if (request.url.indexOf("/search_syllabi") == 0) {
-		
-			// Send back syllabi listing
-			send_syllabi(request, response);
-		
-		} else if (request.url.indexOf("/get_syllabus") == 0) {
+		} else if (request.url.match(get_syllabus_req_regex)) {
 		
 			// Send back syllabi listing
 			get_syllabus(request, response);
@@ -259,7 +255,7 @@ io.sockets.on('connection', function(socket) {
 					}
 					
 					// Add week number to result
-					result.week_number = data.week;
+					result.topic_number = data.topic;
 										
     				utility.update_status(util.inspect(result, false, null));
     				socket.emit("worldcat_search_results", result);
@@ -278,7 +274,7 @@ io.sockets.on('connection', function(socket) {
 // Send syllabi in JSON format to web page
 function send_syllabi(request, response) {
  
-	var collection = config.db.collection('syllabi').find({}).limit(1000)
+	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1}).limit(1000)
       .toArray(function(err, docs) {
 		
 			message = {};
@@ -315,60 +311,38 @@ function send_syllabi(request, response) {
 // Send a specific syllabus in JSON format to web page
 function get_syllabus(request, response) {
  
- 	var url_parts = url.parse(request.url, true);
-	var query = url_parts.query;
- 
- 	var message = {};
- 
- 	if ( typeof query.syllabus_id === 'undefined') {
+ 	var syllabus_id = request.url.match(get_syllabus_req_regex)[1];
  	
- 		// HTTP request did not specify syllabus ID
- 		message.status_message = "Need to provide syllabus ID number";
- 		message.status = false;
- 		send_json_message(response, message);
- 		return;
- 		
- 	} else {
-
-		// Search for syllabus id
-		var syllabus_id;
+ 	// If _id is present, convert it to object
+ 	var id;
+	if (typeof syllabus_id !== 'undefined') {
+		id = new mongo.ObjectID(syllabus_id)
+	}
+	utility.update_status("looking for:");
+	utility.update_status(id);
+	
+	var message;
+	
+	var collection = config.db.collection('syllabi').findOne({_id:id}, function(err, doc) {
+				
+		if (err) {
 		
-		try {
-			var syllabus_id = new mongo.ObjectID(query.syllabus_id);
-		} 
-		catch (e) {
-			message.status_message = "Invalid syllabus ID provided: " + query.syllabus_id;
-			message.status = false;
-			send_json_message(response, message);
- 			return;
- 		}
+			utility.update_status("Error reading syllabi from database: " + err);
 		
+		} else if (doc == null ) {
 		
-		var collection = config.db.collection('syllabi').findOne({_id:syllabus_id}, function(err, doc) {
-					
-			if (err) {
-			
-				message.status_message = "Error reading syllabi from database: " + err;
-				message.status = false;
-			
-			} else if (doc == null ) {
-			
-				message.status_message = "Did not find a match for syllabus ID: " + syllabus_id;
-				message.status = false;
-			
-			} else {
-			
-				message.status_message = "Successfully found syllabus id " + syllabus_id + " in database";
-				message.data = doc;
-				message.status = true;
-				send_json_message(response, doc);
-			}
-			
+			utility.update_status("Did not find a match for syllabus ID: " + syllabus_id);
+		
+		} else {
+		
+			utility.update_status("Successfully found syllabus id " + syllabus_id + " in database");
+			send_json_message(response, doc);
+		}
+		
 			
 
-		});
+	});
         
-    }
 }
 
 

@@ -11,8 +11,21 @@ app.SyllabusView = Backbone.View.extend ({
 	
 		console.log("Initialize SyllabusView");
 
+		// If this is an existing model, get the full data set
+		var view = this;
+		if (this.model.get("_id") != 'undefined') {
+			this.model.fetch({
+				success: function(model, response, options) {
+					view.render();
+				}
+			
+			});
+		} else {
+			view.render();
+		}
+
 		this.listenTo( this.model, 'sync', function(m) {console.log("Model sync"); this.render;} );
-		this.render();
+		
 	},
 		
 	render: function() {
@@ -33,8 +46,8 @@ app.SyllabusView = Backbone.View.extend ({
 		var i = render("instructor_template", this.model.toJSON());
 		$(i).appendTo("#instructors").slideDown();
 
-		var w = render("week_template", this.model.toJSON());
-		$(w).appendTo("#weeks_container").slideDown();	
+		var w = render("topic_template", this.model.toJSON());
+		$(w).appendTo("#topics_container").slideDown();	
 	
 		return this;
 		
@@ -44,13 +57,26 @@ app.SyllabusView = Backbone.View.extend ({
         'click #save_syllabus':'saveSyllabus',
         'change input':'saveSyllabus',
         'change select':'saveSyllabus',
+        'change textarea':'saveSyllabus',
 	},	
 	
 	
 	saveSyllabus: function(e) {
+		$("#save_icon").removeClass("hidden glyphicon-floppy-remove").addClass("glyphicon-floppy");
 		var data = prepare_syllabus_data();
-		this.model.set(data, {validate: true});
-		this.model.save();
+		// Need an initial parameter (see http://stackoverflow.com/questions/11322182/backbone-model-save-not-calling-either-error-or-success-callbacks)
+		this.model.set(data);
+		this.model.save(null, {
+			success: function(model, response, options) {
+				console.log("Model Saved");
+				window.setTimeout(function() {$("#save_icon").addClass("hidden");}, 1000);	// Hide "save" icon after a delay
+				
+			},
+			error: function (model, response) {
+				console.log("Model save error");
+				$("#save_icon").removeClass("hidden glyphicon-floppy").addClass("glyphicon-floppy-remove");
+			}
+		});
 	},
 	
 
@@ -116,8 +142,8 @@ function prepare_syllabus_data() {
 	// Readings
 	syllabus.readings = get_course_readings();	
 		
-	// Week information
-	syllabus.weeks = get_weeks();	
+	// Topic information
+	syllabus.topics = get_topics();	
 	
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db
@@ -182,12 +208,12 @@ function get_course_readings() {
 		var citation = $(this).find(".reading_citation_cell").text();
 		var pages = $(this).find(".pages").val();
 		var oclc = $(this).find(".oclc_number_cell").html();
-		var week = $(this).closest(".week_box").index(".week_box") + 1;
+		var topic = $(this).closest(".topic_box").index(".topic_box") + 1;
 		
 		readings.push({ 
 			citation: $.trim(citation), 
 			pages: $.trim(pages), 
-			week: week, 
+			topic: topic, 
 			oclc_number: $.trim(oclc)
 			});
 	
@@ -198,22 +224,22 @@ function get_course_readings() {
 
 
 
-// get the details for all the weeks in the course
-function get_weeks() {
+// get the details for all the topics in the course
+function get_topics() {
 
-	var weeks = [];
+	var topics = [];
 
-	$(".week_box").each( function(index) {
-		var week_number = $(this).index(".week_box") + 1;
-		var topic = $(this).find(".week_topic").val();
-		var details = $(this).find(".week_details").val();
+	$(".topic_box").each( function(index) {
+		var topic_number = $(this).index(".topic_box") + 1;
+		var title = $(this).find(".topic_title").val();
+		var details = $(this).find(".topic_details").val();
 		
-		weeks.push({
-			week_number: week_number,
-			topic: topic,
+		topics.push({
+			topic_number: topic_number,
+			title: title,
 			details: details
 		});		
 	});
 	
-	return weeks;
+	return topics;
 }

@@ -7,7 +7,7 @@ app.Syllabus = Backbone.Model.extend({
 
 	idAttribute: "_id", 
 	
-	url: '/api/syllabi',
+	urlRoot: '/api/syllabi',
 	
 	defaults: {
 		"department" : [],
@@ -24,7 +24,6 @@ app.Syllabus = Backbone.Model.extend({
 		"visitors" : null,
 		"required_events" : null,
 		"readings" : [],
-		"topics" : null,
 		"non_associated_readings": []	
 	},
 	
@@ -36,7 +35,7 @@ app.Syllabus = Backbone.Model.extend({
         });
         
         this.on("error", function(model, error) {
-        	alert(error);
+        	console.log(error);
         });
 	
 	}, // end of initialize
