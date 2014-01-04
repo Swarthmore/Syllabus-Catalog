@@ -28,10 +28,10 @@
 
 	
 	
-	<!--<script src="/js/syllabus_backbone.js"></script>	-->
+	<!--<script src="/js/syllabus_backbone.js"></script>	
 	<script src="/js/syllabus_entry.js"></script>
 	<script src="/js/syllabus_save.js"></script>
-	<script src="/js/syllabus_search.js"></script>
+	<script src="/js/syllabus_search.js"></script>-->
 
 	<script src="/js/models/syllabus.js"></script>
 	<script src="/js/models/reading.js"></script>
@@ -40,7 +40,8 @@
 	<script src="/js/collections/readings.js"></script>
 	<script src="/js/collections/topics.js"></script>
 	<script src="/js/views/syllabus.js"></script>
-	<script src="/js/app.js"</script>
+	<script src="/js/views/syllabi.js"></script>
+	<script src="/js/app.js"></script>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -74,6 +75,11 @@
               <li><a href="#" id="search_button">Search</a></li>
               <li><a href="#" id="entry_button">Add Syllabus</a></li>
               
+            </ul>
+            <ul class="nav pull-right">
+              <li><span id="save_icon" class="glyphicon glyphicon-floppy-disk hidden" style="font-size:24px;margin-top:5px;color:red"></span></li>
+            </ul>
+              
               <!-- for possible future reference 
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
@@ -92,6 +98,7 @@
             </ul>
           </div><!--/.nav-collapse -->
         </div>
+        
       </div>
 
 

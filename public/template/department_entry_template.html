@@ -1,16 +1,16 @@
 <!-- Department entry-->
 
 <% // Check to see if there is a department defined.  If not, define one
-	if ( (typeof data.department == 'undefined') ||  (data.department.length < 1)) {
+	if ( (typeof department == 'undefined') ||  (department.length < 1)) {
 		console.log("No departments");
-		data.department = [{name:null, number:null}]; 
+		department = [{name:null, number:null}]; 
 	}
 
 
 	var department_listing = [{code:'ANCH',name:'Ancient History'}, {code:'ANTH',name:'Anthropology'}, {code:'ARAB',name:'Arabic'}, {code:'ARTH',name:'Art/Art History'}, {code:'ASIA',name:'Asian Studies'}, {code:'ASTR',name:'Astronomy'}, {code:'BIOL',name:'Biology'}, {code:'BLST',name:'Black Studies'}, {code:'CHEM',name:'Chemistry'}, {code:'CHIN',name:'Chinese'}, {code:'CLST',name:'Classics'}, {code:'COGS',name:'Cognitive Science'}, {code:'CPSC',name:'Computer Science'}, {code:'DANC',name:'Dance'}, {code:'ECON',name:'Economics'}, {code:'EDUC',name:'Educational Studies'}, {code:'ENGR',name:'Engineering'}, {code:'ENGL',name:'English Literature'}, {code:'ENVS',name:'Environmental Studies'}, {code:'FMST',name:'Film & Media Studies'}, {code:'FREN',name:'French & Francophone Studies'}, {code:'GMST',name:'Gender & Sexuality Studies'}, {code:'GSST',name:'German Studies'}, {code:'GREK',name:'Greek'}, {code:'HIST',name:'History'}, {code:'INTP',name:'Interpretation Theory'}, {code:'ISLM',name:'Islamic Studies'}, {code:'JPNS',name:'Japanese'}, {code:'LATN',name:'Latin'}, {code:'LASC',name:'Latin American Studies'}, {code:'LING',name:'Linguistics'}, {code:'LITR',name:'Literature'}, {code:'MATH',name:'Math and Stats'}, {code:'MUSI',name:'Music'}, {code:'PEAC',name:'Peace & Conflict Studies'}, {code:'PHIL',name:'Philosophy'}, {code:'PHYS',name:'Physics'}, {code:'POLS',name:'Political Science'}, {code:'PSYC',name:'Psychology'}, {code:'RELG',name:'Religion'}, {code:'RUSS',name:'Russian'}, {code:'SOCI',name:'Sociology'}, {code:'SPAN',name:'Spanish'}, {code:'STAT',name:'Statistics'}, {code:'THEA',name:'Theater'}];
 	
 
-	_.each(data.department, function(department, index, list) { %>
+	_.each(department, function(department_entry, index, list) { %>
 
 
 		<tr class="department_entry">
@@ -23,7 +23,7 @@
 					
 						// Check to see if department has been selected
 						var selected_text = ""
-						if (department.name == dept.code) {
+						if (department_entry.name == dept.code) {
 							selected_text = "selected";
 						}
 						
@@ -35,7 +35,7 @@
 	
 			<td>
 				<!-- Course Number -->
-				<input type="text" class="form-control course_number_entry" placeholder="Enter course number" value="<%= department.number %>">
+				<input type="text" class="form-control course_number_entry" placeholder="Enter course number" value="<%= department_entry.number %>">
 			</td>
 	
 		<td class="text-center">
