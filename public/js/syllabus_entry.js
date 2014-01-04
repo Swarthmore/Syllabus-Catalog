@@ -215,7 +215,7 @@ function setup_instructor_template(syllabus) {
 
 function setup_week_template(syllabus) {			
 	var m = render("week_template", syllabus);
-	$(m).appendTo("#weeks").slideDown();	
+	$(m).appendTo("#weeks_container").slideDown();	
 }
 
 
@@ -233,7 +233,7 @@ function setup_nav_links() {
 	});
 
 	$("#entry_button").click(function() {
-		show_syllabus_detail();
+		show_syllabus_entry_form();
 	});
 	
 	$("#about_button").click(function() {
@@ -244,25 +244,28 @@ function setup_nav_links() {
 
 
 
-function show_syllabus_detail(syllabus) {
+function show_syllabus_entry_form(syllabus) {
 
 		// If not called with data, make a blank syllabus entry
 		if (typeof syllabus != 'object') {
-			syllabus = {data:{}};
+			syllabus = new app.Syllabus();
 		}
 
 		console.log("Show syllabus_detail:");
 		console.log(syllabus);
 
-		// Fill out template
-		setup_syllabus_detail_template(syllabus);
+		new app.SyllabusView( syllabus );
 
 		// Setup form validation for syllabus entry
-		setup_form_validation();
+		//setup_form_validation();
 
-		// Highlight search as active in top menu
+		// Highlight "Add Syllabus" as active in top menu
 		$("ul.navbar-nav li").removeClass("active");	
 		$("#entry_button").closest("li").addClass('active');
+		
+		$("#save_syllabus").click( function() {
+			save_syllabus();
+		});
 
 }
 
@@ -272,7 +275,6 @@ function show_syllabus_detail(syllabus) {
 function show_project_info() {
 
 	var m = render("about_project_template");
-	console.log(m);
 	$("#page_container").html(m).slideDown();	
 
 	// Highlight about as active in top menu

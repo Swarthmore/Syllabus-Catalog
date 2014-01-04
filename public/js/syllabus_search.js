@@ -41,11 +41,13 @@ function load_syllabus(syllabus_id) {
 
 		console.log(response);
 		
-		if (typeof response.status == 'undefined' || !response.status) {
+		if (typeof response._id == 'undefined' || !response._id) {
 			alert("Could not find syllabus");
 			return;
 		} else {
-			show_syllabus_detail(response);
+			//show_syllabus_detail(response);
+			var s = new app.Syllabus(response);
+			var v = new app.SyllabusView(s);
 		}
 		
 	})

@@ -1,16 +1,56 @@
+<!-- Syllabus detail template -->
+
+<% 	// Handle empty data
+	// if type of a variable is undefined, make it blank
+	course_name = _.isUndefined(obj.course_name) ?  "" : course_name;
+	semester = _.isUndefined(obj.semester) ?  "" : semester;
+	credits = _.isUndefined(obj.credits) ?  "" : credits;
+	class_website = _.isUndefined(obj.class_website) ?  "" : class_website;
+	prerequisites = _.isUndefined(obj.prerequisites) ?  "" : prerequisites;
+	course_description = _.isUndefined(obj.course_description) ?  "" : course_description;
+	assignments = _.isUndefined(obj.assignments) ?  "" : assignments;
+	policies = _.isUndefined(obj.policies) ?  "" : policies;
+	class_format = _.isUndefined(obj.class_format) ?  "" : class_format;
+	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
+	required_events = _.isUndefined(obj.required_events) ?  "" : required_events;
+	_id = _.isUndefined(obj._id) ?  "" : _id;
+	
+%>
+
+
+
 <form role="form" class="form-horizontal" id="syllabus_detail_form">
 
 	<!-- Form Name -->
-	<legend>Syllabus Entry</legend>
-
-	<div class="row" id="departments">
-		<!-- Place to put department and course number selections -->
+	<div class="col-sm-10">
+		<legend>Syllabus Entry</legend>
+	</div>
+	<div class="col-sm-2">
+		<span id="save_icon" class="glyphicon glyphicon-floppy-disk pull-right hidden" style="font-size:24px;"></span>
+	</div>
+	
+	<!-- Department -->
+	<div class="row" id="departments">	
+		<div class="table-responsive col-lg-8" id="department_listing">
+			<table class="table department_table">
+				<thead>
+					<tr>
+						<th>Department</th>
+						<th>Course Number</th>
+						<th class="text-center"></th>
+					</tr>
+				</thead>
+				<tbody>
+				<!-- Individual department entries go here-->
+				</tbody>
+			</table>	 <!-- End of department_list -->
+		</div>
 	</div>
 	
 				
 	<div class="row form-group col-lg-8">
 		<label class="control-label"  for="coursename">Course Name</label>
-		<input type="text" class="form-control" id="coursename" placeholder="Enter course name" value="<%= data.course_name %>">
+		<input type="text" class="form-control" id="coursename" placeholder="Enter course name" value="<%= course_name %>">
 	</div>
 
 	<div class="clearfix"></div>
@@ -31,17 +71,17 @@
 					
 					<option value="-1" disabled selected>Select semester</option>
 					
-					<% var semesters = ["Spring 2014","Fall 2013","Spring 2013","Fall 2012","Spring 2012","Fall 2011","Spring 2011","Fall 2010","Spring 2010","Fall 2009","Spring 2009","Fall 2008","Spring 2008","Fall 2007","Spring 2006"];
+					<% var semester_options = ["Spring 2014","Fall 2013","Spring 2013","Fall 2012","Spring 2012","Fall 2011","Spring 2011","Fall 2010","Spring 2010","Fall 2009","Spring 2009","Fall 2008","Spring 2008","Fall 2007","Spring 2006"];
 					
-					_.each(semesters, function(semester, index, list) { 
+					_.each(semester_options, function(sem, index, list) { 
 					
 						// Check to see if syllabus semester has been selected
 						var selected_text = ""
-						if (data.semester == semester) {
+						if (semester == sem) {
 							selected_text = "selected";
 						}
 						
-						print("<option value=\"" + semester + "\" " + selected_text + ">" + semester + "</option>");
+						print("<option value=\"" + sem + "\" " + selected_text + ">" + sem + "</option>");
 				
 					}); %>
 				</select>
@@ -55,13 +95,13 @@
 				<select class="form-control" id="credit_selection">
 					<option value="" selected disabled>Select credits</option>
 	
-					<% var credits = ["2", "1.5", "1", "0.5", "0"];
+					<% var credit_options = ["2", "1.5", "1", "0.5", "0"];
 					
-					_.each(credits, function(credit, index, list) { 
+					_.each(credit_options, function(credit, index, list) { 
 					
 						// Check to see if syllabus credit has been selected
 						var selected_text = ""
-						if (data.credits == credit) {
+						if (credits == credit) {
 							selected_text = "selected";
 						}
 						
@@ -77,49 +117,49 @@
 
 	<div class="row form-group">
 		<label class="control-label" for="prerequisites">Class website</label>
-		<input class="form-control" id="class_website" name="class_website" value="<%= data.class_website %>" />
+		<input class="form-control" id="class_website" name="class_website" value="<%= class_website %>" />
 	</div>
 
 
 	<div class="row form-group">
 		<label class="control-label" for="prerequisites">Official Prerequisites</label>
-		<textarea class="form-control" rows="3" id="prerequisites"><%= data.prerequisites %></textarea>
+		<textarea class="form-control" rows="3" id="prerequisites"><%= prerequisites %></textarea>
 	</div>
 
 	
 	<div class="row form-group ">
 		<label class="control-label" for="course_description">Course Description</label>
-		<textarea class="form-control" rows="3" id="course_description"><%= data.course_description %></textarea>
+		<textarea class="form-control" rows="3" id="course_description"><%= course_description %></textarea>
 	</div>
 
 			
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="assignments">Assignments</label>
-		<textarea class="form-control" rows="3" id="assignments"><%= data.assignments %></textarea>
+		<textarea class="form-control" rows="3" id="assignments"><%= assignments %></textarea>
 	</div>			
 
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="policies">Policies</label>
-		<textarea class="form-control" rows="3" id="policies"><%= data.policies %></textarea>
+		<textarea class="form-control" rows="3" id="policies"><%= policies %></textarea>
 	</div>
 					
 	<div class="row form-group">
 		<label class="control-label"  class="control-label" for="class_format">Class Format</label>
-		<textarea class="form-control" rows="3" id="class_format"><%= data.class_format %></textarea>
+		<textarea class="form-control" rows="3" id="class_format"><%= class_format %></textarea>
 	</div>				
 
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="visitors">Visitors</label>
-		<textarea class="form-control" rows="3" id="visitors"><%= data.visitors %></textarea>
+		<textarea class="form-control" rows="3" id="visitors"><%= visitors %></textarea>
 	</div>	
 
 	<div class="row form-group">
 		<label class="control-label"  class="control-label" for="required_events">Required Events</label>
-		<textarea class="form-control" rows="3" id="required_events"><%= data.required_events %></textarea>
+		<textarea class="form-control" rows="3" id="required_events"><%= required_events %></textarea>
 	</div>	
 
 		
-	<div id="weeks">
+	<div id="topics_container">
 		<!-- Search WorldCat modal placeholder -->
 		<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>	
 	</div>
@@ -127,13 +167,13 @@
 
 	<div class="row">
 		<div class="col-lg-1 col-centered">
-			<button type="button" class="btn btn-primary btn-lg" onClick="save_syllabus()">Save Syllabus</button>
+			<button type="button" class="btn btn-primary btn-lg" id="save_syllabus">Save Syllabus</button>
 			<BR><BR>
 		</div>
 	</div>		
 		
 <div class="form-group col-lg-4">
-	<input type="text" class="form-control" id="syllabus_id" readonly value="<%= data._id %>">
+	<input type="text" class="form-control" id="syllabus_id" readonly value="<%= _id %>">
 </div>
 		
 	

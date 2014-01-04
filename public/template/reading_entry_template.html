@@ -1,15 +1,16 @@
+
 <tr class="reading_entry">
 
 	<td class="oclc_number_cell">
-		<%= oclc %>
+		<%= obj.oclc_number %>
 	</td>
 	
 	<td class="reading_citation_cell">
-		<%= citation %>
+		<%= obj.citation %>
 	</td>
 	
 	<td>
-		<input type="text" class="form-control pages">
+		<input type="text" class="form-control pages" value="<%= obj.pages %>">
 	</td>
 	
 	<td class="remove_reading_cell">

@@ -3,15 +3,15 @@
 var instructor_number;
 var manually_added = false;
 
-if ( (typeof data.instructor == 'undefined') ||  (data.instructor.length < 1)) {
+if ( (typeof instructor == 'undefined') ||  (instructor.length < 1)) {
 	
-	data.instructor = [""]; 
+	instructor = [""]; 
 	manually_added = true;
 	instructor_number = $(".instructor_entry").length + 1;	// Look for existing instructor entries
 } 
 
 
-_.each(data.instructor, function(instructor, index, list) { 
+_.each(instructor, function(inst, index, list) { 
 
 	if (!manually_added) {
 		instructor_number = index+1;
@@ -23,7 +23,7 @@ _.each(data.instructor, function(instructor, index, list) {
 		<div class="col-lg-6">
 		<label for="instructor">Instructor <%= instructor_number %></label>
 		<div class="input-group">
-		  <input type="text" class="instructor_name form-control" placeholder="Enter instructor name" value="<%= instructor %>">
+		  <input type="text" class="instructor_name form-control" placeholder="Enter instructor name" value="<%= inst %>">
 		  <span class="input-group-btn">
 			<% if ( (index> 0) || ($(".instructor_entry") ).length > 0){ %>
 				<button type="button" class="btn btn-danger delete_instructor"><span class="glyphicon glyphicon-remove"></span></button>
@@ -43,14 +43,7 @@ _.each(data.instructor, function(instructor, index, list) {
 </div>
 <div class="clearfix"></div>	
 
-<% }); 
-
-	/*
-	if (manually_added) {
-		delete data;
-	}
-	*/
-%>
+<% }); %>
 
 
 
