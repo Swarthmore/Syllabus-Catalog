@@ -11,7 +11,7 @@ app.Syllabus = Backbone.Model.extend({
 	
 	defaults: {
 		"department" : [],
-		"course_name" : " ",
+		"course_name" : "",
 		"instructor" : [],
 		"semester" : null,
 		"credits" : null,
