@@ -10,10 +10,11 @@ app.SyllabusView = Backbone.View.extend ({
 	initialize: function() {
 	
 		console.log("Initialize SyllabusView");
-
+		
 		// If this is an existing model, get the full data set
 		var view = this;
-		if (this.model.get("_id") != 'undefined') {
+		if (typeof this.model.get("_id") != 'undefined') {
+			console.log("Fetching syllabus model data");
 			this.model.fetch({
 				success: function(model, response, options) {
 					view.render();
@@ -31,7 +32,6 @@ app.SyllabusView = Backbone.View.extend ({
 	render: function() {
 	
 		console.log("Rendering syllabus");
-		
 		// Highlight "Add Syllabus" as active in top menu
 		$("ul.navbar-nav li").removeClass("active");	
 		$("#entry_button").closest("li").addClass('active');
@@ -69,6 +69,7 @@ app.SyllabusView = Backbone.View.extend ({
 		this.model.save(null, {
 			success: function(model, response, options) {
 				console.log("Model Saved");
+				$("#syllabus_id").val(model.get("_id"));	// Update model id
 				window.setTimeout(function() {$("#save_icon").addClass("hidden");}, 1000);	// Hide "save" icon after a delay
 				
 			},
