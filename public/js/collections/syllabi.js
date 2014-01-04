@@ -13,7 +13,6 @@ app.Syllabi = Backbone.Collection.extend({
 		
 		this.on('add', function(syllabus){
             console.log('New Syllabus added to Syllabi collection:');
-            console.log(syllabus);
         });
     }, 
 

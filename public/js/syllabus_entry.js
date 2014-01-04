@@ -259,7 +259,7 @@ function show_syllabus_entry_form(syllabus) {
 		// Setup form validation for syllabus entry
 		//setup_form_validation();
 
-		// Highlight search as active in top menu
+		// Highlight "Add Syllabus" as active in top menu
 		$("ul.navbar-nav li").removeClass("active");	
 		$("#entry_button").closest("li").addClass('active');
 		

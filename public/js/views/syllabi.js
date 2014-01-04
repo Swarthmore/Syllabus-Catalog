@@ -8,10 +8,9 @@ app.SyllabiView = Backbone.View.extend ({
 	el: '#page_container',
 	
 	initialize: function( initialSyllabi ) {
-		console.log("initialize SyllabiView");
-		console.log(this.collection);
-			
 		
+		console.log("initialize SyllabiView");
+
 		var self = this;
 		this.collection.fetch().complete(function(){
 		  self.render();
@@ -23,12 +22,17 @@ app.SyllabiView = Backbone.View.extend ({
 	},
 
 	render: function() {
+	
+		// Highlight search as active
+		$("ul.navbar-nav li").removeClass("active");
+		$("#search_button").closest("li").addClass('active');
+	
 		console.log("Rendering syllabi view");	
 	
 		var t = render("search_results_template");
 		this.$el.html(t);
 			
-		this.collection.each(function(model){ 
+		this.collection.each(function(model) { 
 			var m = render("syllabus_table_row_template", model.toJSON());			
 			this.$("#syllabi_search_table_body").append(m);
 		});
@@ -38,15 +42,25 @@ app.SyllabiView = Backbone.View.extend ({
 	
 	
 	events: {
-	
 		'click .view_syllabus': 'view_syllabus'
-	
 	},
 	
 	view_syllabus: function(e) {
 		var button = $(e.currentTarget);
 		var model_index = $("#syllabi_search_table_body button").index(button);
-		var v = new app.SyllabusView(this.collection.models[model_index ]);
+		console.log("Clicked on a syllabus:");
+		
+		if (app.syllabus_detail_view) { app.syllabus_detail_view.remove(); }
+		app.syllabus_detail_view = new app.SyllabusView({model:this.collection.models[model_index]});
+	},
+	
+	// Override remove to prevent removal of el	
+	// See http://stackoverflow.com/questions/10966440/recreating-a-removed-view-in-backbone-js	
+	remove: function() {
+		this.undelegateEvents();
+		this.$el.empty();
+		this.stopListening();
+		return this;
 	}
 	
 });

@@ -5,21 +5,24 @@ var app = app || {};
 
 app.SyllabusView = Backbone.View.extend ({
 
-	el: '#page_container',
+	el: '#page_container', 
 
-	events:{
-        'click #save_syllabus':'saveSyllabus'
-	},
+	initialize: function() {
+	
+		console.log("Initialize SyllabusView");
 
-	initialize: function( initialSyllabus ) {
-		this.model = new app.Syllabus( initialSyllabus ); 
+		this.listenTo( this.model, 'sync', function(m) {console.log("Model sync"); this.render;} );
 		this.render();
-		console.log("initialize SyllabusView");
-		 
 	},
 		
 	render: function() {
+	
 		console.log("Rendering syllabus");
+		
+		// Highlight "Add Syllabus" as active in top menu
+		$("ul.navbar-nav li").removeClass("active");	
+		$("#entry_button").closest("li").addClass('active');
+	
 		var t = render("syllabus_detail_template", this.model.toJSON());
 		this.$el.html(t);
 		
@@ -34,31 +37,34 @@ app.SyllabusView = Backbone.View.extend ({
 		$(w).appendTo("#weeks_container").slideDown();	
 	
 		return this;
+		
 	} ,
+
+	events:{
+        'click #save_syllabus':'saveSyllabus',
+        'change input':'saveSyllabus',
+        'change select':'saveSyllabus',
+	},	
 	
-	
-	initialize: function(m) {
-		this.model = m;
-		this.render();
-	},
 	
 	saveSyllabus: function(e) {
 		var data = prepare_syllabus_data();
-		this.model.set(data);
+		this.model.set(data, {validate: true});
 		this.model.save();
+	},
+	
+
+	// Override remove to prevent removal of el	
+	// See http://stackoverflow.com/questions/10966440/recreating-a-removed-view-in-backbone-js
+	remove: function() {
+		this.undelegateEvents();
+		this.$el.empty();
+		this.stopListening();
+		return this;
 	}
 	
 });
 
-
-
-function save_syllabus() {
-	console.log("Saving syllabus");
-	var data = prepare_syllabus_data();
-	
-	var s = app.syllabi_listing.save( data );
-	new app.SyllabusView( s );
-}
 
 
 
@@ -125,3 +131,89 @@ function prepare_syllabus_data() {
 }
 
 
+
+function get_departments() {
+
+	// Departments
+	var department = []
+	
+	// Get a list of all the department entries
+	$(".department_entry").each( function(index) {
+		
+		var dept_name = $(this).find(".department_selection").val();
+		var course_number = $(this).find(".course_number_entry").val();
+	
+		department.push({ name: dept_name, number: course_number});
+	
+	});
+
+	return department;
+}
+
+
+
+
+
+function get_instructors() {
+
+	// Departments
+	var instructor = [];
+	
+	// Get a list of all the department entries
+	$(".instructor_entry .instructor_name").each( function(index) {
+		
+		instructor.push($(this).val());
+	
+	});
+
+	return instructor;
+}
+
+
+
+// get all the readings in the course
+function get_course_readings() {
+
+	var readings = [];
+	
+	// Get a list of all the readings in the course
+	$(".reading_entry").each( function(index) {
+		
+		var citation = $(this).find(".reading_citation_cell").text();
+		var pages = $(this).find(".pages").val();
+		var oclc = $(this).find(".oclc_number_cell").html();
+		var week = $(this).closest(".week_box").index(".week_box") + 1;
+		
+		readings.push({ 
+			citation: $.trim(citation), 
+			pages: $.trim(pages), 
+			week: week, 
+			oclc_number: $.trim(oclc)
+			});
+	
+	});
+
+	return readings;
+}
+
+
+
+// get the details for all the weeks in the course
+function get_weeks() {
+
+	var weeks = [];
+
+	$(".week_box").each( function(index) {
+		var week_number = $(this).index(".week_box") + 1;
+		var topic = $(this).find(".week_topic").val();
+		var details = $(this).find(".week_details").val();
+		
+		weeks.push({
+			week_number: week_number,
+			topic: topic,
+			details: details
+		});		
+	});
+	
+	return weeks;
+}

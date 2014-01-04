@@ -7,6 +7,8 @@ app.Syllabus = Backbone.Model.extend({
 
 	idAttribute: "_id", 
 	
+	url: '/api/syllabi',
+	
 	defaults: {
 		"department" : [],
 		"course_name" : " ",
@@ -30,10 +32,10 @@ app.Syllabus = Backbone.Model.extend({
 		console.log('New syllabus model created.');
 		
 		this.on('change', function(){
-            alert('Syllabus model has changed.');
+            console.log('Syllabus model has changed.');
         });
         
-        this.on("invalid", function(model, error) {
+        this.on("error", function(model, error) {
         	alert(error);
         });
 	
@@ -41,12 +43,18 @@ app.Syllabus = Backbone.Model.extend({
 	
 	
 	validate: function(attribs) { 
+		console.log("validating");
+		console.log(attribs);
+	
 		if (attribs.department.length < 1){
+			console.log("Remember to set a department.");
 			return "Remember to set a department."; 
 		}
 		if (attribs.instructor.length < 1){
+			console.log("Remember to set an instructor.")
 			return "Remember to set an instructor."; 
 		}	
 	}
+	
 	
 });
