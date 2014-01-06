@@ -6,6 +6,12 @@
 		topics = [{title:"", details:""}]; 
 	}
 
+
+	if ( (typeof readings == 'undefined') ||  (readings.length < 1)) {
+		console.log("No readings");
+		readings = []; 
+	}	
+
 	// Loop through each topic, printing out the information
 	_.each(topics, function(topic, index, list) { %>
 
