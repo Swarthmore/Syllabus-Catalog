@@ -180,6 +180,9 @@ function handler (request, response) {
 				if (typeof data._id !== 'undefined') {
 					data._id = new mongo.ObjectID(data._id)
 				}
+
+				// Add institution to data saved in database
+				data.institution = config.app.institution_name;
 				
 				var _id = config.db.collection('syllabi').save(data, function(err, doc) {
 					

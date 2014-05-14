@@ -18,6 +18,7 @@ app.Syllabus = Backbone.Model.extend({
 		"class_website" : null,
 		"prerequisites" : null,
 		"course_description" : null,
+		"asessment" : null,
 		"assignments" : null,
 		"policies" : null,
 		"class_format" : null,

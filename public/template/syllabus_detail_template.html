@@ -8,6 +8,7 @@
 	class_website = _.isUndefined(obj.class_website) ?  "" : class_website;
 	prerequisites = _.isUndefined(obj.prerequisites) ?  "" : prerequisites;
 	course_description = _.isUndefined(obj.course_description) ?  "" : course_description;
+	assessment = _.isUndefined(obj.assessment) ?  "" : assessment;
 	assignments = _.isUndefined(obj.assignments) ?  "" : assignments;
 	policies = _.isUndefined(obj.policies) ?  "" : policies;
 	class_format = _.isUndefined(obj.class_format) ?  "" : class_format;
@@ -111,6 +112,30 @@
 				</select>
 			</div>
 		</div>
+
+		<div class="col-lg-2 col-lg-offset-1">
+			<div  class="form-group">
+				<label class="control-label"  for="format_selection">Format</label>
+				<select class="form-control" id="format_selection">
+					<option value="" selected disabled>Select format</option>
+	
+					<% var format_options = ["Lecture", "Seminar"];
+					
+					_.each(format_options, function(format, index, list) { 
+					
+						// Check to see if syllabus format has been selected
+						var selected_text = ""
+						if (class_format == format) {
+							selected_text = "selected";
+						}
+						
+						print("<option value=\"" + format + "\" " + selected_text + ">" + format + "</option>");
+				
+					}); %>
+				</select>
+			</div>
+		</div>
+
 	</div> <!-- End row col-lg-8 -->
 
 	<div class="clearfix"></div>
@@ -132,6 +157,10 @@
 		<textarea class="form-control" rows="3" id="course_description"><%= course_description %></textarea>
 	</div>
 
+	<div class="row form-group">
+		<label class="control-label" class="control-label" for="assessment">Assessment</label>
+		<textarea class="form-control" rows="3" id="assessment"><%= assessment %></textarea>
+	</div>	
 			
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="assignments">Assignments</label>
@@ -141,12 +170,7 @@
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="policies">Policies</label>
 		<textarea class="form-control" rows="3" id="policies"><%= policies %></textarea>
-	</div>
-					
-	<div class="row form-group">
-		<label class="control-label"  class="control-label" for="class_format">Class Format</label>
-		<textarea class="form-control" rows="3" id="class_format"><%= class_format %></textarea>
-	</div>				
+	</div>	
 
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="visitors">Visitors</label>

@@ -124,6 +124,9 @@ function prepare_syllabus_data() {
 	
 	// Course description
 	syllabus.course_description = $("#course_description").val();	
+
+	// Assessment
+	syllabus.assessment = $("#assessment").val();	
 	
 	// Assignments
 	syllabus.assignments = $("#assignments").val();	
@@ -132,7 +135,7 @@ function prepare_syllabus_data() {
 	syllabus.policies = $("#policies").val();	
 	
 	// Class format
-	syllabus.class_format = $("#class_format").val();	
+	syllabus.class_format = $("#format_selection").val();	
 	
 	// Visitors
 	syllabus.visitors = $("#visitors").val();
