@@ -5,11 +5,16 @@
 	course_name = _.isUndefined(obj.course_name) ?  "" : course_name;
 	semester = _.isUndefined(obj.semester) ?  "" : semester;
 	credits = _.isUndefined(obj.credits) ?  "" : credits;
+	meeting_schedule = _.isUndefined(obj.meeting_schedule) ?  "" : meeting_schedule;
+	notes = _.isUndefined(obj.notes) ?  "" : notes;
+	office_hours = _.isUndefined(obj.office_hours) ?  "" : office_hours;
+	outcomes = _.isUndefined(obj.outcomes) ?  "" : outcomes;
+	rights = _.isUndefined(obj.rights) ?  "" : rights;
 	class_website = _.isUndefined(obj.class_website) ?  "" : class_website;
 	prerequisites = _.isUndefined(obj.prerequisites) ?  "" : prerequisites;
 	course_description = _.isUndefined(obj.course_description) ?  "" : course_description;
 	assessment = _.isUndefined(obj.assessment) ?  "" : assessment;
-	assignments = _.isUndefined(obj.assignments) ?  "" : assignments;
+	//assignments = _.isUndefined(obj.assignments) ?  [] : assignments;
 	policies = _.isUndefined(obj.policies) ?  "" : policies;
 	class_format = _.isUndefined(obj.class_format) ?  "" : class_format;
 	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
@@ -140,6 +145,22 @@
 
 	<div class="clearfix"></div>
 
+
+	<div class="row form-group">
+		<label class="control-label" for="meeting_schedule">Meeting Times</label>
+		<textarea class="form-control" rows="3" id="meeting_schedule"><%= meeting_schedule %></textarea>
+	</div>
+
+	<div class="row form-group">
+		<label class="control-label" for="office_hours">Office Hours</label>
+		<textarea class="form-control" rows="3" id="office_hours"><%= office_hours %></textarea>
+	</div>
+
+	<div class="row form-group">
+		<label class="control-label" for="outcomes">Outcomes</label>
+		<textarea class="form-control" rows="3" id="outcomes"><%= outcomes %></textarea>
+	</div>
+
 	<div class="row form-group">
 		<label class="control-label" for="prerequisites">Class website</label>
 		<input class="form-control" id="class_website" name="class_website" value="<%= class_website %>" />
@@ -161,11 +182,13 @@
 		<label class="control-label" class="control-label" for="assessment">Assessment</label>
 		<textarea class="form-control" rows="3" id="assessment"><%= assessment %></textarea>
 	</div>	
-			
+		
+	<!--		
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="assignments">Assignments</label>
 		<textarea class="form-control" rows="3" id="assignments"><%= assignments %></textarea>
-	</div>			
+	</div>
+	-->			
 
 	<div class="row form-group">
 		<label class="control-label" class="control-label" for="policies">Policies</label>
@@ -182,7 +205,19 @@
 		<textarea class="form-control" rows="3" id="required_events"><%= required_events %></textarea>
 	</div>	
 
-		
+	<div class="row form-group">
+		<label class="control-label"  class="control-label" for="notes">Additional Notes</label>
+		<textarea class="form-control" rows="3" id="notes"><%= notes %></textarea>
+	</div>	
+
+	<div class="row form-group">
+		<label class="control-label"  class="control-label" for="notes">Rights</label>
+		<textarea class="form-control" rows="3" id="rights"><%= rights %></textarea>
+	</div>	
+
+	<div id="assignments_container">	
+	</div>
+
 	<div id="topics_container">
 		<!-- Search WorldCat modal placeholder -->
 		<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>	

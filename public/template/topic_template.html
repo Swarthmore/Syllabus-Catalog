@@ -53,6 +53,7 @@
 								<th>OCLC&nbsp;#</th>
 								<th>Citation</th>
 								<th>Pages</th>
+								<th>Optional?</th>
 								<th>Remove</th>
 							</tr>
 						</thead>
@@ -112,7 +113,7 @@
 	$(".add_topic").unbind("click");	// Remove existing events
 	$(".add_topic").click(function() {
 		var this_topic = $(this).closest(".topic_box");
-		number_of_topics = $("#topics .topic_box").length;
+		number_of_topics = $("#topics_container .topic_box").length;
 		var m = render("topic_template");
 		$(m).insertAfter(this_topic).slideDown();
 		renumber_topics();
@@ -140,7 +141,7 @@
 		// Make sure reading list div is visible
 		$(this).closest(".topic_box").find(".reading_list").show();
 		
-		var m = render("reading_entry_template", {citation: title, oclc: null});
+		var m = render("reading_entry_template", {citation: title, oclc: null, optional:false});
 		$(m).appendTo(reading_list).slideDown();
 
 	});

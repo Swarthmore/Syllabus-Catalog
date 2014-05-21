@@ -12,6 +12,10 @@
 	<td>
 		<input type="text" class="form-control pages" value="<%= obj.pages %>">
 	</td>
+
+	<td style="text-align:center">
+		<input type="checkbox" class="optional" <% if (obj.optional) {print(" checked='checked'");} %>  > 
+	</td>
 	
 	<td class="remove_reading_cell">
 		<button type="button" class="btn btn-danger btn-xs delete_reading"><span class="glyphicon glyphicon-remove"></span></button>

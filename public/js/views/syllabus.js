@@ -49,6 +49,9 @@ app.SyllabusView = Backbone.View.extend ({
 		var w = render("topic_template", this.model.toJSON());
 		$(w).appendTo("#topics_container").slideDown();	
 	
+		var w = render("assignment_template", this.model.toJSON());
+		$(w).appendTo("#assignments_container").slideDown();	
+
 		return this;
 		
 	} ,
@@ -116,6 +119,21 @@ function prepare_syllabus_data() {
 	// Credits
 	syllabus.credits = $("#credit_selection").val();	
 
+	// Meeting Times
+	syllabus.meeting_schedule = $("#meeting_schedule").val();	
+
+	// Office Hours
+	syllabus.office_hours = $("#office_hours").val();	
+
+	// Rights
+	syllabus.rights = $("#rights").val();	
+
+	// Other notes
+	syllabus.notes = $("#notes").val();	
+
+	// Outcomes
+	syllabus.outcomes = $("#outcomes").val();	
+
 	// Class website
 	syllabus.class_website = $("#class_website").val();	
 	
@@ -148,7 +166,10 @@ function prepare_syllabus_data() {
 		
 	// Topic information
 	syllabus.topics = get_topics();	
-	
+		
+	// Assignment information
+	syllabus.assignments = get_assignments();	
+
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db
 	if ($("#syllabus_id").val() != "") {
@@ -212,13 +233,15 @@ function get_course_readings() {
 		var citation = $(this).find(".reading_citation_cell").text();
 		var pages = $(this).find(".pages").val();
 		var oclc = $(this).find(".oclc_number_cell").html();
+		var optional = $(this).find(".optional").prop('checked');
 		var topic = $(this).closest(".topic_box").index(".topic_box") + 1;
 		
 		readings.push({ 
 			citation: $.trim(citation), 
 			pages: $.trim(pages), 
 			topic: topic, 
-			oclc_number: $.trim(oclc)
+			oclc_number: $.trim(oclc),
+			optional: optional
 			});
 	
 	});
@@ -247,3 +270,27 @@ function get_topics() {
 	
 	return topics;
 }
+
+
+// get the details for all the assignments in the course
+function get_assignments() {
+
+	var assignments = [];
+
+	$(".assignment_box").each( function(index) {
+		var assignment_number = $(this).index(".assignment_box") + 1;
+		var title = $(this).find(".assignment_title").val();
+		var description = $(this).find(".assignment_description").val();
+		var duedate = moment($(this).find(".assignment_duedate").val()).toDate(); 	// Use moment to parse due date and convert to JS date for MongoDB
+		
+		assignments.push({
+			assignment_number: assignment_number,
+			title: title,
+			description: description,
+			duedate: duedate
+		});		
+	});
+	
+	return assignments;
+}
+
