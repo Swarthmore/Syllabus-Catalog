@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if lte IE 6]><html class="ie6"><!--[if gt IE 8]><!--><html><!--<![endif]-->
+<head>
+    <title>Rangy Highlighter Module Demo</title>
+  
+    <link href="/css/rangy.css" rel="stylesheet" type="text/css">
+   
+    <style type="text/css">
+        .highlight_topic {
+            background-color: yellow;
+        }
+
+
+        .highlight_reading {
+            background-color: green;
+        }        
+
+        .highlight_assignment {
+            background-color: blue;
+        }
+
+        .note {
+            background-color: limegreen;
+        }
+        
+        #summary {
+            border: dotted orange 1px;
+        }
+
+    </style>
+
+	<script src="/js/lib/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/lib/rangy/log4javascript_stub.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/core.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/dom.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/domrange.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/wrappedrange.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/wrappedselection.js"></script>
+    <script type="text/javascript" src="/js/lib/rangy/rangy-cssclassapplier.js"></script>
+
+    <script type="text/javascript" src="/js/lib/rangy/rangy-highlighter.js"></script>
+    <script type="text/javascript">
+
+        var serializedHighlights = decodeURIComponent(window.location.search.slice(window.location.search.indexOf("=") + 1));
+        var highlighter;
+
+        var initialDoc;
+
+        var highlight_mode = "highlight_topic";
+
+
+
+
+
+
+        $( document ).ready(function() {
+
+        	// Handle key presses
+        	$( document ).keyup(function(event) {
+				handle_keypress(event)
+			});
+
+      
+            rangy.init();
+
+            highlighter = rangy.createHighlighter();
+
+            highlighter.addClassApplier(rangy.createCssClassApplier("highlight_topic", {
+                ignoreWhiteSpace: true,
+                tagNames: ["span", "a"]
+            }));
+
+            highlighter.addClassApplier(rangy.createCssClassApplier("highlight_reading", {
+                ignoreWhiteSpace: true,
+                tagNames: ["span", "a"]
+            }));            
+
+            highlighter.addClassApplier(rangy.createCssClassApplier("highlight_assignment", {
+                ignoreWhiteSpace: true,
+                tagNames: ["span", "a"]
+            }));  
+
+
+            highlighter.addClassApplier(rangy.createCssClassApplier("note", {
+                ignoreWhiteSpace: true,
+                elementTagName: "a",
+                elementProperties: {
+                    href: "#",
+                    onclick: function() {
+                        var highlight = highlighter.getHighlightForElement(this);
+                        if (window.confirm("Delete this note (ID " + highlight.id + ")?")) {
+                            highlighter.removeHighlights( [highlight] );
+                        }
+                        return false;
+                    }
+                }
+            }));
+
+
+            if (serializedHighlights) {
+                highlighter.deserialize(serializedHighlights);
+            }
+        });
+
+
+        // Based on keypress, take appropriate action
+        function handle_keypress(event) {
+
+        	console.log("Received keypress with code: " + event.which);
+
+        	switch(event.which) {
+
+        		case 49: // 1
+        			highlighter.highlightSelection( "highlight_topic" );
+        			break;
+        		case 50: // 2
+        			highlighter.highlightSelection( "highlight_reading" );
+        			break;
+        		case 51: // 3
+        			highlighter.highlightSelection( "highlight_assignment" );
+        			break;
+
+        		case 82: // R
+        		case 114: // r
+        			removeHighlightFromSelectedText();
+        			break;    			
+        	}
+        	
+        }
+
+
+        function highlightSelectedText() {
+        	highlighter.highlightSelection(highlight_mode);  
+        	highlight_summary();
+        }
+
+        function noteSelectedText() {
+            highlighter.highlightSelection("note");
+        }
+
+        function removeHighlightFromSelectedText() {
+            highlighter.unhighlightSelection();
+            highlight_summary() ;
+        }
+
+        function highlightScopedSelectedText() {
+            highlighter.highlightSelection("highlight", null, "summary");
+        }
+
+        function noteScopedSelectedText() {
+            highlighter.highlightSelection("note", null, "summary");
+        }
+
+
+
+        function highlight_summary() {
+        	console.log("Topics:");
+        	var topic_listing = $(".highlight_topic").each(function (index) {
+        		console.log("Topic " + (index+1) + ": " + $(this).text());
+        	});
+        }
+
+
+        function reloadPage(button) {
+            button.form.elements["serializedHighlights"].value = highlighter.serialize();
+            button.form.submit();
+        }
+
+    </script>
+</head>
+<body>
+    <div id="buttons">
+        <h3>Highlighter</h3>
+        <p>Make a selection in the document and use the buttons below to highlight and unhighlight.</p>
+
+        <input type="button" ontouchstart="highlightSelectedText();" onclick="highlightSelectedText();" value="Highlight selection">
+        <input type="button" ontouchstart="noteSelectedText();" onclick="noteSelectedText();" value="Add note to selection">
+        <input type="button" ontouchstart="removeHighlightFromSelectedText();" onclick="removeHighlightFromSelectedText();" value="Remove highlights from selection">
+        <br>
+        <input type="button" ontouchstart="highlightScopedSelectedText();" onclick="highlightScopedSelectedText();" value="Highlight within outlined paragraph">
+        <input type="button" ontouchstart="noteScopedSelectedText();" onclick="noteScopedSelectedText();" value="Annotate selection within outlined paragraph">
+
+        <h3>Preserving highlights between page requests</h3>
+        <form action="highlighter.html" method="get">
+            Highlights can be preserved between page requests. Press the following button to reload the page with the
+            highlights preserved:
+            <br>
+            <input type="hidden" name="serializedHighlights" value="">
+            <input type="button" value="Reload" onclick="reloadPage(this)">
+        </form>
+    </div>
+
+    <div id="content">
+  
+		<p>English_Literature_035.wiz<br/>
+		<strong>PAGE  </strong><br/>
+		7<br/>
+		Battling Against Voldemort
+		</p><p>ENGLISH 009J: Battling Against Voldemort                LPAC 201        
+		</p><pre>
+		Prof. Melinda Finberg                                           TTH 11:20-12:35
+		Office Hours: 304 LPAC                                          Fall 2007       
+		</pre>
+		<p>T, TH 10:15 – 11:15 and by appt.<br/>
+		215-570-8288
+		</p><p><a href="mailto:mfinber1@swarthmore.edu">mfinber1@swarthmore.edu</a>
+		                                                                                                 
+		</p><p>Syllabus 
+		</p>
+		<p>Week 1  Defining the Hero
+		</p><pre>
+		        Readings:  Harry Potter 
+		                       Campbell, “Myth and Dream”
+		                       Christopher Hitchens, “The Boy Who Lived”  
+		                      (get a head start reading Odyssey)</pre>
+
+		<p>September 4     Introduction
+		</p><p>September 6  Harry Potter and the Hero’s Quest,  discussion of first assignment
+		First paper assignment:  Response to Hitchens Review  1 – 2 pp.
+		</p>
+		<p>Week 2   Library Session and Pan’s Labyrinth
+		</p><pre>
+		September 11  meet in Science Center 256 computer room for a session with librarians                    Anne Garrison and Amanda Watson
+		        First paper due September 11 by midnight to me by e-mail
+		</pre>
+		<p>September 13  No class (Rosh Hashanah)  
+		** Required:  Sunday, September 16, 7:00 pm  Pan’s Labyrinth  320 McCabe
+		</p>
+		<p>Week 3 Coming of Age of the Hero/Heroine
+		</p><pre>
+		        Readings:  Odyssey Intro and books 1 through 4
+		                       Campbell, “The Call to Adventure,” “Supernatural Aid”</pre>
+
+		<p>September 18  Pan’s Labyrinth and The Odyssey
+		September 20  Talk about first papers, writing instruction
+		</p>
+		<p>Week 4 Monsters
+		</p><pre>
+		        Readings: Odyssey books 9 through 12
+		                      Campbell, “The Road of Trials,” “Meeting with the Goddess,”                               “Woman as Temptress”</pre>
+		<p>September 25  The Monster Without:  Obstacles and Blocking Mechanisms
+		</p><p>September 27  The Monster Within
+		</p><p>Week 5 Mothers and Fathers
+		</p><pre>
+		        Readings:  Odyssey books 15, 16, 19 through 24
+		                       Campbell, “Atonement with the Father”</pre>
+
+		<p>October 2  Discussion of second assignment.  Mother Figures
+		</p><p>October 4  Father Figures.
+		</p><p>Week 6 Fellowship
+		</p><pre>
+		        Readings:  Tolkien, Lord of the Rings: Fellowship of the Ring, 
+		                       Selections: “The Shadow of the Past” – “A Conspiracy Unmasked,”                        “Strider” – “Flight to the Ford,” “The Council of Elrond,” “The Ring                            Goes South,” “The Bridge at Khazad-D&ucirc;m” – “Farewell to Lorien,”                        “The Breaking of the Fellowship”</pre>
+		<p>October 9  The Inner Circle – Community
+		October 11  Division, Separation, Going it Alone
+		</p><p>        Second paper due, 3-5 pp, by midnight October 9
+		</p>
+		<p>Midterm Break
+		</p><p>Week 7 War:  Battle of the Titans
+		</p><pre>
+		        Readings:  Lord of the Rings:  Two Towers and Return of the King         
+		                       Selections:  “The White Rider” – “Helm’s Deep”, “The Voice of                            Saruman,” “The Passage of the Marshes,” “The Stairs of Cirith                           Ungol” – “The Choices of Master Samwise,” “The Passing of the                           Grey Company,” “Siege of Gondor” – “The Battle of the Pellenor                          Fields,” “The Last Debate,” “The Tower of Cirith Ungol” – “The                          Field of Cormallen,” “Homeward Bound” – “The Grey Havens”  
+		                       Selections from Tolkien,  Silmarillon, Unfinished Tales 
+		        October 23  Betrayal and Upheaval
+		        October 25  Cost and Experience
+		                conferences on second paper</pre>
+
+		<p>Week  8 Tricksters and Prophecies
+		</p><pre>
+		        Readings:  Pullman, The Golden Compass
+		                       Kleist, “On the Marionette Theatre”</pre>
+
+		<pre>
+		        October 30  Discussion of third assignment.  Archetypal Tricksters
+		        November 1  The Role of Prophecy</pre>
+
+		<p>Week  9   Love, Sex and Marriage
+		</p><pre>
+		        Readings:  Pullman, The Subtle Knife
+		                      Selections from Blake “Little Girl Lost” “The Marriage of Heaven and                      Hell,” “America, A Prophecy”    
+		                   third 3 – 5 pp paper due November 8 midnight
+		        November 6 Passionate Parents
+		        November 8 Sex vs. Sin</pre>
+		<p>Week 10 Nemesis… and others     
+		</p><p>Readings:  Pullman, The Amber Spyglass 
+		</p><p>               Milton, Paradise Lost, selections from Books I, VI, IX
+		</p><p>November 13  Questioning God
+		</p><p>November 15  Innocence vs. Experience.  Class discussions of third paper.
+		                
+		</p><p>Week 11 Descent into Death
+		</p><pre>
+		        Readings:  Nix, Abhorsen: Sabriel
+		                        Campbell, “Apotheosis,” “The Ultimate Boon”</pre>
+
+		<p>        November 20 Discussion of fourth assignment.  Images of Death
+		</p><p>Week 12 Magical Artifacts and Heirlooms
+		</p><p>        Readings:  Abhorsen: Sabriel,  Lirael
+		                        
+		</p><pre>
+		        November 27 Weapons
+		        November 29  Inheritance vs. Earned Power
+		                Outline of 4th paper  (8-10 pp) due November 27 midnight (optional?)</pre>
+		<p>Week 13 Fulfillment/Repairing the World
+		</p><pre>
+		        Readings:  Abhorsen, Harry Potter
+		        December 4  Apotheosis
+		        December 6 Repairing the World
+		</pre>
+		<p>December 9?  See The Golden Compass??? Followed by pizza/discussion
+		</p><p>Week 14 December 11 Conclusions
+		</p><p>        Readings:  Harry Potter
+		</p><p>        Final version of 4th paper due midnight December 11
+		</p>
+		<p>Books on order at the bookstore:
+		</p><p>Campbell, Joseph.  The Hero with a Thousand Faces 
+		</p><p>Homer, The Odyssey, Fagels translation<br/>
+		Nix, Garth,  The Abhorsen Trilogy:  Sabriel, Lirael, Abhorsen
+		Norton Pocket Guide to Grammar and Punctuation
+		Pullman, Phillip.  His Dark Materials:  The Golden Compass, The Subtle Knife, The       Amber Spyglass  
+		Rowling, J.K. Harry Potter and the Deathly Hallows    
+		Strunk Jr., William and White, E. B.  Elements of Style 
+		Tolkien, J.R.R.  The Lord of the Rings:  The Fellowship of the Ring, The Two Towers,    The Return of the King
+		</p><p>&amp;#65533;<br/>
+		Course Description
+		</p>
+		<p>        We have been witnesses to – and participants in – a literary event.  Despite age differences, we are all part of the Harry Potter generation. We have grown up with Harry and watched Harry grow up, and no other generation of readers will experience his serial saga as we have.  What made Harry’s story so compelling?  This seminar will give us the opportunity to examine this beloved chronicle in a new light, and, I hope, in greater depth.  We will look at how J. K. Rowling tapped into the mythic hero’s journey and how her retelling of that tale relates to previous tellings of the mythic story through the centuries and across cultures.  We will examine writers on myth and the psyche, such as Carl Jung, and Joseph Campbell, and explore both classical and contemporary tales of heroes and heroines, their battles against evil, and their quests for transcendence and wisdom.  Our purpose is to try to understand why we are driven to invent stories about battling inhuman powers to learn what it means to be human.  
+		</p>
+		<p>        The reading list for this course is daunting, since we will be examining a number of epic works.  I can only justify the amount of required reading by assuring myself that anyone who signed up for the class has already read all seven volumes of the Harry Potter series.  I am also assuming that most of you are very familiar with Tolkien’s Lord of the Rings trilogy, either through the books (perhaps even read several times) or the Peter Jackson film version, and that therefore I can assign selections from this trilogy and count on your following where these chapters fit into the overall arc of the story.  (Of course, you are always welcome to read more than I have assigned.)  If you know the story through the films only, please be aware that the film differs from Tolkien’s plot in numerous and significant ways. A number of you may even be familiar already with the works by Pullman and by Nix.  That is wonderful.  All the better to turn to closer readings of these books.  Our required reading assignments begin slowly and then accelerate almost alarmingly, so I can’t urge you strongly enough to get a head start.  Most of the assigned readings are page turners and great fun; use them for relaxing and entertainment, but read them thoroughly.  
+		</p>
+		<p>        The structure of the seminar is cumulative, by which I mean that each discussion will not focus only on the assigned reading, but will refer to all the readings that have come before.  The topics for each class are meant as touchstones for issues crucial to our understanding of the hero/heroine’s quest and as points of departure for our discussions.  They are not meant to be limiting.  So, for example, while we are scheduled to discuss Mother Figures in relation to The Odyssey, that does not mean we will not discuss them again when we talk about His Dark Materials.  Nor does that mean we will not refer to “The Scouring of the Shire,”  when we are reading Tolkien even though the topic, “Repairing the World” doesn’t occur until we are reading Nix.  Since our topic is vast and ambitious, flexibility will be required.
+		</p>
+
+		<p>Requirements
+		        
+		</p><p>        Despite how much we will have to discuss, we must keep in mind that this seminar is a writing seminar.  We will use a fair amount of our time talking about writing strategy, structure, and style, responding to each other’s work, and learning how to edit one’s self.  My purpose in choosing this topic for an FYS is to give you a subject you are passionate about on which to focus your writing.  Academic writing can be passionate! – but it must be well structured and well supported.  You need to develop your abilities not only to write clearly and succinctly, but also to write material worth reading.  
+		</p>
+		<p>        There will be four written assignments.  The first will be a very short essay responding to a critical review of Harry Potter and the Deathly Hallows.  The purpose of this work is to give me a sense of the state of your writing abilities.  It will not be graded (except in the event it is turned in late or not at all) and shouldn’t be the cause of anxiety.  The remaining essays will be discussed further at a later date, but all will involve comparing texts to other texts, criticism, or other outside reading.  There will be opportunities to include multicultural quests.  
+		</p>
+		<p>        Assignments are due by e-mail as stated on the syllabus.  Extensions will be granted rarely, and only when requested before the due date.  A late paper will receive a one-third letter grade deduction for each day it is late. (B+ to a B, B to B-, B- to C+, etc.) A conference will be required after the second essay to discuss any writing concerns either you or I have and to offer guidance for a revision if necessary.  Revision is a wonderful writing aid (haven’t you already been told that all good writing is rewriting?) and I wish we had more time to work it into this class, but individual rewrites are encouraged and can be submitted to improve one’s essay grade.  If you wish to rewrite an essay, please discuss it with me. (To be safe, always keep a hard copy of your submitted assignment.)
+		</p>
+		<p>        Remember, plagiarism is intellectual theft.  I am interested in helping you develop your ideas and your moral sense of when your ideas are indebted to others.  It is your responsibility to ensure that all your citations are properly credited.  These include indirect as well as direct quotations and references, websites, etc.  Please consult <a href="http://www.swarthmore.edu/Humanities/english/plagiarism.htm">http://www.swarthmore.edu/Humanities/english/plagiarism.htm</a>  for complete information on correct forms of citation and the consequences of plagiarism at Swarthmore.
+		</p><p>        Class attendance and participation are required.  This class is a seminar, not a lecture, and the give and take of our community of scholars is at its core.  We will all be learning from each other and this is not possible without regular attendance and a respectful give and take of ideas.  Unexcused absences will result in a grade deduction.
+		</p>
+
+
+		<p>Grading
+		</p><p>        Your grades will be a composite of your class participation, writing assignments and final exam to be weighted as follows:  
+		</p>
+		<p>                Writing assignments:
+		</p><p>                        Second essay    15%
+		</p><p>                        Third essay     15%
+		</p><p>                        Fourth essay    20%
+		</p>                
+		<p>                Class participation:    35%
+		</p>
+		<p>                Final Exam:             15%
+		</p><hr/>
+
+		<p>                Total:                     100%
+		</p>
+
+
+ 	</div> 
+</body>
+</html>
