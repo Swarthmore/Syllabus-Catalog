@@ -39,6 +39,10 @@
     <script type="text/javascript" src="/js/lib/rangy/rangy-cssclassapplier.js"></script>
 
     <script type="text/javascript" src="/js/lib/rangy/rangy-highlighter.js"></script>
+    
+    
+    
+    
     <script type="text/javascript">
 
         var serializedHighlights = decodeURIComponent(window.location.search.slice(window.location.search.indexOf("=") + 1));
@@ -146,7 +150,7 @@
             
             var style = document.createElement('style');
 			style.type = 'text/css';
-			style.innerHTML = '.highlight_topic { color: #F00; }';
+			style.innerHTML = '.highlight_topic { background-color: yellow; opacity:0.2;}';
 			$("#content_iframe" ).get(0).contentWindow.document.getElementsByTagName('head')[0].appendChild(style);
             
         
@@ -157,7 +161,8 @@
         	// Get selection from iFrame
         	var iframe = document.getElementById("content_iframe");
         	var sel = rangy.getSelection(iframe);
-        	console.log(sel);
+        	console.log(sel.toString());
+        	console.log(sel.getAllRanges());
         	//highlighter.highlightSelection(highlight_mode);  
         	
         	highlightApplier = rangy.createCssClassApplier("highlight_topic", {elementTagName: 'span'});
@@ -223,7 +228,7 @@
     </div>
 
     <div id="content" style="width:80%;height:100%">
-    		<iframe id="content_iframe" src="/syllabi/Buurma, English 44, 20th Century Novel.html" style="width:100%;height:100%"></iframe>
+    		<iframe id="content_iframe" src="/web/viewer.html?file=/Syllabi/Buurma, English 44, 20th Century Novel.pdf" style="width:100%;height:100%"></iframe>
 
 
  	</div> 
