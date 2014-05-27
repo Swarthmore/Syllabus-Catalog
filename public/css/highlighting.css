@@ -1,0 +1,20 @@
+.highlight_topic {
+	background-color: #FFFF66;
+}
+
+
+.highlight_reading {
+	background-color: #99FF66;
+}        
+
+.highlight_assignment {
+	background-color: #99CCFF;
+}
+
+.note {
+	background-color: limegreen;
+}
+
+#summary {
+	border: dotted orange 1px;
+}
