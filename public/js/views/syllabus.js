@@ -47,7 +47,10 @@ app.SyllabusView = Backbone.View.extend ({
 		$(i).appendTo("#instructors").slideDown();
 
 		var w = render("topic_template", this.model.toJSON());
-		$(w).appendTo("#topics_container").slideDown();	
+		$(w).appendTo("#topics_container").slideDown(function() {
+			initialize_topic_boxes();	// Set up numbering and button options	
+		});	
+		
 	
 		var w = render("assignment_template", this.model.toJSON());
 		$(w).appendTo("#assignments_container").slideDown();	
@@ -260,11 +263,13 @@ function get_topics() {
 		var topic_number = $(this).index(".topic_box") + 1;
 		var title = $(this).find(".topic_title").val();
 		var details = $(this).find(".topic_details").val();
+		var highlight = $(this).find(".topic_highlight").val();
 		
 		topics.push({
 			topic_number: topic_number,
 			title: title,
-			details: details
+			details: details,
+			highlight: highlight
 		});		
 	});
 	

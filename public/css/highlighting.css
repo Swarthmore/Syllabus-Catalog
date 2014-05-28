@@ -2,7 +2,6 @@
 	background-color: #FFFF66;
 }
 
-
 .highlight_reading {
 	background-color: #99FF66;
 }        
@@ -11,10 +10,33 @@
 	background-color: #99CCFF;
 }
 
-.note {
-	background-color: limegreen;
+.highlight_officehours {
+	background-color: #FFFF66;
 }
 
-#summary {
-	border: dotted orange 1px;
+.highlight_meetingtimes {
+	background-color: #FFFF66;
 }
+
+.highlight_outcomes {
+	background-color: #FFFF66;
+}
+
+.highlight_classwebsite {
+	background-color: #FFFF66;
+}
+
+.highlight_description {
+	background-color: #FFFF66;
+}
+
+.highlight_policies {
+	background-color: #FFFF66;
+}
+
+.highlight_notes {
+	background-color: #FFFF66;
+}
+
+
+
