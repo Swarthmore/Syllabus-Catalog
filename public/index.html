@@ -1,44 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Syllabus Entry Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Bootstrap -->
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
 
+    <!-- CSS -->
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<!-- Optional theme
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
 	 -->
-	 
-   <!-- Date picker CSS -->
-   <link rel="stylesheet" href="/css/datepicker3.css">
-
+	<!-- Date picker CSS -->
+	<link rel="stylesheet" href="/css/datepicker3.css">
 	<!-- Program specific CSS -->
 	<link rel="stylesheet" href="/css/syllabus_entry.css">
-	 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) and other JS libs-->
-  <script src="/js/lib/jquery.min.js"></script>
+
+	<!-- JavaScript Libraries -->
+	<script src="/js/lib/jquery.min.js"></script>
 	<script src="/js/lib/underscore-min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/lib/date.format.js"></script>
 	<script src="/js/lib/jquery.validate.min.js"></script>
 	<script src="/js/lib/backbone-min.js"></script>
-  <script src="/js/lib/bootstrap-datepicker.js"></script>
-  <script src="/js/lib/moment.min.js"></script>
+  	<script src="/js/lib/bootstrap-datepicker.js"></script>
+  	<script src="/js/lib/moment.min.js"></script>
+	
 
   
-
 	<!-- Program-specific JS -->
-
-	
-	
-	<!--<script src="/js/syllabus_backbone.js"></script>	
-	<script src="/js/syllabus_entry.js"></script>
-	<script src="/js/syllabus_save.js"></script>
-	<script src="/js/syllabus_search.js"></script>-->
-
 	<script src="/js/models/syllabus.js"></script>
 	<script src="/js/models/reading.js"></script>
 	<script src="/js/models/topic.js"></script>
@@ -56,76 +46,53 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
   
-  <body>
+<body>
   
-    <!-- Wrap all page content here -->
-    <div id="wrap">
+	<!-- Wrap all page content here -->
+	<div id="wrap">
 
-      <!-- Fixed navbar -->
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Swarthmore Syllabus Catalog Project</a>
-          </div>
-          <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#" id="about_button">About</a></li>
-              <li><a href="#" id="search_button">Search</a></li>
-              <li><a href="#" id="entry_button">Add Syllabus</a></li>
-              
-            </ul>
-            <ul class="nav pull-right">
-              <li><span id="save_icon" class="glyphicon glyphicon-floppy-disk hidden" style="font-size:24px;margin-top:5px;color:red"></span></li>
-            </ul>
-              
-              <!-- for possible future reference 
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-              -->
-              
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-        
-      </div>
+		<!-- Fixed navbar -->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						  <span class="sr-only">Toggle navigation</span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+						  <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Swarthmore Syllabus Catalog Project</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#" id="about_button">About</a></li>
+						<li><a href="#" id="search_button">Search</a></li>
+						<li><a href="#" id="entry_button">Add Syllabus</a></li> 
+					</ul>
+					<ul class="nav pull-right">
+						<li><span id="save_icon" class="glyphicon glyphicon-floppy-disk hidden" style="font-size:24px;margin-top:5px;color:red"></span></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div> <!-- end of container -->
+		</div> <!-- End of navbar -->
+
+		
 
 
+		<!-- Begin page content -->
+		<div class="container" id="page_container"></div>
 
-		  <!-- Begin page content -->
-		<div class="container" id="page_container">
-		</div>
-
-      
-    </div> <!-- End page wrap -->
-
-
+	</div> <!-- End page wrap -->
 
     <div id="footer">
       <div class="container">
       </div>
     </div>
-
-    
-	<!-- Latest compiled and minified JavaScript -->
+	
 	<script src="/js/lib/bootstrap.min.js"></script>
+	
 	
   </body>
 </html>
