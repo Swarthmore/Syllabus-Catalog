@@ -173,6 +173,9 @@ function prepare_syllabus_data() {
 	// Assignment information
 	syllabus.assignments = get_assignments();	
 
+	// Syllabus status 
+	syllabus.status = $("#syllabus_status").val();	
+
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db
 	if ($("#syllabus_id").val() != "") {

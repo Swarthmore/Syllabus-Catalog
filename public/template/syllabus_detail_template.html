@@ -34,6 +34,7 @@
 	class_format = _.isUndefined(obj.class_format) ?  "" : class_format;
 	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
 	required_events = _.isUndefined(obj.required_events) ?  "" : required_events;
+	status = _.isUndefined(obj.status) ?  "" : status;
 	_id = _.isUndefined(obj._id) ?  "" : _id;
 	
 %>
@@ -163,39 +164,49 @@
 		<div class="clearfix"></div>
 
 
-		<div class="row form-group">
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="meeting_schedule">Meeting Times</label>
 			<textarea class="form-control" rows="3" id="meeting_schedule"><%= meeting_schedule %></textarea>
 		</div>
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+		
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="office_hours">Office Hours</label>
 			<textarea class="form-control" rows="3" id="office_hours"><%= office_hours %></textarea>
 		</div>
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="outcomes">Outcomes</label>
 			<textarea class="form-control" rows="3" id="outcomes"><%= outcomes %></textarea>
 		</div>
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="prerequisites">Class website</label>
 			<input class="form-control" id="class_website" name="class_website" value="<%= class_website %>" />
 		</div>
 
+		<div class="clearfix"></div>
 
-		<div class="row form-group">
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="prerequisites">Official Prerequisites</label>
 			<textarea class="form-control" rows="3" id="prerequisites"><%= prerequisites %></textarea>
 		</div>
 
+		<div class="clearfix"></div>
 	
-		<div class="row form-group ">
+		<div class="row form-group col-lg-12">
 			<label class="control-label" for="course_description">Course Description</label>
 			<textarea class="form-control" rows="3" id="course_description"><%= course_description %></textarea>
 		</div>
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label" class="control-label" for="assessment">Assessment</label>
 			<textarea class="form-control" rows="3" id="assessment"><%= assessment %></textarea>
 		</div>	
@@ -207,30 +218,42 @@
 		</div>
 		-->			
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label" class="control-label" for="policies">Policies</label>
 			<textarea class="form-control" rows="3" id="policies"><%= policies %></textarea>
 		</div>	
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label" class="control-label" for="visitors">Visitors</label>
 			<textarea class="form-control" rows="3" id="visitors"><%= visitors %></textarea>
 		</div>	
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label"  class="control-label" for="required_events">Required Events</label>
 			<textarea class="form-control" rows="3" id="required_events"><%= required_events %></textarea>
 		</div>	
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label"  class="control-label" for="notes">Additional Notes</label>
 			<textarea class="form-control" rows="3" id="notes"><%= notes %></textarea>
 		</div>	
 
-		<div class="row form-group">
+		<div class="clearfix"></div>
+
+		<div class="row form-group col-lg-12">
 			<label class="control-label"  class="control-label" for="notes">Rights</label>
 			<textarea class="form-control" rows="3" id="rights"><%= rights %></textarea>
 		</div>	
+
+		<div class="clearfix"></div>
 
 		<div id="assignments_container">	
 		</div>
@@ -238,6 +261,30 @@
 		<div id="topics_container">
 			<!-- Search WorldCat modal placeholder -->
 			<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>	
+		</div>
+	
+	
+		<div class="col-lg-8">
+				<div  class="form-group">
+					<label class="control-label"  for="syllabus_status">Syllabus Status</label>
+					<select class="form-control" id="syllabus_status">
+						<option value="" selected disabled>Select status</option>
+	
+						<% var status_options = ["Unknown", "Incomplete", "Ready for Review", "Complete"];
+					
+						_.each(status_options, function(status_option, index, list) { 
+					
+							// Check to see if syllabus status has been selected
+							var selected_text = ""
+							if (status_option == status) {
+								selected_text = "selected";
+							}
+						
+							print("<option value=\"" + status_option + "\" " + selected_text + ">" + status_option + "</option>");
+				
+						}); %>
+					</select>
+				</div>
 		</div>
 	
 

@@ -28,6 +28,7 @@ app.Syllabus = Backbone.Model.extend({
 		"policies" : null,
 		"class_format" : null,
 		"visitors" : null,
+		"status" : null,
 		"required_events" : null,
 		"readings" : [],
 		"non_associated_readings": []	
