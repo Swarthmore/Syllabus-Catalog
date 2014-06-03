@@ -12,7 +12,8 @@ var http = require('http'),
   	moment = require('moment'),
   	util = require('util'),
   	utility = require("./utility"),
-  	parseString = require('xml2js').parseString;
+  	parseString = require('xml2js').parseString,
+  	formidable = require('formidable');
 
 
 var twit;
@@ -112,8 +113,21 @@ function handler (request, response) {
 	
 	} else if (request.method == "POST") {
 	
-		// Is this a a request to save a  newsyllabus?  If so, collect the data
-		if (request.url.indexOf("/api/syllabi") == 0) {
+		if (req.url == '/upload') {
+    		// parse a file upload
+    		var form = new formidable.IncomingForm();
+
+			form.parse(req, function(err, fields, files) {
+			  res.writeHead(200, {'content-type': 'text/plain'});
+			  res.write('received upload:\n\n');
+			  res.end(util.inspect({fields: fields, files: files}));
+			});
+
+			return;
+			
+  		} else if (request.url.indexOf("/api/syllabi") == 0) {
+	
+			// Is this a a request to save a  newsyllabus?  If so, collect the data
 		
 			// Save POST data as it arrives
 			request.on("data", function(chunk) {
