@@ -31,7 +31,8 @@ app.Syllabus = Backbone.Model.extend({
 		"status" : null,
 		"required_events" : null,
 		"readings" : [],
-		"non_associated_readings": []	
+		"non_associated_readings": [],
+		"html_syllabus": ""
 	},
 	
 	initialize: function() {

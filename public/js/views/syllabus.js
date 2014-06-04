@@ -67,7 +67,7 @@ app.SyllabusView = Backbone.View.extend ({
         'click #save_syllabus':'saveSyllabus',
         'change input':'saveSyllabus',
         'change select':'saveSyllabus',
-        'change textarea':'saveSyllabus',
+        'change textarea':'saveSyllabus'
 	},	
 	
 	
@@ -179,6 +179,9 @@ function prepare_syllabus_data() {
 
 	// Syllabus status 
 	syllabus.status = $("#syllabus_status").val();	
+
+	// Syllabus status 
+	syllabus.syllabus_html = $("#syllabus_iframe").contents().find("html").html();
 
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db

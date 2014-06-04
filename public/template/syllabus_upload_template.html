@@ -56,13 +56,14 @@ $(function () {
         },
         done: function (e, data) {
         
-			console.log(data);
+			console.log("Converted syllabus returned");
 			var iframe =  $('#syllabus_iframe');
 			var idoc = iframe[0].contentDocument;
 			idoc.open();
 			idoc.write(data.result.html_syllabus);
 			idoc.close();
 			$(".progress-bar-success").css("width", "0%");
+			$("#save_syllabus").click();
     
         },
         progressall: function (e, data) {

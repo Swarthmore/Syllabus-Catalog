@@ -35,6 +35,7 @@
 	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
 	required_events = _.isUndefined(obj.required_events) ?  "" : required_events;
 	status = _.isUndefined(obj.status) ?  "" : status;
+	syllabus_html = _.isUndefined(obj.syllabus_html) ?  "" : syllabus_html;
 	_id = _.isUndefined(obj._id) ?  "" : _id;
 	
 %>
@@ -308,7 +309,14 @@
 
 	<div id="load_syllabus"></div>
 
-	<iframe id="syllabus_iframe" src="/syllabi/Attachment_003.html" style="width:100%;height:100%"></iframe>
+	<iframe id="syllabus_iframe" src="" style="width:100%;height:100%"></iframe>
+	
+	<% 
+		// Set iframe content
+		console.log("HTML syllabus");
+		console.log($("#syllabus_iframe").contents().find("html").html());
+		$("#syllabus_iframe").contents().find("html").html(syllabus_html);
+	%>
 </div>
 
 
