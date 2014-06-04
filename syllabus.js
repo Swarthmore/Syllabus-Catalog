@@ -13,7 +13,9 @@ var http = require('http'),
   	util = require('util'),
   	utility = require("./utility"),
   	parseString = require('xml2js').parseString,
-  	formidable = require('formidable');
+  	formidable = require('formidable'),
+  	pdftohtml = require('pdftohtmljs'),
+  	tmp = require('tmp');
 
 
 var twit;
@@ -113,14 +115,48 @@ function handler (request, response) {
 	
 	} else if (request.method == "POST") {
 	
-		if (req.url == '/upload') {
+		if (request.url == '/upload') {
     		// parse a file upload
     		var form = new formidable.IncomingForm();
+			
+			form.parse(request, function(err, fields, files) {
+			  	response.writeHead(200, { 'Content-Type': 'application/json' });
+			  
+			  	var path_to_file = files['files[]'].path;
+			  	console.log("Starting conversion process on " + path_to_file);
+			 
+			 
+				converter = new pdftohtml(path_to_file, "converted_pdf.html");
+				converter.preset('syllabus');
 
-			form.parse(req, function(err, fields, files) {
-			  res.writeHead(200, {'content-type': 'text/plain'});
-			  res.write('received upload:\n\n');
-			  res.end(util.inspect({fields: fields, files: files}));
+				converter.success(function() {
+					console.log("conversion done");
+					util.inspect({fields: fields, files: files});
+				  
+					fs.readFile("converted_pdf.html", "utf-8", function (err, data) {
+				  		if (err) throw err;
+				  		console.log(data);
+				  		response.write(JSON.stringify({html_syllabus:data}));
+				  		response.end();
+					});
+				  	  	
+				});
+
+				converter.error(function(error) {
+				  console.log("conversion error: " + error);
+				});
+
+				converter.progress(function(ret) {
+				  console.log ((ret.current*100.0)/ret.total + " %");
+				});
+
+				converter.convert();
+		  
+				
+					
+				  	
+			 
+				
 			});
 
 			return;

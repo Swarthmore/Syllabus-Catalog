@@ -80,6 +80,11 @@
     <!-- The container for the uploaded files -->
     <div id="files" class="files"></div>
     <br>
+    <div>
+    	<iframe id="syllabus_iframe" src="/syllabi/Attachment_003.html" style="width:100%;height:100%"></iframe>
+    </div>
+    
+    
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Demo Notes</h3>
@@ -126,7 +131,7 @@ $(function () {
     'use strict';
     // Change this to the location of your server-side upload handler:
     var url = window.location.hostname === 'blueimp.github.io' ?
-                '//jquery-file-upload.appspot.com/' : '//localhost:8888/',
+                '//jquery-file-upload.appspot.com/' : '/upload',
         uploadButton = $('<button/>')
             .addClass('btn btn-primary')
             .prop('disabled', true)
@@ -149,7 +154,7 @@ $(function () {
         url: url,
         dataType: 'json',
         autoUpload: false,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        acceptFileTypes: /(\.|\/)(pdf)$/i,
         maxFileSize: 5000000, // 5 MB
         // Enable image resizing, except for Android and Opera,
         // which actually support image resizing, but fail to
@@ -196,8 +201,27 @@ $(function () {
             'width',
             progress + '%'
         );
-    }).on('fileuploaddone', function (e, data) {
+    }).on('fileuploaddone', function (e, data) {;
+    	
+    	console.log(data);
+    	var iframe =  $('#syllabus_iframe');
+		var idoc = iframe[0].contentDocument;
+		idoc.open();
+		idoc.write(data.result.html_syllabus);
+		idoc.close();
+    	/*
         $.each(data.result.files, function (index, file) {
+        	
+        	var iframe =  $('#iframe');
+			var idoc = iframe[0].contentDocument;
+			idoc.open();
+			idoc.write(mytext);
+			idoc.close();
+		
+			
+		
+        
+        
             if (file.url) {
                 var link = $('<a>')
                     .attr('target', '_blank')
@@ -210,7 +234,9 @@ $(function () {
                     .append('<br>')
                     .append(error);
             }
+            
         });
+        */
     }).on('fileuploadfail', function (e, data) {
         $.each(data.files, function (index, file) {
             var error = $('<span class="text-danger"/>').text('File upload failed.');

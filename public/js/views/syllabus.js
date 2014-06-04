@@ -55,6 +55,10 @@ app.SyllabusView = Backbone.View.extend ({
 		var w = render("assignment_template", this.model.toJSON());
 		$(w).appendTo("#assignments_container").slideDown();	
 
+		var i = render("syllabus_upload_template", this.model.toJSON());
+		$(i).appendTo("#load_syllabus").slideDown();
+
+
 		return this;
 		
 	} ,
