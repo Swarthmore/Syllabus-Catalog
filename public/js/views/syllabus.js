@@ -41,23 +41,37 @@ app.SyllabusView = Backbone.View.extend ({
 		
 		// Add the department listing structure
 		var d = render("department_entry_template", this.model.toJSON());
-		$(d).appendTo("#departments table tbody").slideDown();
+		$("#departments table tbody").append(d).slideDown();
 		
 		var i = render("instructor_template", this.model.toJSON());
-		$(i).appendTo("#instructors").slideDown();
+		$("#instructors").append(i).slideDown();
 
 		var w = render("topic_template", this.model.toJSON());
-		$(w).appendTo("#topics_container").slideDown(function() {
+		$("#topics_container").append(w).slideDown(function() {
 			initialize_topic_boxes();	// Set up numbering and button options	
 		});	
 		
-	
 		var w = render("assignment_template", this.model.toJSON());
-		$(w).appendTo("#assignments_container").slideDown();	
+		$("#assignments_container").append(w).slideDown();	
 
 		var i = render("syllabus_upload_template", this.model.toJSON());
-		$(i).appendTo("#load_syllabus").slideDown();
+		$("#load_syllabus").append(i).slideDown();
 
+		setup_rangy();
+
+		// Load syllabus html
+		var htmlString = _.isUndefined(this.model.get("syllabus_html")) ?  "" : this.model.get("syllabus_html");
+
+		// Working syllabus (for highlighting)
+		$("#syllabus_iframe").contents().find('body').html(htmlString);
+
+		// Original syllabus (non marked up)
+		$("#original_syllabus_iframe").contents().find('body').html(htmlString);
+
+		// Load in highlights
+		if (!_.isUndefined(this.model.get("highlights"))) {
+			highlight_syllabus_topics(this.model.get("highlights"));
+		}
 
 		return this;
 		
@@ -180,8 +194,11 @@ function prepare_syllabus_data() {
 	// Syllabus status 
 	syllabus.status = $("#syllabus_status").val();	
 
-	// Syllabus status 
-	syllabus.syllabus_html = $("#syllabus_iframe").contents().find("html").html();
+	// html version of Syllabus 
+	syllabus.syllabus_html = $('#original_syllabus_iframe').contents().find('body').html();
+
+	// Highlighting
+	syllabus.highlights = collect_highlights();
 
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db

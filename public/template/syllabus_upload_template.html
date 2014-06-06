@@ -44,7 +44,7 @@
 /*global window, $ */
 $(function () {
     'use strict';
-    // Change this to the location of your server-side upload handler:
+
     var url = '/upload';
     
     $('#fileupload').fileupload({
@@ -56,12 +56,13 @@ $(function () {
         },
         done: function (e, data) {
         
-			console.log("Converted syllabus returned");
-			var iframe =  $('#syllabus_iframe');
-			var idoc = iframe[0].contentDocument;
-			idoc.open();
-			idoc.write(data.result.html_syllabus);
-			idoc.close();
+			console.log("Converted syllabus returned");		
+			// Copy to a working document (for highlighting)
+			$('#syllabus_iframe').contents().find('body').html(data.result.html_syllabus);
+			
+			// Also copy to hidden original verison in an iframe (for saving)
+			$('#original_syllabus_iframe').contents().find('body').html(data.result.html_syllabus);
+			
 			$(".progress-bar-success").css("width", "0%");
 			$("#save_syllabus").click();
     

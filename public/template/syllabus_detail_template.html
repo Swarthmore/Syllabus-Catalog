@@ -1,7 +1,7 @@
 <!-- Syllabus detail template -->
 
 
-	<!- Rangy - Javascript library for highlighting -->
+	<!-- Rangy Javascript library for highlighting -->
  	<script type="text/javascript" src="/js/lib/rangy/log4javascript_stub.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/core.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/dom.js"></script>
@@ -29,13 +29,14 @@
 	prerequisites = _.isUndefined(obj.prerequisites) ?  "" : prerequisites;
 	course_description = _.isUndefined(obj.course_description) ?  "" : course_description;
 	assessment = _.isUndefined(obj.assessment) ?  "" : assessment;
-	//assignments = _.isUndefined(obj.assignments) ?  [] : assignments;
+	assignments = _.isUndefined(obj.assignments) ?  [] : assignments;
 	policies = _.isUndefined(obj.policies) ?  "" : policies;
 	class_format = _.isUndefined(obj.class_format) ?  "" : class_format;
 	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
 	required_events = _.isUndefined(obj.required_events) ?  "" : required_events;
 	status = _.isUndefined(obj.status) ?  "" : status;
 	syllabus_html = _.isUndefined(obj.syllabus_html) ?  "" : syllabus_html;
+	serialized_highlight = _.isUndefined(obj.serialized_highlight) ?  "" : serialized_highlight;
 	_id = _.isUndefined(obj._id) ?  "" : _id;
 	
 %>
@@ -309,29 +310,32 @@
 
 	<div id="load_syllabus"></div>
 
-	<iframe id="syllabus_iframe" src="" style="width:100%;height:100%"></iframe>
+	<!-- This is the working syllabus html -->
+	<iframe id="syllabus_iframe" style="width:100%;height:100%;overflow:auto;"></iframe>
 	
-	<% 
-		// Set iframe content
-		console.log("HTML syllabus");
-		console.log($("#syllabus_iframe").contents().find("html").html());
-		$("#syllabus_iframe").contents().find("html").html(syllabus_html);
-	%>
+	<!-- THis is the unmodified syllabus -->
+	<iframe id="original_syllabus_iframe" style="visibility:hidden;"></iframe>
+	
+	
+	
 </div>
-
 
 
 <script>
 
-function add_text_to_element(element_id, text_to_add, highlight_selection) {	
-	var text_to_add = text_to_add || "";	
-	var highlight_selection = highlight_selection || null;		
-	var e = $("#" + element_id);
-	// Add a carriage return if there is already text in the entry box
-	if (e.val()) {text_to_add = "\n" + text_to_add;}
-	e.val(e.val() + text_to_add);
-	$("#save_syllabus").click();	
-}
+	//var htmlString = "<h1>TEST</h1>";
+    //$('#resume_holder').contents().find('body').html(htmlString);
+
+
+	function add_text_to_element(element_id, text_to_add, highlight_selection) {	
+		var text_to_add = text_to_add || "";	
+		var highlight_selection = highlight_selection || null;		
+		var e = $("#" + element_id);
+		// Add a carriage return if there is already text in the entry box
+		if (e.val()) {text_to_add = "\n" + text_to_add;}
+		e.val(e.val() + text_to_add);
+		$("#save_syllabus").click();	
+	}
 
 
 </script>

@@ -9,20 +9,10 @@ var topics = [];
 
 console.log("Highlighter loaded");
 
-// When script is loaded, check for iframe to load and then set up keypress functions and rangy object
-$("#syllabus_iframe" ).load(function() {
-	console.log("Setting up iFrame keypress");
-	
-	$( SYLLABUS_IFRAME.contentWindow.document).keyup(function(event) {
-		handle_keypress(event)
-	});
-	
-	setup_rangy();	
-});
+
 	
       
-            
-
+    
             
 // Based on keypress, take appropriate action
 function handle_keypress(event) {
@@ -75,6 +65,12 @@ function setup_rangy() {
 
 	console.log("Setting up rangy");
 	rangy.init();
+
+	console.log("Setting up keypress events for highlighting");
+	$( SYLLABUS_IFRAME.contentWindow.document).keyup(function(event) {
+		handle_keypress(event)
+	});
+
 	
 	// Set up highlighter
 	highlighter = rangy.createHighlighter(SYLLABUS_IFRAME.contentWindow.document);
@@ -201,14 +197,17 @@ function highlightSelectedText(highlight_mode) {
 
 
 
+function collect_highlights() {
+	return highlighter.serialize();
+}
+
+
+
 // Given a serialized highlight selection, highlight the appropriate location in the syllabus
 function highlight_syllabus_topics(serialized_highlight) {
 	// Make sure syllabus is loaded
-	$("#syllabus_iframe" ).load(function() {
-		highlighter.deserialize(serialized_highlight);
-		console.log("Highlighting text");
-	});
-
+	highlighter.deserialize(serialized_highlight);
+	console.log("Highlighting text");
 }
         
         

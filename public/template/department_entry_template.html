@@ -71,7 +71,7 @@
 	$(".add_dept").click(function() {
 		var department_list = $("#department_listing > table")
 		var m = render("department_entry_template", {data:{}});
-		$(m).appendTo(department_list).slideDown();
+		$(department_list).append(m).slideDown();
 	});
 	
 </script>
