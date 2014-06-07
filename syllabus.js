@@ -113,6 +113,12 @@ function handler (request, response) {
 			fileServer.serve(request, response);
 		}
 	
+	} else if (request.method == "DELETE") {
+	
+		// Request to delete syllabus
+		delete_syllabus(request, response);	
+	
+	
 	} else if (request.method == "POST") {
 	
 		if (request.url == '/upload') {
@@ -391,11 +397,42 @@ function get_syllabus(request, response) {
 			utility.update_status("Successfully found syllabus id " + syllabus_id + " in database");
 			send_json_message(response, doc);
 		}
-		
-			
-
 	});
-        
+}
+
+
+
+
+// Delete a specific syllabus 
+function delete_syllabus(request, response) {
+ 
+ 	var syllabus_id = request.url.match(get_syllabus_req_regex)[1];
+ 	
+ 	// If _id is present, convert it to object
+ 	var id;
+	if (typeof syllabus_id !== 'undefined') {
+		id = new mongo.ObjectID(syllabus_id)
+	}
+	utility.update_status("looking for:" + id + " to delete");
+	
+	var message;
+	
+	var collection = config.db.collection('syllabi').remove({_id:id}, {w:1}, function(err, result) {
+				
+		if (err) {
+		
+			utility.update_status("Error removing syllabi from database: " + err);
+		
+		} else if (result < 1) {
+		
+			utility.update_status("Did not find a match for syllabus ID to remove: " + syllabus_id);
+		
+		} else {
+		
+			utility.update_status("Successfully removed syllabus id " + syllabus_id + " in database");
+			send_json_message(response, result);
+		}
+	});
 }
 
 

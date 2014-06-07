@@ -42,7 +42,8 @@ app.SyllabiView = Backbone.View.extend ({
 	
 	
 	events: {
-		'click .view_syllabus': 'view_syllabus'
+		'click .view_syllabus': 'view_syllabus',
+		'click .remove_syllabus': 'delete_syllabus'
 	},
 	
 	view_syllabus: function(e) {
@@ -53,6 +54,23 @@ app.SyllabiView = Backbone.View.extend ({
 		if (app.syllabus_detail_view) { app.syllabus_detail_view.remove(); }
 		app.syllabus_detail_view = new app.SyllabusView({model:this.collection.models[model_index]});
 	},
+
+	delete_syllabus: function(e) {
+		var button = $(e.currentTarget);
+		var model_index = $("#syllabi_search_table_body button").index(button)-1;
+		console.log(model_index);
+		
+		this.collection.models[model_index].destroy({
+			success: function(model, response) {
+ 				console.log("Destroyed syllabus");
+				},
+			error: function(model, response) {
+ 				console.log("Error destroying syllabus");
+				}
+		});
+		this.render();
+	},
+
 	
 	// Override remove to prevent removal of el	
 	// See http://stackoverflow.com/questions/10966440/recreating-a-removed-view-in-backbone-js	
