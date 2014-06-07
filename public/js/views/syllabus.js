@@ -41,23 +41,37 @@ app.SyllabusView = Backbone.View.extend ({
 		
 		// Add the department listing structure
 		var d = render("department_entry_template", this.model.toJSON());
-		$(d).appendTo("#departments table tbody").slideDown();
+		$("#departments table tbody").append(d).slideDown();
 		
 		var i = render("instructor_template", this.model.toJSON());
-		$(i).appendTo("#instructors").slideDown();
+		$("#instructors").append(i).slideDown();
 
-		var w = render("topic_template", this.model.toJSON());
-		$(w).appendTo("#topics_container").slideDown(function() {
-			initialize_topic_boxes();	// Set up numbering and button options	
+		var w = render("segment_template", this.model.toJSON());
+		$("#segments_container").append(w).slideDown(function() {
+			initialize_segment_boxes();	// Set up numbering and button options	
 		});	
 		
-	
 		var w = render("assignment_template", this.model.toJSON());
-		$(w).appendTo("#assignments_container").slideDown();	
+		$("#assignments_container").append(w).slideDown();	
 
 		var i = render("syllabus_upload_template", this.model.toJSON());
-		$(i).appendTo("#load_syllabus").slideDown();
+		$("#load_syllabus").append(i).slideDown();
 
+		setup_rangy();
+
+		// Load syllabus html
+		var htmlString = _.isUndefined(this.model.get("syllabus_html")) ?  "" : this.model.get("syllabus_html");
+
+		// Load working syllabus (for highlighting)
+		$("#syllabus_iframe").contents().find('body').html(htmlString);
+
+		// Load Original syllabus (non marked up)
+		$("#original_syllabus_iframe").contents().find('body').html(htmlString);
+
+		// Load in highlights
+		if (!_.isUndefined(this.model.get("highlights"))) {
+			highlight_syllabus_segments(this.model.get("highlights"));
+		}
 
 		return this;
 		
@@ -171,8 +185,8 @@ function prepare_syllabus_data() {
 	// Readings
 	syllabus.readings = get_course_readings();	
 		
-	// Topic information
-	syllabus.topics = get_topics();	
+	// segment information
+	syllabus.segments = get_segments();	
 		
 	// Assignment information
 	syllabus.assignments = get_assignments();	
@@ -180,8 +194,11 @@ function prepare_syllabus_data() {
 	// Syllabus status 
 	syllabus.status = $("#syllabus_status").val();	
 
-	// Syllabus status 
-	syllabus.syllabus_html = $("#syllabus_iframe").contents().find("html").html();
+	// html version of Syllabus 
+	syllabus.syllabus_html = $('#original_syllabus_iframe').contents().find('body').html();
+
+	// Highlighting
+	syllabus.highlights = collect_highlights();
 
 	// Syllabus ID -- only include if the ID has been already set
 	// the ID is set when saving to the db
@@ -247,12 +264,12 @@ function get_course_readings() {
 		var pages = $(this).find(".pages").val();
 		var oclc = $(this).find(".oclc_number_cell").html();
 		var optional = $(this).find(".optional").prop('checked');
-		var topic = $(this).closest(".topic_box").index(".topic_box") + 1;
+		var segment = $(this).closest(".segment_box").index(".segment_box") + 1;
 		
 		readings.push({ 
 			citation: $.trim(citation), 
 			pages: $.trim(pages), 
-			topic: topic, 
+			segment: segment, 
 			oclc_number: $.trim(oclc),
 			optional: optional
 			});
@@ -264,26 +281,26 @@ function get_course_readings() {
 
 
 
-// get the details for all the topics in the course
-function get_topics() {
+// get the details for all the segments in the course
+function get_segments() {
 
-	var topics = [];
+	var segments = [];
 
-	$(".topic_box").each( function(index) {
-		var topic_number = $(this).index(".topic_box") + 1;
-		var title = $(this).find(".topic_title").val();
-		var details = $(this).find(".topic_details").val();
-		var highlight = $(this).find(".topic_highlight").val();
+	$(".segment_box").each( function(index) {
+		var segment_number = $(this).index(".segment_box") + 1;
+		var title = $(this).find(".segment_title").val();
+		var details = $(this).find(".segment_details").val();
+		var highlight = $(this).find(".segment_highlight").val();
 		
-		topics.push({
-			topic_number: topic_number,
+		segments.push({
+			segment_number: segment_number,
 			title: title,
 			details: details,
 			highlight: highlight
 		});		
 	});
 	
-	return topics;
+	return segments;
 }
 
 

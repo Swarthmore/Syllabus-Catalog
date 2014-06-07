@@ -5,24 +5,14 @@ var PATH_TO_CSS = "/css/highlighting.css" // for highlighting CSS details
 var SYLLABUS_IFRAME = $("#syllabus_iframe" ).get(0);
 
 var highlighter;
-var topics = [];
+var segments = [];
 
 console.log("Highlighter loaded");
 
-// When script is loaded, check for iframe to load and then set up keypress functions and rangy object
-$("#syllabus_iframe" ).load(function() {
-	console.log("Setting up iFrame keypress");
-	
-	$( SYLLABUS_IFRAME.contentWindow.document).keyup(function(event) {
-		handle_keypress(event)
-	});
-	
-	setup_rangy();	
-});
+
 	
       
-            
-
+    
             
 // Based on keypress, take appropriate action
 function handle_keypress(event) {
@@ -31,7 +21,7 @@ function handle_keypress(event) {
 	switch(event.which) {
 
 		case 49: // 1
-			highlightSelectedText("highlight_topic");
+			highlightSelectedText("highlight_segment");
 			break;
 		case 50: // 2
 			highlightSelectedText( "highlight_reading" );
@@ -75,12 +65,18 @@ function setup_rangy() {
 
 	console.log("Setting up rangy");
 	rangy.init();
+
+	console.log("Setting up keypress events for highlighting");
+	$( SYLLABUS_IFRAME.contentWindow.document).keyup(function(event) {
+		handle_keypress(event)
+	});
+
 	
 	// Set up highlighter
 	highlighter = rangy.createHighlighter(SYLLABUS_IFRAME.contentWindow.document);
 
 	// Configure classes to apply for highlighting
-	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_topic", {
+	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_segment", {
 		ignoreWhiteSpace: true,
 		tagNames: ["span", "a"]
 	}));
@@ -158,8 +154,8 @@ function highlightSelectedText(highlight_mode) {
 	// Based on the the highlight mode, take the appropriate action
 	switch (highlight_mode) {
 		
-		case "highlight_topic":
-			add_new_topic(null, sel.toString(), highlighter.serialize(sel));	// Create a new topic with the highlighted text
+		case "highlight_segment":
+			add_new_segment(null, sel.toString(), highlighter.serialize(sel));	// Create a new segment with the highlighted text
 			break;
 			
 		case "highlight_reading":
@@ -201,19 +197,22 @@ function highlightSelectedText(highlight_mode) {
 
 
 
-// Given a serialized highlight selection, highlight the appropriate location in the syllabus
-function highlight_syllabus_topics(serialized_highlight) {
-	// Make sure syllabus is loaded
-	$("#syllabus_iframe" ).load(function() {
-		highlighter.deserialize(serialized_highlight);
-		console.log("Highlighting text");
-	});
+function collect_highlights() {
+	return highlighter.serialize();
+}
 
+
+
+// Given a serialized highlight selection, highlight the appropriate location in the syllabus
+function highlight_syllabus_segments(serialized_highlight) {
+	// Make sure syllabus is loaded
+	highlighter.deserialize(serialized_highlight);
+	console.log("Highlighting text");
 }
         
         
 
-// Remove the highlight from the syllabus and also remove any matching topics
+// Remove the highlight from the syllabus and also remove any matching segments
 function removeHighlightFromSelectedText() {
 	// Get selection from iframe   
 	var sel = rangy.getSelection(SYLLABUS_IFRAME);

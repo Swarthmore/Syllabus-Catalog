@@ -1,8 +1,8 @@
-// Topic/ week model
+// Segment/ week model
 
 var app = app || {};
 
-app.Topic = Backbone.Model.extend({
+app.Segment = Backbone.Model.extend({
 	defaults: {
 		"title" : null,
 		"details" : [],

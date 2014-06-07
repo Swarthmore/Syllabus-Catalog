@@ -1,0 +1,292 @@
+<% // Check to see if there is a segment defined.  If not, define one
+
+
+	if ( (typeof segments == 'undefined') ||  (segments.length < 1)) {
+		console.log("No segments");
+		segments = [{title:"", details:"", highlight:""}]; 
+	}
+
+
+	if ( (typeof readings == 'undefined') ||  (readings.length < 1)) {
+		console.log("No readings");
+		readings = []; 
+	}	
+
+	// Loop through each segment, printing out the information
+	_.each(segments, function(segment, index, list) { %>
+
+		<div class="panel panel-default segment_box">
+			<div class="panel-heading">
+				<span class="panel-title segment_heading"></span>
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-primary btn-sm add_segment">Add a segment</button>
+					<button type="button" class="btn btn-danger btn-sm delete_segment">Delete segment</button>
+				</div>
+				<div class="clearfix"></div>
+			
+			</div> <!-- End of panel-heading -->
+	
+	
+			<div class="panel-body">
+	
+				<div class="form-group" >
+					<label class="col-sm-1 control-label">Segment</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control segment_title" placeholder="Enter segment" value="<% if (segment.title) { print(segment.title); } %>">
+					</div>
+				</div>	
+
+
+
+				<!-- Place to store serialized highlight -->
+				<input type="hidden" class="segment_highlight" value="">
+				
+				
+				
+				<div class="form-group" >
+					<label class="col-sm-1 control-label">Details</label>
+					<div class="col-sm-10">
+						<textarea class="form-control segment_details" rows="3" placeholder="segment details"><%= segment.details %></textarea>
+					</div>
+				</div>	
+
+				<div class="clearfix"></div>
+
+				<div class="table-responsive col-lg-12 reading_list">
+					<label class="control-label">Reading list</label>
+					<table class="table table-striped " >
+						<thead>
+							<tr>
+								<th>OCLC&nbsp;#</th>
+								<th>Citation</th>
+								<th>Pages</th>
+								<th>Optional?</th>
+								<th>Remove</th>
+							</tr>
+						</thead>
+						<!-- Individual reading entries go here-->
+						<%  var readings_for_this_segment = _.filter(readings, function(reading) {
+												return reading.segment == index+1;
+											});
+											
+							console.log("Readings!");
+							console.log(readings);
+							console.log(readings_for_this_segment	);		
+											
+							_.each(readings_for_this_segment, function(reading, index, list) {
+								var m = render("reading_entry_template", reading);
+								print(m);
+							});
+
+						%>
+	
+					</table>	 <!-- End of reading_list -->
+				</div>
+		
+				<!-- Button for adding a new reading via OCLC search -->
+				<div class="col-lg-6">
+					<label class="control-label">Search for a reading in WorldCat</label>
+					<div class="input-group">
+					  <input type="text" class="form-control">
+					  <span class="input-group-btn search_reading" >
+						<button class="btn btn-default " type="button" data-loading-text="Searching...">Search</button>
+					  </span>
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-6 -->
+
+
+				<!-- Button for adding a new reading manually-->
+				<div class="col-lg-6">
+					<label class="control-label">Manually enter a reading</label>
+					<div class="input-group">
+					  <input type="text" class="form-control manual_reading_title">
+					  <span class="input-group-btn add_manual_reading" >
+						<button class="btn btn-default" type="button">Add</button>
+					  </span>
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-6 -->
+
+
+			</div> <!-- End of panel-body -->
+	
+		</div> <!-- End of panel -->
+
+
+	<% }); %>
+
+<!-- code to add and remove segments and readings -->
+<script>
+
+
+
+
+
+function setup_segment_buttons() {
+
+	$(".add_segment").off("click");
+	console.log("Unbinding click function");
+	$(".add_segment").on("click", function() {
+		console.log("Add segment button clicked");
+		add_new_segment($( this ));
+	});	
+
+
+	$(".delete_segment").off("click");
+	$(".delete_segment").on("click", function() {
+		// Find the div with class reading_entry that contains this button and remove it
+		$(this).closest(".segment_box").slideUp(
+			function() {
+				$(this).remove();
+				renumber_segments();
+			}
+		);
+	});
+
+	
+	// Add a new manual reading
+	$(".add_manual_reading").off("click");
+	$(".add_manual_reading").on("click", function() {
+
+		var reading_list = $(this).closest(".segment_box").find(".reading_list > table");
+		var title = $(this).closest(".segment_box").find(".manual_reading_title").val();
+
+		// Make sure reading list div is visible
+		$(this).closest(".segment_box").find(".reading_list").show();
+	
+		var m = render("reading_entry_template", {citation: title, oclc: null, optional:false});
+		$(m).appendTo(reading_list).slideDown();
+	});
+
+
+	// Search for a new reading.
+	$(".search_reading").off("click");
+	$(".search_reading").on("click", function() {
+
+		// Set the search button to disabled
+		$(this).find("button").button("loading");
+	
+		var segment_number = $(this).closest(".segment_box").index(".segment_box") + 1;
+		var search_q = $(this).prev().val();	
+		socket.emit("search_oclc", {q:search_q, segment:segment_number});		
+	});	
+
+}
+	
+	
+	
+// Create a new segment - either from a button press or highlighted selection
+function add_new_segment(button_ref, segment_title, highlight_selection) {
+	 
+	console.log("Adding a new segment"); 
+	
+	var  segment_title = segment_title || "";	
+	var  highlight_selection = highlight_selection || null;	
+	var number_of_segments = $("#segments_container .segment_box").length;
+	
+	// If the segment was added via a button click, find the segment box that contained the button.
+	// Otherwise, get the last segment box
+	var this_segment;
+	if (button_ref) {
+		this_segment = button_ref.closest(".segment_box");
+	} else {
+		this_segment = $("#segments_container .segment_box").last();
+	}
+
+	// Add the new segment, then renumber all the segments
+	var m = render("segment_template", {segments:[{title:segment_title, highlight:highlight_selection}]});
+	if (number_of_segments > 0) {
+		$(m).insertAfter(this_segment).slideDown();
+	} else {
+		$(m).appendTo($("#segments_container"));
+	}
+	
+	renumber_segments();
+	setup_segment_buttons();
+	$("#save_syllabus").click();	
+
+}
+
+
+
+
+
+// Create a new reading - either from a button press or highlighted selection
+function add_new_reading(button_ref, reading_title, highlight_selection) {
+
+	console.log("Adding a new reading"); 
+	
+	var reading_title = reading_title || "";	
+	var highlight_selection = highlight_selection || null;	
+	var number_of_readings = $(this).closest(".segment_box").find(".reading_list > table tr.reading_entry").length;
+	
+	// If the segment was added via a button click, find the segment box that contained the button.
+	// Otherwise, get the last segment box
+	var this_segment;
+	if (button_ref) {
+		this_segment = button_ref.closest(".segment_box");
+	} else {
+		this_segment = $("#segments_container .segment_box").last();
+	}
+
+	// Add the new segment, then renumber all the segments
+	var m = render("segment_template", {segments:[{title:segment_title, highlight:highlight_selection}]});
+	if (number_of_segments > 0) {
+		$(m).insertAfter(this_segment).slideDown();
+	} else {
+		$(m).appendTo($("#segments_container"));
+	}
+	
+	renumber_segments();
+	setup_segment_buttons();
+
+	var reading_list = $(this).closest(".segment_box").find(".reading_list > table");
+	var title = $(this).closest(".segment_box").find(".manual_reading_title").val();
+
+	// Make sure reading list div is visible
+	$(this).closest(".segment_box").find(".reading_list").show();
+
+	var m = render("reading_entry_template", {citation: title, oclc: null, optional:false});
+	$(m).appendTo(reading_list).slideDown();
+
+}
+	
+	
+	
+	
+
+function renumber_segments() {
+	// Find all segments and put the correct number in the segment heading
+	$(".segment_box").each(function(index, element) {
+		$(element).find(".segment_heading").html("Segment " + (index + 1));
+	});
+}
+
+
+
+	
+function show_non_empty_reading_lists() {
+	// Go through all the segments, and show reading lists with content
+	$(".segment_box").each(function(index, element) {
+		var rl = $(element).find(".reading_list");
+		if (rl.find("tbody tr").length > 0) {
+			console.log("reading list with content");
+			rl.show();
+		}
+	});	
+}
+
+
+
+
+
+function initialize_segment_boxes() {
+ 	// Run renumber
+	renumber_segments();
+	
+	show_non_empty_reading_lists();
+	
+	setup_segment_buttons();
+}
+
+
+</script>
