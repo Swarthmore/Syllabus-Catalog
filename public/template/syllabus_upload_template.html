@@ -11,7 +11,7 @@
 -->
 <link rel="stylesheet" href="/css/jquery.fileupload.css">
  
-   <div class="col-sm-6">     
+   <div class="col-sm-4">     
         
 		<!-- The fileinput-button span is used to style the file input field as button -->
 		<span class="btn btn-success fileinput-button">
@@ -21,12 +21,23 @@
 			<input id="fileupload" type="file" name="files[]" multiple>
 		</span>
 	</div>
-   	<div class="col-sm-6">    
-
-		<!-- The global progress bar -->
+   	<div class="col-sm-4">    
+		<!-- progress bar -->
 		<div id="progress" class="progress">
 			<div class="progress-bar progress-bar-success"></div>
 		</div>
+	</div>
+
+   	<div class="col-sm-4">    		
+		<button type="button" class="zoom_in btn btn-default btn-md">
+			<span class="glyphicon glyphicon-zoom-in"></span>
+		</button>			
+		<button type="button" class="zoom_out btn btn-default btn-md">
+			<span class="glyphicon glyphicon-zoom-out"></span>
+		</button>		
+		<button type="button" class="zoom_fit btn btn-default btn-md">
+			<span class="glyphicon glyphicon glyphicon-resize-full"></span>
+		</button>								
 	</div>
 
 
@@ -60,7 +71,7 @@ $(function () {
 			// Copy to a working document (for highlighting)
 			$('#syllabus_iframe').contents().find('body').html(data.result.html_syllabus);
 			
-			// Also copy to hidden original verison in an iframe (for saving)
+			// Also copy to hidden original version in an iframe (for saving)
 			$('#original_syllabus_iframe').contents().find('body').html(data.result.html_syllabus);
 			
 			$(".progress-bar-success").css("width", "0%");
@@ -76,5 +87,24 @@ $(function () {
         }
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+
+
+	// Set up zoom buttons
+	$(".zoom_in.btn").click( function() {
+		var zoom_level = parseFloat($("#syllabus_iframe").contents().find('body').css("zoom"));
+		$("#syllabus_iframe").contents().find('body').css("zoom", zoom_level*1.2);
+	});
+
+	$(".zoom_out.btn").click( function() {
+		var zoom_level = parseFloat($("#syllabus_iframe").contents().find('body').css("zoom"));
+		$("#syllabus_iframe").contents().find('body').css("zoom", zoom_level/1.2);
+	});
+
+	$(".zoom_fit.btn").click( function() {
+		$("#syllabus_iframe").contents().find('body').css("zoom", "1");
+	});
+	
+	
 });
 </script>
