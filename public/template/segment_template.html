@@ -14,7 +14,7 @@
 
 	// Loop through each segment, printing out the information
 	_.each(segments, function(segment, index, list) { %>
-
+		<li>
 		<div class="panel panel-default segment_box">
 			<div class="panel-heading">
 				<span class="panel-title segment_heading"></span>
@@ -30,7 +30,7 @@
 			<div class="panel-body">
 	
 				<div class="form-group" >
-					<label class="col-sm-1 control-label">Segment</label>
+					<label class="col-sm-2 control-label">Segment</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control segment_title" placeholder="Enter segment" value="<% if (segment.title) { print(segment.title); } %>">
 					</div>
@@ -44,7 +44,7 @@
 				
 				
 				<div class="form-group" >
-					<label class="col-sm-1 control-label">Details</label>
+					<label class="col-sm-2 control-label">Details</label>
 					<div class="col-sm-10">
 						<textarea class="form-control segment_details" rows="3" placeholder="segment details"><%= segment.details %></textarea>
 					</div>
@@ -110,7 +110,7 @@
 			</div> <!-- End of panel-body -->
 	
 		</div> <!-- End of panel -->
-
+		</li>
 
 	<% }); %>
 
@@ -163,7 +163,7 @@ function setup_segment_buttons() {
 	$(".search_reading").on("click", function() {
 
 		// Set the search button to disabled
-		$(this).find("button").button("loading");
+		//$(this).find("button").button();
 	
 		var segment_number = $(this).closest(".segment_box").index(".segment_box") + 1;
 		var search_q = $(this).prev().val();	
@@ -181,7 +181,7 @@ function add_new_segment(button_ref, segment_title, highlight_selection) {
 	
 	var  segment_title = segment_title || "";	
 	var  highlight_selection = highlight_selection || null;	
-	var number_of_segments = $("#segments_container .segment_box").length;
+	var number_of_segments = $("#segments_list .segment_box").length;
 	
 	// If the segment was added via a button click, find the segment box that contained the button.
 	// Otherwise, get the last segment box
@@ -189,7 +189,7 @@ function add_new_segment(button_ref, segment_title, highlight_selection) {
 	if (button_ref) {
 		this_segment = button_ref.closest(".segment_box");
 	} else {
-		this_segment = $("#segments_container .segment_box").last();
+		this_segment = $("#segments_list .segment_box").last();
 	}
 
 	// Add the new segment, then renumber all the segments
@@ -197,7 +197,7 @@ function add_new_segment(button_ref, segment_title, highlight_selection) {
 	if (number_of_segments > 0) {
 		$(m).insertAfter(this_segment).slideDown();
 	} else {
-		$(m).appendTo($("#segments_container"));
+		$(m).appendTo($("#segments_list"));
 	}
 	
 	renumber_segments();
@@ -259,6 +259,14 @@ function renumber_segments() {
 	$(".segment_box").each(function(index, element) {
 		$(element).find(".segment_heading").html("Segment " + (index + 1));
 	});
+
+	$("#segments_list").sortable({
+		placeholder: "sortable_placeholder",
+		update: function( event, ui ) {
+			renumber_segments() ;
+		}
+	});
+	
 }
 
 

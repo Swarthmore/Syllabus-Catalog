@@ -313,8 +313,8 @@ io.sockets.on('connection', function(socket) {
 						return;
 					}
 					
-					// Add week number to result
-					result.topic_number = data.topic;
+					// Add segment number to result
+					result.segment_number = data.segment;
 										
     				utility.update_status(util.inspect(result, false, null));
     				socket.emit("worldcat_search_results", result);

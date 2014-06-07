@@ -1,0 +1,14 @@
+#segments_list {
+  list-style-type: none; 
+  margin: 0; 
+  padding: 0; 
+}
+
+
+.sortable_placeholder {
+    border: 2px dashed red;
+    background-color: lightblue;
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom:10px;
+}

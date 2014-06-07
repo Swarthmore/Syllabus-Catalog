@@ -67,7 +67,12 @@ $(function () {
         },
         done: function (e, data) {
         
-			console.log("Converted syllabus returned");		
+			console.log("Converted syllabus returned");	
+			
+			// Clean up any existing highlights.
+			remove_all_highlights();
+			
+				
 			// Copy to a working document (for highlighting)
 			$('#syllabus_iframe').contents().find('body').html(data.result.html_syllabus);
 			

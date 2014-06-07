@@ -44,12 +44,12 @@
 <!-- Code for select button -->
 <script>
 
-var topic_number = <%= topic_number %>;
-var current_topic_box = $(".topic_box").get(topic_number-1);
+var segment_number = <%= segment_number %>;
+var current_segment_box = $(".segment_box").get(segment_number-1);
 
 
 // Now that results are loaded, reset the state of the search button
-$(current_topic_box).find(".search_reading button").button("reset");
+//$(current_segment_box).find(".search_reading button").button("reset");
 
 
 $(".select_reading_button").click(function() {
@@ -58,13 +58,13 @@ $(".select_reading_button").click(function() {
 	var citation = $("#citation_" + oclc).html();
 		
 	
-	var reading_number = $(current_topic_box).find(".reading_entry").length + 1
-	var reading_list = $(current_topic_box).find(".reading_list > table")
+	var reading_number = $(current_segment_box).find(".reading_entry").length + 1
+	var reading_list = $(current_segment_box).find(".reading_list > table")
 	
 	// Make sure reading list div is visible
-	$(current_topic_box).find(".reading_list").show();
+	$(current_segment_box).find(".reading_list").show();
 		
-	var m = render("reading_entry_template", {topic_number: <%= topic_number %>, reading_number: reading_number, citation: citation, oclc_number: oclc});
+	var m = render("reading_entry_template", {segment_number: <%= segment_number %>, reading_number: reading_number, citation: citation, oclc_number: oclc});
 	$(m).appendTo(reading_list).slideDown();
 
 });

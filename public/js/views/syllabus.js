@@ -47,7 +47,7 @@ app.SyllabusView = Backbone.View.extend ({
 		$("#instructors").append(i).slideDown();
 
 		var w = render("segment_template", this.model.toJSON());
-		$("#segments_container").append(w).slideDown(function() {
+		$("#segments_list").append(w).slideDown(function() {
 			initialize_segment_boxes();	// Set up numbering and button options	
 		});	
 		

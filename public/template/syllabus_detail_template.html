@@ -1,6 +1,8 @@
 <!-- Syllabus detail template -->
 
 
+	<link rel="stylesheet" href="/css/syllabus_detail.css">
+
 	<!-- Rangy Javascript library for highlighting -->
  	<script type="text/javascript" src="/js/lib/rangy/log4javascript_stub.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/core.js"></script>
@@ -10,6 +12,9 @@
     <script type="text/javascript" src="/js/lib/rangy/wrappedselection.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/rangy-cssclassapplier.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/rangy-highlighter.js"></script>
+    
+    <!-- JQuery UI -->
+    <script type="text/javascript" src="/js/lib/jquery-ui.min.js"></script>
     
     <!-- Script for handling syllabus highlighting -->
     <script type="text/javascript" src="/js/syllabus_highlighter.js"></script>
@@ -35,7 +40,6 @@
 	visitors = _.isUndefined(obj.visitors) ?  "" : visitors;
 	required_events = _.isUndefined(obj.required_events) ?  "" : required_events;
 	status = _.isUndefined(obj.status) ?  "" : status;
-	syllabus_html = _.isUndefined(obj.syllabus_html) ?  "" : syllabus_html;
 	serialized_highlight = _.isUndefined(obj.serialized_highlight) ?  "" : serialized_highlight;
 	_id = _.isUndefined(obj._id) ?  "" : _id;
 	
@@ -261,9 +265,9 @@
 		</div>
 
 		<div id="segments_container">
-			<!-- Search WorldCat modal placeholder -->
-			<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>	
-		</div>
+			<ul id="segments_list"></ul>
+			
+		</div>	
 	
 	
 		<div class="col-lg-8">
@@ -319,6 +323,9 @@
 	
 	
 </div>
+
+<!-- Search WorldCat modal placeholder -->
+<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>
 
 
 <script>

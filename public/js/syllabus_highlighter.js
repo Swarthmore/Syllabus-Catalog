@@ -198,16 +198,24 @@ function highlightSelectedText(highlight_mode) {
 
 
 function collect_highlights() {
-	return highlighter.serialize();
+	if (!_.isUndefined(highlighter)) {
+		return highlighter.serialize();
+	} else {
+		return null;
+	}
 }
 
 
 
 // Given a serialized highlight selection, highlight the appropriate location in the syllabus
 function highlight_syllabus_segments(serialized_highlight) {
-	// Make sure syllabus is loaded
-	highlighter.deserialize(serialized_highlight);
-	console.log("Highlighting text");
+	if (!_.isUndefined(serialized_highlight) && serialized_highlight != "" && serialized_highlight != null) {
+		console.log("Highlighting text: " + serialized_highlight);
+		highlighter.deserialize(serialized_highlight);
+		
+	} else {
+		console.log("No highlighting found");
+	}
 }
         
         
@@ -221,4 +229,6 @@ function removeHighlightFromSelectedText() {
 }
 
 
-
+function remove_all_highlights() {
+	highlighter.removeAllHighlights();
+}
