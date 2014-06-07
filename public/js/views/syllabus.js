@@ -62,10 +62,10 @@ app.SyllabusView = Backbone.View.extend ({
 		// Load syllabus html
 		var htmlString = _.isUndefined(this.model.get("syllabus_html")) ?  "" : this.model.get("syllabus_html");
 
-		// Working syllabus (for highlighting)
+		// Load working syllabus (for highlighting)
 		$("#syllabus_iframe").contents().find('body').html(htmlString);
 
-		// Original syllabus (non marked up)
+		// Load Original syllabus (non marked up)
 		$("#original_syllabus_iframe").contents().find('body').html(htmlString);
 
 		// Load in highlights

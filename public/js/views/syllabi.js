@@ -48,7 +48,7 @@ app.SyllabiView = Backbone.View.extend ({
 	
 	view_syllabus: function(e) {
 		var button = $(e.currentTarget);
-		var model_index = $("#syllabi_search_table_body button").index(button);
+		var model_index = $("#syllabi_search_table_body button.view_syllabus").index(button);
 		console.log("Clicked on a syllabus:");
 		
 		if (app.syllabus_detail_view) { app.syllabus_detail_view.remove(); }
@@ -56,20 +56,31 @@ app.SyllabiView = Backbone.View.extend ({
 	},
 
 	delete_syllabus: function(e) {
+	
 		var button = $(e.currentTarget);
-		var model_index = $("#syllabi_search_table_body button").index(button)-1;
+		var model_index = $("#syllabi_search_table_body button.remove_syllabus" ).index(button);
+		var self = this;
 		console.log(model_index);
-		
-		this.collection.models[model_index].destroy({
-			success: function(model, response) {
- 				console.log("Destroyed syllabus");
-				},
-			error: function(model, response) {
- 				console.log("Error destroying syllabus");
-				}
-		});
-		this.render();
-	},
+
+  
+   		BootstrapDialog.show({
+   			title: 'Confirm syllabus deletion',
+            message: 'Are you sure you want to delete the syllabus?',
+            buttons: [ {label: 'Cancel',
+                action: function(dialogRef){
+                    dialogRef.close();
+                	}
+            	},{
+            	label: 'Delete Syllabus',
+                cssClass: 'btn-danger',
+                action: function(dialogRef){
+                	delete_a_syllabus(self, model_index)
+                    dialogRef.close();
+                	}
+            	}]
+       	 });
+  
+	}, // End of delete
 
 	
 	// Override remove to prevent removal of el	
@@ -84,4 +95,18 @@ app.SyllabiView = Backbone.View.extend ({
 });
 
 
+
+function delete_a_syllabus(view, model_index) {
+
+	view.collection.models[model_index].destroy({
+		success: function(model, response) {
+			console.log("Destroyed syllabus");
+			},
+		error: function(model, response) {
+			console.log("Error destroying syllabus");
+			}
+	});
+	view.render();    
+
+}
 

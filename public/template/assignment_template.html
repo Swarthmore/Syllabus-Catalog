@@ -56,10 +56,14 @@
 <!-- code to add and remove readings -->
 <script>
 
-	$('#assignments_container .assignment_duedate').datepicker({
-	    multidate: false
+
+	$('#assignments_container .assignment_duedate').load(function() {
+		$(this).datepicker({
+	    	multidate: false
+		});
 	});
 
+	
 	$(".add_topic").unbind("click");	// Remove existing events
 	$(".add_assignment").click(function() {
 		var this_assignment = $(this).closest(".assignment_box");
