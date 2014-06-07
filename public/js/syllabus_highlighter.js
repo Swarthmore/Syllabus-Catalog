@@ -5,7 +5,7 @@ var PATH_TO_CSS = "/css/highlighting.css" // for highlighting CSS details
 var SYLLABUS_IFRAME = $("#syllabus_iframe" ).get(0);
 
 var highlighter;
-var topics = [];
+var segments = [];
 
 console.log("Highlighter loaded");
 
@@ -21,7 +21,7 @@ function handle_keypress(event) {
 	switch(event.which) {
 
 		case 49: // 1
-			highlightSelectedText("highlight_topic");
+			highlightSelectedText("highlight_segment");
 			break;
 		case 50: // 2
 			highlightSelectedText( "highlight_reading" );
@@ -76,7 +76,7 @@ function setup_rangy() {
 	highlighter = rangy.createHighlighter(SYLLABUS_IFRAME.contentWindow.document);
 
 	// Configure classes to apply for highlighting
-	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_topic", {
+	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_segment", {
 		ignoreWhiteSpace: true,
 		tagNames: ["span", "a"]
 	}));
@@ -154,8 +154,8 @@ function highlightSelectedText(highlight_mode) {
 	// Based on the the highlight mode, take the appropriate action
 	switch (highlight_mode) {
 		
-		case "highlight_topic":
-			add_new_topic(null, sel.toString(), highlighter.serialize(sel));	// Create a new topic with the highlighted text
+		case "highlight_segment":
+			add_new_segment(null, sel.toString(), highlighter.serialize(sel));	// Create a new segment with the highlighted text
 			break;
 			
 		case "highlight_reading":
@@ -204,7 +204,7 @@ function collect_highlights() {
 
 
 // Given a serialized highlight selection, highlight the appropriate location in the syllabus
-function highlight_syllabus_topics(serialized_highlight) {
+function highlight_syllabus_segments(serialized_highlight) {
 	// Make sure syllabus is loaded
 	highlighter.deserialize(serialized_highlight);
 	console.log("Highlighting text");
@@ -212,7 +212,7 @@ function highlight_syllabus_topics(serialized_highlight) {
         
         
 
-// Remove the highlight from the syllabus and also remove any matching topics
+// Remove the highlight from the syllabus and also remove any matching segments
 function removeHighlightFromSelectedText() {
 	// Get selection from iframe   
 	var sel = rangy.getSelection(SYLLABUS_IFRAME);
