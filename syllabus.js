@@ -133,7 +133,7 @@ function handler (request, response) {
 			 
 			 
 				converter = new pdftohtml(path_to_file, "converted_pdf.html");
-				converter.preset('syllabus');
+				converter.preset('syllabus_preset');
 
 				converter.success(function() {
 					console.log("conversion done");
