@@ -80,7 +80,7 @@
 				
 		<div class="row form-group col-lg-12">
 			<label class="control-label"  for="coursename">Course Name</label>
-			<input type="text" class="form-control" id="coursename" placeholder="Enter course name" value="<%= course_name %>">
+			<input type="text" class="form-control" id="coursename" placeholder="Enter course name" value="<%= course_name %>" required>
 		</div>
 
 		<div class="clearfix"></div>
@@ -97,9 +97,9 @@
 			<div class="col-lg-3">
 				<div class="form-group">
 					<label class="control-label"  for="semester">Semester</label>
-					<select class="form-control" name="semester_selection" id="semester_selection">
+					<select class="form-control" name="semester_selection" id="semester_selection" required>
 					
-						<option value="-1" disabled selected>Select semester</option>
+						<option value="" disabled selected>Select semester</option>
 					
 						<% var semester_options = ["Spring 2014","Fall 2013","Spring 2013","Fall 2012","Spring 2012","Fall 2011","Spring 2011","Fall 2010","Spring 2010","Fall 2009","Spring 2009","Fall 2008","Spring 2008","Fall 2007","Spring 2006"];
 					
@@ -123,7 +123,7 @@
 				<div  class="form-group">
 					<label class="control-label"  for="credits">Credits</label>
 					<select class="form-control" id="credit_selection">
-						<option value="" selected disabled>Select credits</option>
+						<option value="" disabled selected>Select credits</option>
 	
 						<% var credit_options = ["2", "1.5", "1", "0.5", "0"];
 					
@@ -193,7 +193,7 @@
 
 		<div class="row form-group col-lg-12">
 			<label class="control-label" for="prerequisites">Class website</label>
-			<input class="form-control" id="class_website" name="class_website" value="<%= class_website %>" />
+			<input type-"url" class="form-control" id="class_website" name="class_website" value="<%= class_website %>" />
 		</div>
 
 		<div class="clearfix"></div>

@@ -86,22 +86,39 @@ app.SyllabusView = Backbone.View.extend ({
 	
 	
 	saveSyllabus: function(e) {
-		$("#save_icon").removeClass("hidden glyphicon-floppy-remove").addClass("glyphicon-floppy");
-		var data = prepare_syllabus_data();
-		// Need an initial parameter (see http://stackoverflow.com/questions/11322182/backbone-model-save-not-calling-either-error-or-success-callbacks)
-		this.model.set(data);
-		this.model.save(null, {
-			success: function(model, response, options) {
-				console.log("Model Saved");
-				$("#syllabus_id").val(model.get("_id"));	// Update model id
-				window.setTimeout(function() {$("#save_icon").addClass("hidden");}, 1000);	// Hide "save" icon after a delay
+	
+		// Check to make sure this is a valid submission
+		if (!$("#syllabus_detail_form")[0].checkValidity()) {
+			// Syllabus is not valid, add classes for invalid fields (and accept valid fields)
+			$("#syllabus_detail_form :required:invalid").parent().addClass("has-error")
+			$("#syllabus_detail_form :required:invalid").parent().removeClass("has-success");
+			$("#syllabus_detail_form :required:valid").parent().addClass("has-success")
+			$("#syllabus_detail_form :required:valid").parent().removeClass("has-error");
+			console.log("Syllabus is not valid -- not saving.");
+			
+		} else {
+			// This is a valid syllabus -- set all success validation fields and save it
+			
+			$("#syllabus_detail_form :required:valid").parent().addClass("has-success")
+			$("#syllabus_detail_form :required:valid").parent().removeClass("has-error");
 				
-			},
-			error: function (model, response) {
-				console.log("Model save error");
-				$("#save_icon").removeClass("hidden glyphicon-floppy").addClass("glyphicon-floppy-remove");
-			}
-		});
+			$("#save_icon").removeClass("hidden glyphicon-floppy-remove").addClass("glyphicon-floppy");
+			var data = prepare_syllabus_data();
+			// Need an initial parameter (see http://stackoverflow.com/questions/11322182/backbone-model-save-not-calling-either-error-or-success-callbacks)
+			this.model.set(data);
+			this.model.save(null, {
+				success: function(model, response, options) {
+					console.log("Model Saved");
+					$("#syllabus_id").val(model.get("_id"));	// Update model id
+					window.setTimeout(function() {$("#save_icon").addClass("hidden");}, 1000);	// Hide "save" icon after a delay
+				
+				},
+				error: function (model, response) {
+					console.log("Model save error");
+					$("#save_icon").removeClass("hidden glyphicon-floppy").addClass("glyphicon-floppy-remove");
+				}
+			});
+		} // End of saving syllabus
 	},
 	
 

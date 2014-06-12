@@ -12,3 +12,14 @@
     margin-top: 10px;
     margin-bottom:10px;
 }
+
+/*
+input:required:invalid, input:focus:invalid {
+  -moz-box-shadow: none;
+  border-color:red;
+}
+
+input:required:valid {
+   border-color:green;
+}
+*/

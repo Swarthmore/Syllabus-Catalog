@@ -67,11 +67,7 @@
 						<!-- Individual reading entries go here-->
 						<%  var readings_for_this_segment = _.filter(readings, function(reading) {
 												return reading.segment == index+1;
-											});
-											
-							console.log("Readings!");
-							console.log(readings);
-							console.log(readings_for_this_segment	);		
+											});	
 											
 							_.each(readings_for_this_segment, function(reading, index, list) {
 								var m = render("reading_entry_template", reading);

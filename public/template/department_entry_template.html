@@ -16,7 +16,7 @@
 		<tr class="department_entry">
 			<td>
 				<!-- Department name -->
-				<select class="form-control department_selection" >
+				<select class="form-control department_selection" required>
 					<option value="-1" disable>Select Department/Program</option>
 					
 					<% _.each(department_listing, function(dept, index, list) { 
@@ -35,7 +35,7 @@
 	
 			<td>
 				<!-- Course Number -->
-				<input type="text" class="form-control course_number_entry" placeholder="Enter course number" value="<%= department_entry.number %>">
+				<input type="text" class="form-control course_number_entry" placeholder="Enter course number" value="<%= department_entry.number %>" required>
 			</td>
 	
 		<td class="text-center">
