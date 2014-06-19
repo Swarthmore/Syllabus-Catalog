@@ -110,9 +110,14 @@ function start_ws() {
 
 	socket.on('worldcat_search_results', function(data) {
 		console.debug(data);
-		var m = render("reading_search_results_template", data);
-		$("#reading_search_results_modal").html(m);
-		$('#reading_search_results_modal').modal({show:true});
+		var m = $(render("reading_search_results_template", data));
+		//$("#reading_search_results_modal").html(m);
+		//$('#reading_search_results_modal').modal({show:true});
+
+		BootstrapDialog.show({
+			title: data.feed.title,
+            message: m
+        });
 	});
 
 

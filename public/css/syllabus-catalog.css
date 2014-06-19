@@ -1,7 +1,12 @@
 html, body {
   height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
 }
+
+
+body {
+	padding-top: 70px;
+}
+
 
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -51,7 +56,12 @@ code {
 	margin: 0 auto;
 }
 
-
 .department_table td{
-    padding:5px;
+    padding: 5px;
+}
+
+#save_icon {
+	font-size: 24px;
+	margin-top: 5px;
+	color: red
 }
