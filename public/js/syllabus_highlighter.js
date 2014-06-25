@@ -20,34 +20,43 @@ function handle_keypress(event) {
 	console.log("Received keypress with code: " + event.which);
 	switch(event.which) {
 
-		case 49: // 1
+		case 83:  // S
+		case 115: // s
 			highlightSelectedText("highlight_segment");
 			break;
 		case 50: // 2
 			highlightSelectedText( "highlight_reading" );
 			break;
-		case 51: // 3
+		case 65:  // A
+		case 97:  // a
 			highlightSelectedText( "highlight_assignment" );
 			break;
-		case 52: // 4
+		case 77:  // M
+		case 109: // m
 			highlightSelectedText( "highlight_meetingtimes" );
 			break;
-		case 53: // 5
+		case 72:  // H
+		case 104: // h
 			highlightSelectedText( "highlight_officehours" );
 			break;
-		case 54: // 6
+		case 79:  // O
+		case 111: // o
 			highlightSelectedText( "highlight_outcomes" );
 			break;
-		case 55: // 7
+		case 87:  // W
+		case 119: // w
 			highlightSelectedText( "highlight_classwebsite" );
 			break;	
-		case 56: // 8
+		case 68:  // D
+		case 100: // d
 			highlightSelectedText( "highlight_description" );
 			break;
-		case 57: // 9
+		case 80: // P
+		case 112: // p
 			highlightSelectedText( "highlight_policies" );
-			break;			
-		case 48: // 0
+			break;	
+		case 78:  // N		
+		case 110: // n
 			highlightSelectedText( "highlight_notes" );
 			break;										
 		case 82: // R

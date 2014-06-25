@@ -13,9 +13,6 @@
     <script type="text/javascript" src="/js/lib/rangy/rangy-cssclassapplier.js"></script>
     <script type="text/javascript" src="/js/lib/rangy/rangy-highlighter.js"></script>
     
-    <!-- JQuery UI -->
-    <script type="text/javascript" src="/js/lib/jquery-ui.min.js"></script>
-    
     <!-- Script for handling syllabus highlighting -->
     <script type="text/javascript" src="/js/syllabus_highlighter.js"></script>
 
@@ -265,7 +262,7 @@
 		</div>
 
 		<div id="segments_container">
-			<ul id="segments_list"></ul>
+			<ul id="segments_list"></ul> 
 			
 		</div>	
 	
@@ -320,19 +317,10 @@
 	<!-- THis is the unmodified syllabus -->
 	<iframe id="original_syllabus_iframe" style="visibility:hidden;"></iframe>
 	
-	
-	
 </div>
-
-<!-- Search WorldCat modal placeholder -->
-<div class="modal fade" id="reading_search_results_modal" tabindex="-1" role="dialog" aria-hidden="false"></div>
 
 
 <script>
-
-	//var htmlString = "<h1>TEST</h1>";
-    //$('#resume_holder').contents().find('body').html(htmlString);
-
 
 	function add_text_to_element(element_id, text_to_add, highlight_selection) {	
 		var text_to_add = text_to_add || "";	
