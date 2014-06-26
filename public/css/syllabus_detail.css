@@ -13,6 +13,11 @@
     margin-bottom:10px;
 }
 
+.keyboard_symbol {
+  padding-left:10px;
+
+}
+
 /*
 input:required:invalid, input:focus:invalid {
   -moz-box-shadow: none;

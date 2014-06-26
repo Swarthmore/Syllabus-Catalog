@@ -68,6 +68,8 @@ app.SyllabusView = Backbone.View.extend ({
 		// Load Original syllabus (non marked up)
 		$("#original_syllabus_iframe").contents().find('body').html(htmlString);
 
+		setup_syllabus_upload();
+
 		// Load in highlights
 		if (!_.isUndefined(this.model.get("highlights"))) {
 			highlight_syllabus_segments(this.model.get("highlights"));

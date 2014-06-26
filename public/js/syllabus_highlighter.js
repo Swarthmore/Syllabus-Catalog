@@ -58,7 +58,11 @@ function handle_keypress(event) {
 		case 78:  // N		
 		case 110: // n
 			highlightSelectedText( "highlight_notes" );
-			break;										
+			break;		
+		case 67:  	// C		
+		case 99: 	// c
+			highlightSelectedText( "highlight_coursename" );
+			break;												
 		case 82: // R
 		case 114: // r
 			removeHighlightFromSelectedText();
@@ -135,6 +139,11 @@ function setup_rangy() {
 		tagNames: ["span", "a"]
 	}));  			
 
+	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_coursename", {
+		ignoreWhiteSpace: true,
+		tagNames: ["span", "a"]
+	}));  
+
 	highlighter.addClassApplier(rangy.createCssClassApplier("highlight_description", {
 		ignoreWhiteSpace: true,
 		tagNames: ["span", "a"]
@@ -197,8 +206,11 @@ function highlightSelectedText(highlight_mode) {
 		
 		case "highlight_notes":
 			add_text_to_element("notes", sel.toString(), highlighter.serialize(sel));		
-			break;				
-					
+			break;	
+
+		case "highlight_coursename":
+			add_text_to_element("coursename", sel.toString(), highlighter.serialize(sel));		
+			break;						
 											
 		}
 	
