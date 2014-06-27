@@ -4,3 +4,5 @@ node_modules/*
 *.csv
 data/
 converted_pdf.html
+nohup.out
+
