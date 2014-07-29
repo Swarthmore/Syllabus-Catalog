@@ -18,6 +18,12 @@ console.log("Highlighter loaded");
 function handle_keypress(event) {
 
 	console.log("Received keypress with code: " + event.which);
+	
+	// If ctrl, command, or alt are pressed, exit
+	// See http://www.epigroove.com/blog/check-for-modifier-keys-when-using-jquerys-keypress
+	if (event.altKey || event.ctrlKey || event.metaKey) { return;}
+	
+	
 	switch(event.which) {
 
 		case 83:  // S

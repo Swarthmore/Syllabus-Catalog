@@ -1,0 +1,11 @@
+[app]
+port = 12345
+debug_mode = 1
+
+[DB]
+db_host = 127.0.0.1
+db_name = syllabus_catalog_db_name
+
+[OCLC]
+wskey = xxxxxxxxxxxxxxxxxxx
+search_results_count = 10
