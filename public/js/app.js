@@ -110,12 +110,24 @@ function start_ws() {
 
 	socket.on('worldcat_search_results', function(data) {
 		console.debug(data);
-		var m = $(render("reading_search_results_template", data));
-		//$("#reading_search_results_modal").html(m);
-		//$('#reading_search_results_modal').modal({show:true});
+		var m = $(render("worldcat_search_results_template", data));
 
 		BootstrapDialog.show({
 			title: data.feed.title,
+            message: m
+        });
+	});
+	
+	
+	socket.on('crossref_search_results', function(data) {
+		
+		data.data = JSON.parse(data.data);	// Convert response to JSON
+		console.debug(data.data);
+		
+		var m = $(render("crossref_search_results_template", {results: data}));
+
+		BootstrapDialog.show({
+			title: "Crossref Search Results",
             message: m
         });
 	});

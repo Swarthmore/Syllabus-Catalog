@@ -15,7 +15,8 @@ var http = require('http'),
   	parseString = require('xml2js').parseString,
   	formidable = require('formidable'),
   	pdftohtml = require('pdftohtmljs'),
-  	tmp = require('tmp');
+  	tmp = require('tmp'),
+  	library_search = require("./library_search");
 
 
 var twit;
@@ -280,51 +281,16 @@ function handler (request, response) {
 io.sockets.on('connection', function(socket) {
 
 	utility.update_status("Got a socket connection");
+	
 			
 	socket.on('search_oclc', function (data) {
-		utility.update_status("Search OCLC for: " + data.q);
-		
-		http.get("http://www.worldcat.org/webservices/catalog/search/opensearch?q=" + data.q + 
-			"&format=atom&cformat=mla&count=" + 
-			config.OCLC.search_results_count + 
-			"&wskey=" + config.OCLC.wskey, function(res) {
-
-			var pageData = "";
-		
-		
-			res.on('error', function(e) {
-				console.log("Error doing WorldCat search: " + e.message);
-			});
-	
-	
-			res.on('data', function (chunk) {
-				pageData += chunk;
-			});
-
-
-			res.on('end', function(){
-				utility.update_status("Got response from WorldCat search: " + res.statusCode);
-				
-				// Parse XML data from WorldCat search
-				parseString(pageData, function (err, result) {
-				
-					if (err) {
-						utility.update_status("Error parsing XML from Worldcat search: " + err);
-						return;
-					}
-					
-					// Add segment number to result
-					result.segment_number = data.segment;
-										
-    				utility.update_status(util.inspect(result, false, null));
-    				socket.emit("worldcat_search_results", result);
-				});
-				
-			});
-		
-		
+		utility.update_status(data);
+		library_search.search_oclc(config, data, socket);
 	});
-	});
+
+	socket.on('search_crossref', function (data) {
+		library_search.search_crossref(config, data, socket);
+	});	
 	
 });
 
