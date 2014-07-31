@@ -1,0 +1,58 @@
+<% console.log(results) %>
+        <p>Search for: <%= results.data.query.searchTerms %></p>
+        
+        <% if (typeof results.data.items  === 'undefined' || results.data.items.length < 1) { %>
+        	<h5>No search results found</h5>
+        <% } %>
+        
+        
+        <div class="table-responsive">
+			<table class="table table-striped">
+				<% _.each(results.data.items, function(entry, index, list) { 
+				
+					var doi = entry.doi.replace("http://dx.doi.org/","");	// Calculate doi (without url prefix)
+					%>
+					<tr>
+						<td>
+							<button type="button" class="btn btn-primary select_reading_button" data-dismiss="modal">Select</button> 
+							<input type="hidden" class="doi_holder" value="<%= doi %>">
+						</td>
+						<td>
+							<a href="<%= entry.doi %>" target="blank">
+								<span class="crossref_citation" >
+									<%= entry.fullCitation %>
+								</span>
+							</a>
+						</td>
+					</tr>
+				<% }); %>
+			</table>
+		</div>
+
+
+
+<!-- Code for select button -->
+<script>
+
+var segment_number = <%= results.segment_number %>;
+var current_segment_box = $(".segment_box").get(segment_number-1);
+
+
+$(".select_reading_button").click(function() {
+	// Get the index of the button -- this is everything after the underscore
+	var doi = $(this).next().val();
+	var citation = $(this).parents("tr").find(".crossref_citation").html();
+		
+	var reading_number = $(current_segment_box).find(".reading_entry").length + 1
+	var reading_list = $(current_segment_box).find(".reading_list > table")
+	
+	// Make sure reading list div is visible
+	$(current_segment_box).find(".reading_list").show();
+		
+	var m = render("reading_entry_template", {segment_number: segment_number, reading_number: reading_number, citation: citation, oclc_number: doi});
+	$(m).appendTo(reading_list).slideDown();
+
+});
+
+
+</script>

@@ -81,14 +81,18 @@
 		
 				<!-- Button for adding a new reading via OCLC search -->
 				<div class="col-lg-6">
-					<label class="control-label">Search for a reading in WorldCat</label>
+					<label class="control-label">Search for a reading in WorldCat</label>				  
 					<div class="input-group">
-					  <input type="text" class="form-control">
-					  <span class="input-group-btn search_reading" >
-						<button class="btn btn-default " type="button" data-loading-text="Searching...">Search</button>
-					  </span>
+						<input type="text" class="form-control library_search_q">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-loading-text="Searching...">Search <span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-right" role="menu">
+								<li><a class="search_worldcat" href="#">WorldCat</a></li>
+								<li><a class="search_crossref" href="#">CrossRef</a></li>
+							</ul>
+						</div><!-- /btn-group -->
 					</div><!-- /input-group -->
-				  </div><!-- /.col-lg-6 -->
+				</div><!-- /.col-lg-6 -->
 
 
 				<!-- Button for adding a new reading manually-->

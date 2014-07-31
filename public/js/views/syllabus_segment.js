@@ -36,16 +36,28 @@ function setup_segment_buttons() {
 
 
 	// Search for a new reading.
-	$(".search_reading").off("click");
-	$(".search_reading").on("click", function() {
+	$(".search_worldcat").off("click");
+	$(".search_worldcat").on("click", function() {
 
 		// Set the search button to disabled
 		//$(this).find("button").button();
 	
 		var segment_number = $(this).closest(".segment_box").index(".segment_box") + 1;
-		var search_q = $(this).prev().val();	
+		var search_q = $(this).closest(".segment_box").find(".library_search_q").val();
 		socket.emit("search_oclc", {q:search_q, segment:segment_number});		
 	});	
+	
+	$(".search_crossref").off("click");
+	$(".search_crossref").on("click", function() {
+
+		// Set the search button to disabled
+		//$(this).find("button").button();
+	
+		var segment_number = $(this).closest(".segment_box").index(".segment_box") + 1;
+		var search_q = $(this).closest(".segment_box").find(".library_search_q").val();
+		socket.emit("search_crossref", {q:search_q, segment:segment_number});		
+	});		
+	
 
 }
 	
