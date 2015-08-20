@@ -299,7 +299,7 @@ io.sockets.on('connection', function(socket) {
 // Send syllabi in JSON format to web page
 function send_syllabi(request, response) {
  
-	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1},{sort: {'department.name':1, 'department.number':1}}).limit(100)
+	var collection = config.db.collection('syllabi').find({},{_id:1, department:1, course_name:1, instructor:1, semester:1,course_description:1},{sort: {'department.name':1, 'department.number':1}}).limit(1000)
       .toArray(function(err, docs) {
 		
 			message = {};
@@ -318,7 +318,6 @@ function send_syllabi(request, response) {
 					}
 				});
 			}
-		
 			response.writeHead(200, {"Content-Type": "application/json"});
 			response.write(JSON.stringify(sorted_syllabi));
 			response.end(); 
