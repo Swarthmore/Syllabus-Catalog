@@ -96,11 +96,17 @@ function render(tmpl_name, tmpl_data) {
 
 function start_ws() {
 
-	socket = io.connect('', {
-		'reconnect': true,
-		'reconnection delay': 500,
-		'max reconnection attempts': Infinity
-	});
+    if (!socket) {
+        socket = io.connect('', {
+			'reconnect': true,
+			'reconnection delay': 500,
+			'max reconnection attempts': Infinity
+		});
+    } else {
+        socket.socket.connect();
+    }
+
+	
 	var socketTimer;
 	var ws_heartbeat_interval = 60000;		// Websocket heartbeat (to keep connection open)
 			
